@@ -1,8 +1,11 @@
 <?php
+session_start();
+
 // Initialisation TWIG
 require_once("../lib/vendor/autoload.php");
 $loader = new \Twig\Loader\FilesystemLoader("../src/view/");
 $twig = new \Twig\Environment($loader, []);
+$twig->addGlobal("session", $_SESSION);
 
 // MVC
 require_once("../src/controller/_controller.php");

@@ -1,0 +1,8 @@
+header{flex-direction: column;}
+header h1{text-align: center;}
+header nav {flex-direction: column;}
+header nav ul{
+    flex-direction: column;
+	margin: 0;
+}
+header nav ul li{margin: 2px;}
