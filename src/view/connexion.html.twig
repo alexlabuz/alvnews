@@ -2,28 +2,4 @@
 {% block title %}Connexion{{parent()}} {% endblock %}
 
 {% block content %}
-	<h1>Connexion</h1>
-
-	{% if form.message is defined %}
-		<div class="message-block red">{{form.message}}</div>
-	{% endif %}
-
-	<form method="POST" action="index.php?page=connexion" class="form-membre">
-		<div class="input-text">
-			<label for="email">Adresse email</label>
-			<input type="text" id="email" name="email"/>
-		</div>
-		<div class="input-text">
-			<label for="password">Mot de passe</label>
-			<input type="password" id="password" name="password"/>
-		</div>
-		<div>
-		<div class="input-checkbox">
-			<input type="checkbox" id="resteConnecte" name="resteConnecte"></input>
-			<label for="resteConnecte">Maintenir la connection</label>
-		</div>
-		</div>
-
-		<button type="submit" name="btConnecter" class="button">Valider</button>
-	</form>
 {% endblock %}
