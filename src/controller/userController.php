@@ -8,7 +8,6 @@ function inscriptionController($twig, $db){
 	}
 
 	$form = array();
-	// Si le bouton s'inscrire est actionné
 	if(isset($_POST["btInscrire"])){
 		$email = $_POST["email"];
 		$nom = $_POST["nom"];
@@ -111,6 +110,7 @@ function connexionController($twig, $db){
 	echo $twig->render("connexion.html.twig", array("form" => $form));
 }
 
+// Déconnecte l'utilisateur
 function deconnexionController($twig, $db){
 	session_unset();
  	session_destroy();
@@ -118,6 +118,7 @@ function deconnexionController($twig, $db){
  	header("Location:index.php");
 }
 
+// Affiche le profil de l'utilisateur
 function profilController($twig, $db){
 	if(!isset($_SESSION["id"])){
 		header("Location:?page=connexion");
@@ -128,6 +129,101 @@ function profilController($twig, $db){
 	$utilisateur = new User($db);
 	$donnees = $utilisateur->selectById($_SESSION["id"]);
 
+	switch($donnees["role"]){
+		case 1:
+			$form["roleText"] = "Utilisateur";
+		break;
+		case 2:
+			$form["roleText"] = "Modérateur";
+		break;
+		case 3:
+			$form["roleText"] = "Administrateur";
+		break;
+	}
 
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
+}
+
+// Met à jour le profil de l'utilisateur
+function updateUserController($twig, $db){
+	if(!isset($_SESSION["id"])){
+		header("Location:?page=connexion");
+		exit;
+	}
+	$form = array();
+
+	if(isset($_POST['btUpdate'])){
+		$email = $_POST["email"];
+		$nom = $_POST["nom"];
+		$image = $_POST["image"];
+		$code = null;
+
+		$utilisateur = new User($db);
+		if($email == null || $nom == null){
+			$code = 1;
+		}else{
+			$utilisateur = new User($db);
+			$exec = $utilisateur->update($email, $nom, $image, $_SESSION['id']);
+			if(!$exec){
+				$code = 3;
+			}else{
+				$_SESSION["nom"] = $nom;
+				$_SESSION["email"] = $email;
+				$code = 0;
+			}
+		}
+
+		// Si l'inscritption à échoué on envoie dans l'url le code d'erreur
+		header("Location:?page=updateUser&code=".$code);
+		exit;
+	}
+
+	// Code erreur renvoyé dans le GET
+	$code[0] = "Les modifications ont bien étais changé";
+	$code[1] = "Une erreur s'est produite lors de la saisie des données, veuillez réésayer";
+	$code[2] = "Le mail saisie déjà existe déjà";
+	$code[3] = "Une erreur s'est produite, veuillez réésayer";
+	$code[4] = "Le mot de passe est incorrect, veuillez réésayer";
+
+	if(isset($_GET["code"]) && isset($code[$_GET["code"]])){
+		$form["message"] = $code[$_GET["code"]];
+	}
+
+	$utilisateur = new User($db);
+	$donnees = $utilisateur->selectById($_SESSION["id"]);
+
+	echo $twig->render("updateUser.html.twig", array("form" => $form, "user" => $donnees));
+}
+
+// Supprime le profil de l'utilisateur
+function deleteUserController($twig, $db){
+	if(isset($_POST["btSupprimer"])){
+		$utilisateur = new User($db);
+		$unUtilisateur = $utilisateur->selectById($_SESSION["id"]);
+
+		if(password_verify($_POST["password"], $unUtilisateur['mdp'])){
+			$exec = $utilisateur->delete($_SESSION["id"]);
+			session_unset();
+			session_destroy();
+			setcookie('id_user', "", time() + 365*24*3600);
+			if(!$exec){
+				$code = 3;
+			}
+		}else{
+			$code = 4;
+		}
+		
+		// Si l'inscritption à échoué on envoie dans l'url le code d'erreur
+		if($code != null){
+			header("Location:?page=updateUser&code=".$code);
+			exit;
+		}
+		header("Location:?page=home");
+		exit;
+	}
+}
+
+// Met à jour le mot de passe de l'utilisateur
+function updatePasswordController($twig, $db){
+
 }

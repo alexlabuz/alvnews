@@ -5,6 +5,8 @@ class User{
 	private $insert;
 	private $connect;
 	private $selectById;
+	private $update;
+	private $delete;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -17,6 +19,13 @@ class User{
 		$this->connect = $this->db->prepare("SELECT * FROM utilisateur WHERE email = :email");
 
 		$this->selectById = $this->db->prepare("SELECT * FROM utilisateur WHERE id = :id");
+
+		$this->update = $this->db->prepare(
+			"UPDATE utilisateur 
+			SET email=:email, nom=:nom, image=:image
+			WHERE id = :id");
+
+		$this->delete = $this->db->prepare("DELETE FROM utilisateur WHERE id = :id");
 	}
 
 	public function insert($email, $nom, $mdp, $image){
@@ -50,5 +59,31 @@ class User{
 		}
 
 		return $this->selectById->fetch();
+	}
+
+	public function update($email, $nom, $image, $id){
+		$r = true;
+
+		$this->update->execute(array(":email"=>$email,":nom"=>$nom,":image"=>$image,":id"=>$id));
+
+		if($this->update->errorCode()!=0){
+			print_r($this->update->errorInfo());
+			$r = false;
+		}
+
+		return $r;
+	}
+
+	public function delete($id){
+		$r = true;
+
+		$this->delete->execute(array(":id"=>$id));
+
+		if($this->delete->errorCode()!=0){
+			print_r($this->delete->errorInfo());
+			$r = false;
+		}
+
+		return $r;
 	}
 }

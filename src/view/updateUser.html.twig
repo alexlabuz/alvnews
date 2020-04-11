@@ -1,0 +1,64 @@
+{% extends "base.html.twig" %}
+{% block title %}Mettre à jour le profile{{parent()}} {% endblock %}
+
+{% block content %}
+	<h1 class="text-center m-3">Modifier profile</h1>
+
+	{% if form.message is defined %}
+		{% if get.code == 0 %}
+			<div class="alert alert-success mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
+		{% else %}
+			<div class="alert alert-danger mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
+		{% endif %}
+	{% endif %}
+
+	<form method="POST" action="index.php?page=updateUser" class="bg-primary text-light p-4 mx-auto rounded block-custom">
+		<div class="form-group">
+			<label for="email">Adresse email</label>
+			<input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required />
+		</div>
+		<div class="form-group">
+			<label for="nom">Nom</label>
+			<input type="text" class="form-control" id="nom" name="nom" maxlength="50" value="{{user.nom}}" required/>
+		</div>
+		<div class="form-group">
+			<label for="image">Photo de profil</label>
+			<input type="file" class="form-control" id="image" name="image"/>
+		</div>
+
+		<button type="submit" name="btUpdate" class="btn btn-light">Mettre à jour</button>
+	</form>
+
+	<div class="bg-danger text-light p-4 mt-5 mx-auto rounded block-custom">
+		<p>Cloturer mon compte</p>
+		<button class="btn btn-light" id="supprimerCompte" data-toggle="modal" data-target="#exampleModal">Supprimer mon compte</button>
+	</div>
+
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Cloturer le compte</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<form method="POST" action="?page=deleteUser">
+			<div class="modal-body">
+				<p>Veuillez saisir votre mot de passe afin de confirmer votre identité</p>
+				<div class="form-group">
+					<label for="password">Mot de passe</label>
+					<input type="password" class="form-control" id="password" name="password" required/>
+				</div>
+				<p class="text-danger"><b>Il ne seras plus possible de revenir en arrière , tout les articles que vous avez posté serons supprimer égalment</b></p>
+			</div>
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-danger" name="btSupprimer">Supprimer mon compte</button>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
+
+{% endblock %}
