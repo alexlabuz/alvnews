@@ -7,6 +7,7 @@ function getPage($db){
 	$listPage['inscription'] = "inscriptionController";
 	$listPage['connexion'] = "connexionController";
 	$listPage['deconnexion'] = "deconnexionController";
+	$listPage['profil'] = "profilController";
 	$listPage['404'] = "error404Controller";
 	$listPage['maintenance'] = "maintenanceController";
 

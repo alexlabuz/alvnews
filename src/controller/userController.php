@@ -2,8 +2,12 @@
 
 // Controleur permettant l'inscription du client
 function inscriptionController($twig, $db){
-	$form = array();
+	if(isset($_SESSION["id"])){
+		header("Location:?page=profil");
+		exit;
+	}
 
+	$form = array();
 	// Si le bouton s'inscrire est actionné
 	if(isset($_POST["btInscrire"])){
 		$email = $_POST["email"];
@@ -13,7 +17,13 @@ function inscriptionController($twig, $db){
 		$image = $_POST["image"];
 		$code = null;
 
-		if($password != $password2){
+		$utilisateur = new User($db);
+
+		if($utilisateur->connect($email)){
+			$code = 4;
+		}else if($email == null || $nom == null || $password == null){
+			$code = 3;
+		}else if($password != $password2){
 			$code = 1;
 		}else{
 			$utilisateur = new User($db);
@@ -35,6 +45,8 @@ function inscriptionController($twig, $db){
 	// Code erreur renvoyé dans le GET
 	$code[1] = "Les 2 mots de passe ne corresponde pas";
 	$code[2] = "Une erreur s'est produite, veuillez réésayer";
+	$code[3] = "Une erreur s'est produite lors de la saisie des données, veuillez réésayer";
+	$code[4] = "Le mail saisie déjà existe déjà";
 
 	if(isset($_GET["code"]) && isset($code[$_GET["code"]])){
 		$form["message"] = $code[$_GET["code"]];
@@ -43,9 +55,15 @@ function inscriptionController($twig, $db){
 	echo $twig->render("inscription.html.twig", array("form" => $form));
 }
 
+// Controleur permettant la connexion du client
 function connexionController($twig, $db){
-	$form = array();
+	if(isset($_SESSION["id"])){
+		header("Location:?page=profil");
+		exit;
+	}
 
+	$form = array();
+	// Si le bouton se connecter est actionné
 	if(isset($_POST["btConnecter"])){
 		$email = $_POST["email"];
 		$password = $_POST["password"];
@@ -65,7 +83,7 @@ function connexionController($twig, $db){
 				$_SESSION["email"] = $unUtilisateur["email"];
 				$_SESSION["role"] = $unUtilisateur["role"];
 				if($resteConnecte){
-					setcookie('id_login', $unUtilisateur["id"], time() + 365*24*3600);
+					setcookie('id_user', $unUtilisateur["id"], time() + 365*24*3600);
 				}
 			}else{
 				$code = 1;
@@ -96,6 +114,20 @@ function connexionController($twig, $db){
 function deconnexionController($twig, $db){
 	session_unset();
  	session_destroy();
- 	setcookie('id_login', "", time() + 365*24*3600);
+ 	setcookie('id_user', "", time() + 365*24*3600);
  	header("Location:index.php");
+}
+
+function profilController($twig, $db){
+	if(!isset($_SESSION["id"])){
+		header("Location:?page=connexion");
+		exit;
+	}
+	$form = array();
+
+	$utilisateur = new User($db);
+	$donnees = $utilisateur->selectById($_SESSION["id"]);
+
+
+	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }

@@ -9,7 +9,15 @@ body{
 }
 
 
-form.container{
+.block-custom{
 	max-width: 500px;
 	box-shadow: 5px 5px 5px grey;
 }
+
+.img-profile{
+	width: 150px;
+	height: 150px;
+}/*
+.menu-profil{
+	border-bottom: 1px solid var(--);
+}*/
