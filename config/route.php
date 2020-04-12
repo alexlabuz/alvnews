@@ -11,6 +11,8 @@ function getPage($db){
 	$listPage['updateUser'] = "updateUserController";
 	$listPage['updatePassword'] = "updatePasswordController";
 	$listPage["deleteUser"] = "deleteUserController";
+	$listPage["gestionTheme"] = "themeController";
+	$listPage["updateTheme"] = "updateThemeController";
 	$listPage['404'] = "error404Controller";
 	$listPage['maintenance'] = "maintenanceController";
 

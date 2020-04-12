@@ -1,13 +1,11 @@
 {% extends "base.html.twig" %}
-{% block title %}Connexion{{parent()}} {% endblock %}
+{% block title %}Connexion{{parent()}}{% endblock %}
 
 {% block content %}
 	<h1 class="text-center m-3">Connexion</h1>
 
-	{% if form.message is defined %}
-		<div class="alert alert-danger block-custom mx-auto" role="alert">
-			{{form.message}}
-		</div>
+	{% if form.error is defined %}
+		<div class="alert alert-danger block-custom mx-auto" role="alert">Les identifients sont incorrects</div>
 	{% endif %}
 
 	<form method="POST" action="index.php?page=connexion" class="bg-primary text-light p-4 mx-auto rounded block-custom">

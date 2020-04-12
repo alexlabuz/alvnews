@@ -12,10 +12,9 @@ class User{
 	public function __construct($db){
 		$this->db = $db;
 
-
 		$this->insert = $this->db->prepare(
-			"INSERT INTO utilisateur(email, nom, mdp,  image, dateInscription)
-			VALUE (:email , :nom , :mdp , :image , NOW())");
+			"INSERT INTO utilisateur(email, nom, mdp, dateInscription)
+			VALUE (:email , :nom , :mdp , NOW())");
 
 		$this->connect = $this->db->prepare("SELECT * FROM utilisateur WHERE email = :email");
 
@@ -32,10 +31,10 @@ class User{
 		$this->delete = $this->db->prepare("DELETE FROM utilisateur WHERE id = :id");
 	}
 
-	public function insert($email, $nom, $mdp, $image){
+	public function insert($email, $nom, $mdp){
 		$r = true;
 
-		$this->insert->execute(array(":email"=>$email,":nom"=>$nom,":mdp"=>$mdp,":image"=>$image));
+		$this->insert->execute(array(":email"=>$email,":nom"=>$nom,":mdp"=>$mdp));
 
 		if($this->insert->errorCode()!=0){
 			print_r($this->insert->errorInfo());

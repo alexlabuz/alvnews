@@ -1,0 +1,58 @@
+{% extends "base.html.twig" %}
+{% block title %}Gestion des types{{parent()}}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<h1 class="text-center m-3">Gestion des type</h1>
+
+	{% if form.message is defined %}
+		{% if get.code == 0 %}
+			<div class="alert alert-success mx-auto" style="float:center" role="alert">{{form.message}}</div>
+		{% else %}
+			<div class="alert alert-danger mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
+		{% endif %}
+	{% endif %}
+
+	<form method="POST" action="index.php?page=gestionTheme" class="bg-secondary text-light p-4 m-3 mx-auto rounded">
+	<h2>Ajouter un type</h2><form>
+		<div class="form-row">
+			<div class="col">
+					<input type="text" name="nameTheme" class="form-control" placeholder="Nom du théme" required>
+			</div>
+			<div class="col">
+				<input type="text" name="colorTheme" class="form-control" placeholder="Couleur" required>
+			</div>
+		</div>
+		<button type="submit" name="btAjouter" class="btn btn-light mt-3">Ajouter</button>
+	</form>
+
+	<h2>Liste des types</h2>
+
+		<form method="POST" action="?page=gestionTheme">
+	<table class="table table-striped">
+		<thead>
+			<tr>
+			<th scope="col">Libelle</th>
+			<th scope="col">Couleur</th>
+			<th scope="col"></th>
+			<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for t in listeType %}
+			<tr>
+				<td>{{t.libelle}}</td>
+				<td>{{t.couleur}}</td>
+				<td><a class="btn btn-primary btn-sm" href="?page=updateTheme&id={{t.id}}">Modifier</a></td>
+				<td><input class="form-check-input" type="checkbox" name="coche[]" value="{{t.id}}" id="efface"></td>
+			</tr>
+		{% endfor %}
+		</tbody>
+	</table>
+	<div class="float-right">
+		<button class="btn btn-danger" type="submit" name="btEfface">Effacer la sélection</button>
+		<p class="text-danger">Cela supprimera les articles associée !</p>
+	</div>
+	</form>
+</div>
+{% endblock %}

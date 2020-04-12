@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block title %}Modifier un type{{parent()}}{% endblock %}
+		
+{% block content %}
+	<h1 class="text-center m-3">Modifier un type</h1>
+
+	<div class="container">
+		{% if form.error == true %}
+			<div class="alert alert-danger mx-auto" style="float:center" role="alert">Une erreur s'est produite, veuillez réésayer</div>
+		{% endif %}
+		<form method="POST" action="index.php?page=updateTheme" class="bg-secondary text-light p-4 m-3 mx-auto rounded">
+			<h2>Modifier le thème {{theme.libelle}}</h2><form>
+			<div class="form-row">
+				<div class="col">
+					<input type="text" name="nameTheme" class="form-control" value="{{theme.libelle}}" required>
+				</div>
+				<div class="col">
+					<input type="text" name="colorTheme" class="form-control" value="{{theme.couleur}}" required>
+				</div>
+				<input type="hidden" name="idTheme" value="{{get.id}}" />
+			</div>
+			<button type="submit" name="btAjouter" class="btn btn-light mt-3">Modifier</button>
+		</form>
+	</div>
+{% endblock %}

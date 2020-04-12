@@ -20,6 +20,7 @@ require_once("../config/parametres.php");
 require_once("../config/connect.php");
 $db = connect($config);
 
+// Reconnecte l'utilisateur grace aux cookies
 if(isset($_COOKIE["id_user"]) && !isset($_SESSION["id"])){
 	$utilisateur = new User($db);
 	$unUtilisateur = $utilisateur->selectById($_COOKIE["id_user"]);
