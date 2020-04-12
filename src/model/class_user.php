@@ -6,6 +6,7 @@ class User{
 	private $connect;
 	private $selectById;
 	private $update;
+	private $updateMdp;
 	private $delete;
 
 	public function __construct($db){
@@ -22,8 +23,11 @@ class User{
 
 		$this->update = $this->db->prepare(
 			"UPDATE utilisateur 
-			SET email=:email, nom=:nom, image=:image
+			SET email=:email, nom=:nom, image=:image, role=:role
 			WHERE id = :id");
+
+			
+		$this->updateMdp = $this->db->prepare("UPDATE utilisateur SET mdp = :mdp WHERE id = :id");
 
 		$this->delete = $this->db->prepare("DELETE FROM utilisateur WHERE id = :id");
 	}
@@ -61,13 +65,26 @@ class User{
 		return $this->selectById->fetch();
 	}
 
-	public function update($email, $nom, $image, $id){
+	public function update($email, $nom, $image, $role, $id){
 		$r = true;
 
-		$this->update->execute(array(":email"=>$email,":nom"=>$nom,":image"=>$image,":id"=>$id));
+		$this->update->execute(array(":email"=>$email,":nom"=>$nom,":role"=>$role,":image"=>$image,":id"=>$id));
 
 		if($this->update->errorCode()!=0){
 			print_r($this->update->errorInfo());
+			$r = false;
+		}
+
+		return $r;
+	}
+
+	public function updateMdp($mdp, $id){
+		$r = true;
+
+		$this->updateMdp->execute(array(":mdp"=>$mdp,":id"=>$id));
+
+		if($this->updateMdp->errorCode()!=0){
+			print_r($this->updateMdp->errorInfo());
 			$r = false;
 		}
 

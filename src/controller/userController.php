@@ -33,22 +33,18 @@ function inscriptionController($twig, $db){
 		}
 
 		// Si l'inscritption à échoué on envoie dans l'url le code d'erreur
-		if($code != null){
-			header("Location:?page=inscription&code=".$code);
-			exit;
-		}
-		header("Location:?page=inscription");
+		header("Location:?page=inscription&code=".$code);
 		exit;
 	}
 
 	// Code erreur renvoyé dans le GET
-	$code[1] = "Les 2 mots de passe ne corresponde pas";
-	$code[2] = "Une erreur s'est produite, veuillez réésayer";
-	$code[3] = "Une erreur s'est produite lors de la saisie des données, veuillez réésayer";
-	$code[4] = "Le mail saisie déjà existe déjà";
+	$message[1] = "Les 2 mots de passe ne corresponde pas";
+	$message[2] = "Une erreur s'est produite, veuillez réésayer";
+	$message[3] = "Une erreur s'est produite lors de la saisie des données, veuillez réésayer";
+	$message[4] = "Le mail saisie déjà existe déjà";
 
-	if(isset($_GET["code"]) && isset($code[$_GET["code"]])){
-		$form["message"] = $code[$_GET["code"]];
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
 	}
 	
 	echo $twig->render("inscription.html.twig", array("form" => $form));
@@ -85,26 +81,22 @@ function connexionController($twig, $db){
 					setcookie('id_user', $unUtilisateur["id"], time() + 365*24*3600);
 				}
 			}else{
-				$code = 1;
+				$message = 1;
 			}
 		}else{
-			$code = 1;
+			$message = 1;
 		}
  
 		// Si la connexion à échoué on envoie dans l'url le code d'erreur
-		if($code != null){
-			header("Location:?page=connexion&code=".$code);
-			exit;
-		}
-		header("Location:index.php");
+		header("Location:?page=connexion&code=".$code);
 		exit;
 	}
 
 	// Code erreur renvoyé dans le GET
-	$code[1] = "Identifiants incorrect, réésayez";
+	$message[1] = "Identifiants incorrect, réésayez";
 
-	if(isset($_GET["code"]) && isset($code[$_GET["code"]])){
-		$form["message"] = $code[$_GET["code"]];
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
 	}
 
 	echo $twig->render("connexion.html.twig", array("form" => $form));
@@ -141,6 +133,13 @@ function profilController($twig, $db){
 		break;
 	}
 
+	// Code erreur renvoyé dans le GET
+	$message[0] = "Les modifications ont bien étais changé";
+
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
+	}
+
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
 
@@ -152,21 +151,30 @@ function updateUserController($twig, $db){
 	}
 	$form = array();
 
+	$utilisateur = new User($db);
+	$donnees = $utilisateur->selectById($_SESSION["id"]);
+
 	if(isset($_POST['btUpdate'])){
-		$email = $_POST["email"];
+		$email = $_POST["email"];	
 		$nom = $_POST["nom"];
 		$image = $_POST["image"];
 		$code = null;
 
 		$utilisateur = new User($db);
-		if($email == null || $nom == null){
+		if($utilisateur->connect($email)){
+			$code = 2;
+		}else if($nom == null){
 			$code = 1;
 		}else{
 			$utilisateur = new User($db);
-			$exec = $utilisateur->update($email, $nom, $image, $_SESSION['id']);
+			if(empty($email)){
+				$email = $donnees["email"];
+			}
+			$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
 			if(!$exec){
 				$code = 3;
 			}else{
+				// Réussite de la demande
 				$_SESSION["nom"] = $nom;
 				$_SESSION["email"] = $email;
 				$code = 0;
@@ -179,18 +187,15 @@ function updateUserController($twig, $db){
 	}
 
 	// Code erreur renvoyé dans le GET
-	$code[0] = "Les modifications ont bien étais changé";
-	$code[1] = "Une erreur s'est produite lors de la saisie des données, veuillez réésayer";
-	$code[2] = "Le mail saisie déjà existe déjà";
-	$code[3] = "Une erreur s'est produite, veuillez réésayer";
-	$code[4] = "Le mot de passe est incorrect, veuillez réésayer";
+	$message[0] = "Les modifications ont bien étais changé";
+	$message[1] = "Une erreur s'est produite lors de la saisie des données, veuillez réésayer";
+	$message[2] = "Le mail saisie déjà existe déjà";
+	$message[3] = "Une erreur s'est produite, veuillez réésayer";
+	$message[4] = "Le mot de passe est incorrect, veuillez réésayer";
 
-	if(isset($_GET["code"]) && isset($code[$_GET["code"]])){
-		$form["message"] = $code[$_GET["code"]];
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
 	}
-
-	$utilisateur = new User($db);
-	$donnees = $utilisateur->selectById($_SESSION["id"]);
 
 	echo $twig->render("updateUser.html.twig", array("form" => $form, "user" => $donnees));
 }
@@ -214,16 +219,44 @@ function deleteUserController($twig, $db){
 		}
 		
 		// Si l'inscritption à échoué on envoie dans l'url le code d'erreur
-		if($code != null){
-			header("Location:?page=updateUser&code=".$code);
-			exit;
-		}
-		header("Location:?page=home");
+		header("Location:?page=updateUser&code=".$code);
 		exit;
 	}
 }
 
 // Met à jour le mot de passe de l'utilisateur
 function updatePasswordController($twig, $db){
+	$form = array();
 
+	if(isset($_POST['btValider'])){
+		$password = $_POST["password"];
+		$password2 = $_POST["password2"];
+		$code = null;
+
+		if($password == $password2){
+			$utilisateur = new User($db);
+			$exec = $utilisateur->updateMdp(password_hash($password, PASSWORD_DEFAULT), $_SESSION["id"]);
+			if(!$exec){
+				$code = 1;
+			}else{
+				$code = 0;
+				header("Location:?page=profil&code=". $code);
+				exit;
+			}
+		}else{
+			$code = 2;
+		}
+
+		header("Location:?page=updatePassword&code=". $code);
+		exit;
+	}
+
+	$message[1] = "Echec lors de la demande";
+	$message[2] = "Les 2 mot de passe sont différent, veuillez réésayer";
+
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
+	}
+
+	echo $twig->render("updatePassword.html.twig", array("form" => $form));
 }

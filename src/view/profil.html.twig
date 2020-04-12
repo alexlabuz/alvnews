@@ -3,10 +3,20 @@
 
 {% block content %}
 
+{% if form.message is defined %}
+	<div class="container">
+	{% if get.code == 0 %}
+		<div class="alert alert-success mx-auto" style="float:center" role="alert">{{form.message}}</div>
+	{% else %}
+		<div class="alert alert-danger mx-auto " style="float:center" role="alert">{{form.message}}</div>
+	{% endif %}
+	</div>
+{% endif %}
+
 <div class="container bg-secondary text-light">
 	<div class="row underline-light border-bottom border-light p-2">
 		<div class="col-lg-2 align-self-center">
-			<img src="images/img.jpg" alt="..." class="img-thumbnail img-profile">
+			<img src="{{user.image}}" alt="..." class="img-thumbnail img-profile">
 		</div>
 		<div class="col-lg-3 align-self-center">
 			<h2>{{user.nom}}</h2>
@@ -19,7 +29,7 @@
 	</div>
 	<div class="btn-group-fluid">
 			<a href="?page=updateUser" class="btn btn-secondary">Modifier profil</a>
-			<a href="" class="btn btn-secondary">Modifier mot de passe</a>
+			<a href="?page=updatePassword" class="btn btn-secondary">Modifier mot de passe</a>
 			{% if user.role == 2 %}
 				<a href="" class="btn btn-secondary">Rédiger un article</a>
 			{% elseif user.role == 3 %}
