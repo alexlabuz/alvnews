@@ -221,24 +221,28 @@ function updatePasswordController($twig, $db){
 		exit;
 	}
 	$form = array();
+	$utilisateur = new User($db);
+	$unUtilisateur = $utilisateur->selectById($_SESSION["id"]);
 
 	if(isset($_POST['btValider'])){
+		$oldPassword = $_POST["oldPassword"];
 		$password = $_POST["password"];
 		$password2 = $_POST["password2"];
 		$code = null;
 
-		if($password == $password2){
-			$utilisateur = new User($db);
+		if(!password_verify($oldPassword, $unUtilisateur["mdp"])){
+			echo $unUtilisateur["mdp"];
+			$code = 3;
+		}else if($password != $password2){
+			$code = 2;
+		}else{
 			$exec = $utilisateur->updateMdp(password_hash($password, PASSWORD_DEFAULT), $_SESSION["id"]);
 			if(!$exec){
 				$code = 1;
 			}else{
-				$code = 0;
-				header("Location:?page=profil&code=". $code);
+				header("Location:?page=profil&code=0");
 				exit;
 			}
-		}else{
-			$code = 2;
 		}
 
 		header("Location:?page=updatePassword&code=". $code);
@@ -247,6 +251,7 @@ function updatePasswordController($twig, $db){
 
 	$message[1] = "Echec lors de la demande";
 	$message[2] = "Les 2 mot de passe sont différent, veuillez réésayer";
+	$message[3] = "Le mot de passe actuel est incorect";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
 		$form["message"] = $message[$_GET["code"]];
