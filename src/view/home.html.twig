@@ -11,9 +11,22 @@
 
 Etiam vel mauris non nulla euismod convallis. Aliquam nec nibh at dolor laoreet eleifend. Phasellus dignissim vel nulla quis tincidunt. Fusce condimentum risus nec enim ullamcorper mollis. Curabitur elementum risus vitae luctus eleifend. Maecenas scelerisque tellus nec bibendum varius. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
 		</div>
-		<div class="col-sm-10">
+		<div class="col-sm-10 p-3">
 			<h1>Bienvenue sur la page d'acceuil</h1>
 			<p>Vous trouverez ici bientôt les dernière news</p>
+			{% for a in list %}
+			<a href="?page=article&id={{a.id}}">
+			<div class="card mb-3 card-custom">
+			<img src="images/img.jpg" class="card-img-top" alt="">
+			<div class="card-body">
+				<h5 class="card-title">{{a.titre}}	<span class="badge badge-pill badge-secondary">{{a.theme}}</span></h5>
+				<p class="card-text">{{a.description}}</p>
+				<p class="card-text"><small class="text-muted">Le {{a.dateCreation | date("d F Y à G:i")}} | par {{a.redacteur}}</small></p>
+			</div>
+			</div>
+			</a>
+			{% endfor %}
+
 		</div>
 	</div>
 </div>

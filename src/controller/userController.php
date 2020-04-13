@@ -124,8 +124,13 @@ function profilController($twig, $db){
 		break;
 	}
 
+	$article = new Article($db);
+	$form["listArticle"] = $article->selectByUser($donnees["id"]);
+	$form["nbArticle"] = count($form["listArticle"]);
+
 	// Code erreur renvoyé dans le GET
 	$message[0] = "Les modifications ont bien étais changé";
+	$message[1] = "Une erreur s'est produite, veuillez réésayer";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
 		$form["message"] = $message[$_GET["code"]];

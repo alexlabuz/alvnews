@@ -1,0 +1,25 @@
+{% extends "base.html.twig" %}
+{% block title %}{{article.titre}}{{parent()}} {% endblock %}
+
+{% block content %}
+
+<div class="card bg-dark text-white card-custom align-top rounded-0">
+  <img src="images/img.jpg" class="card-img">
+  <div class="card-img-overlay text-center">
+    <h1 class="card-title">{{article.titre}}</h1>
+    <p class="card-text">Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}</p>
+  </div>
+</div>
+<div class="bg-light text-secondary p-4 rounded-bottom">
+	<div class="container">
+		<h5>{{article.description}}</h5>
+	</div>
+</div>
+
+<div class="container mt-4">
+	{{article.contenu | raw| nl2br}}
+</div>
+
+<h2 class="mt-4">Commentaires</h2>
+
+{% endblock %}

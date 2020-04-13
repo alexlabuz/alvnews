@@ -4,6 +4,7 @@ function getPage($db){
 	$listPage = array();
 
 	$listPage['home'] = "homeController";
+	$listPage['article'] = "afficheArticleController";
 	$listPage['inscription'] = "inscriptionController";
 	$listPage['connexion'] = "connexionController";
 	$listPage['deconnexion'] = "deconnexionController";
@@ -13,6 +14,8 @@ function getPage($db){
 	$listPage["deleteUser"] = "deleteUserController";
 	$listPage["gestionTheme"] = "themeController";
 	$listPage["updateTheme"] = "updateThemeController";
+	$listPage["editor"] = "editorController";
+	$listPage["deleteArticle"] = "removeArticleController";
 	$listPage['404'] = "error404Controller";
 	$listPage['maintenance'] = "maintenanceController";
 

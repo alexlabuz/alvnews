@@ -14,7 +14,7 @@
 {% endif %}
 
 <div class="container bg-secondary text-light">
-	<div class="row underline-light border-bottom border-light p-2">
+	<div class="row border-bottom border-light p-2">
 		<div class="col-lg-2 align-self-center">
 			<img src="{{user.image}}" alt="..." class="img-thumbnail img-profile">
 		</div>
@@ -23,33 +23,45 @@
 		</div>
 		<div class="col-sm-7 align-self-center">
 			<p>{{ form.roleText }} alLavi news</p>
-			<p>Nombre d'article : 4</p>
+			{% if user.role != 1 %}
+			<p>Nombre d'article : {{form.nbArticle}}</p>
+			{% endif %}
 			<p>Inscrit depuis le {{ user.dateInscription | date("d F Y") }}</p>
 		</div>
 	</div>
 	<div class="btn-group-fluid">
-			<a href="?page=updateUser" class="btn btn-secondary">Modifier profil</a>
-			<a href="?page=updatePassword" class="btn btn-secondary">Modifier mot de passe</a>
-			{% if user.role == 2 %}
-				<a href="" class="btn btn-secondary">Rédiger un article</a>
-			{% elseif user.role == 3 %}
-				<a href="" class="btn btn-secondary">Rédiger un article</a>
-				<div class="btn-group" role="group">
-					<a href="" id="btnGroupDrop1" class="btn btn-secondary dropdown-toggle"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-					<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-						<a href="" class="dropdown-item">Gestion des utilisateurs</a>
-						<a href="" class="dropdown-item">Gestion des articles</a>
-						<a href="?page=gestionTheme" class="dropdown-item">Gestion des thémes</a>
-					</div>
-				</div>
-			{% endif %}
-			<a href="?page=deconnexion" class="btn btn-danger">Déconnexion</a>
+		<a href="?page=updateUser" class="btn btn-secondary">Modifier profil</a>
+		<a href="?page=updatePassword" class="btn btn-secondary">Modifier mot de passe</a>
+		{% if user.role >= 2 %}
+		<a href="?page=editor" class="btn btn-secondary">Rédiger un article</a>
+		{% endif %}
+		{% if user.role == 3 %}
+		<div class="btn-group" role="group">
+			<a href="" id="btnGroupDrop1" class="btn btn-secondary dropdown-toggle"data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
+			<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+				<a href="" class="dropdown-item">Gestion des utilisateurs</a>
+				<a href="" class="dropdown-item">Gestion des articles</a>
+				<a href="?page=gestionTheme" class="dropdown-item">Gestion des thémes</a>
+			</div>
+		</div>
+		{% endif %}
+		<a href="?page=deconnexion" class="btn btn-danger">Déconnexion</a>
 	</div>
 </div>
+
 <div class="container">
-<h1 class="mt-5">Mes articles</h1>
-
+	<h1 class="mt-5">Mes articles</h1>
+	{% for a in form.listArticle %}
+		<div class="card-body">
+			<h5 class="card-title">{{a.titre}}</h5>
+			<h6 class="card-subtitle mb-2 text-muted">Le {{a.dateModif | date("d F Y à G:i")}}</h6>
+			<p class="card-text">{{a.description}}</p>
+			<a href="?page=article&id={{a.id}}" class="card-link">Voir l'article</a>
+			<a href="?page=editor&id={{a.id}}" class="card-link">Modifier l'article</a>
+			<a href="?page=deleteArticle&id={{a.id}}" class="card-link text-danger">Supprimer l'article</a>
+		</div>
+		<hr>
+	{% endfor %}
 </div>
-
-
+</div>
 {% endblock %}

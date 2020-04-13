@@ -1,0 +1,95 @@
+{% extends "base.html.twig" %}
+
+{% block title %}
+{% if get.id is defined %}{{article.titre}}{% else %}Nouvel article{% endif %}{{parent()}}
+{% endblock %}
+
+{% block content %}
+
+{% if form.errorMessage is defined %}
+		<div class="alert alert-danger mx-auto " style="float:center" role="alert">{{form.errorMessage}}</div>
+{% else %}
+	
+
+{% if get.id is defined %}
+	<h1 class="m-3">{{article.titre}}</h1>
+{% else %}
+	<h1 class="m-3">Nouvel article</h1>
+{% endif %}
+
+<div class="container-lg">
+<form method="POST" action="?page=editor">
+	<div class="bg-secondary p-3 text-light mb-2 rounded">
+
+		<div class="form-row mb-2">
+			<!-- INPUT TITRE -->
+			<div class="col-sm-6">
+				<label>Titre *</label>
+				<input type="text" class="form-control" id="titre" name="titre" placeholder="Titre de l'article" value="{{article.titre}}" required>
+			</div>
+
+			<!-- INPUT THEME -->
+			<div class="col-sm-2">
+				<label for="theme">Thème *</label>
+				<select class="form-control" id="theme" name="theme" required>
+					{% for t in form.theme %}
+							<p></p>
+						{% if article.idTheme == t.id %}
+							<option value="{{t.id}}" selected>{{t.libelle}}</option>
+						{% else %}
+							<option value="{{t.id}}">{{t.libelle}}</option>
+						{% endif %}
+					{% endfor %}
+				</select>
+			</div>
+
+			<!-- INPUT IMAGE -->
+			<div class="col-sm-4">
+				<label>Image</label>
+				<input type="file" class="form-control-file m-1" id="image" name="image" rows="3" />
+			</div>
+		</div>
+		<div class="form-row">
+			<!-- INPUT DESCRIPTION -->
+			<div class="col-12">
+				<label>Description</label>
+				<input type="text" class="form-control" id="description" name="description" maxlength="255" placeholder="Description de l'article" value="{{article.description}}"/>
+			</div>
+		</div>
+
+	</div>
+
+	<!-- INPUT ARTICLE -->
+	<div class="form-group">
+		<label for="article">Article</label>
+		<textarea class="form-control" id="article" name="article" rows="10">{{article.contenu}}</textarea>
+	</div>
+
+	
+	<!-- INPUT VISIBLE -->
+	<div class="form-group form-check float-left">
+		<input type="checkbox" class="form-check-input" name="visible" id="visible" checked />
+		<label class="form-check-label" for="visible">Publication visible</label>
+	</div>
+
+	<!-- INPUT HIDDEN ID UPDATE -->
+	{% if get.id is defined %}
+		<input hidden name="idArticleUpdate" value="{{get.id}}" />
+	{% endif %}
+
+	<!-- SUBMIT -->
+	<div class="float-right inligne">
+		{% if get.id is defined %}
+			<small>Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</small>
+		{% else %}
+			<small>Pas encore publié</small>
+		{% endif %}
+		<button class="btn btn-primary" type="submit" name="btEnvoyer">Envoyer</button>
+	</div>
+</form>
+</div>
+
+{% endif %}
+
+{% endblock %}
+

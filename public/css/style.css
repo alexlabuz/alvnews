@@ -8,7 +8,6 @@ body{
 	font-family:Comfortaa;
 }
 
-
 .block-custom{
 	max-width: 500px;
 	box-shadow: 5px 5px 5px grey;
@@ -17,4 +16,22 @@ body{
 .img-profile{
 	width: 150px;
 	height: 150px;
+}
+/*--Page d'accueil--*/
+.card-custom{
+	color: black;
+	text-decoration: none;
+}
+.card-custom img {
+	height: 180px;
+}
+
+/*--Page d'article--*/
+.image-article{
+	width: 100%;
+	height: 300px;
+}
+
+.card-img{
+	opacity: 0.6;
 }
