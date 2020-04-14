@@ -35,3 +35,11 @@ body{
 .card-img{
 	opacity: 0.6;
 }
+
+.input-commentaire{
+	max-width: 520px;
+}
+
+.overflow-auto{
+	height: 600px;
+}

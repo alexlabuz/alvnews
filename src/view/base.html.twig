@@ -21,7 +21,6 @@
         <a class="nav-link" href="?page=home">Accueil</a>
       </li>
 	{% if session.id is defined %}
-	
 	<div class="dropdown">
       <li class="nav-item">
         <a class="nav-link dropdown-toggle" href="?page=deconnexion" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{session.nom}}</a>
@@ -34,7 +33,6 @@
 		</div>
       </li>
 	</div>
-
 	{% else %}
       <li class="nav-item">
         <a class="nav-link" href="?page=inscription">Inscription</a>
@@ -47,8 +45,8 @@
   </div>
 </nav>
 
-<div class="container-fluid">
-	{% block content %}{% endblock %}
+<div class="container-fluid mb-4">
+{% block content %}{% endblock %}
 </div>
 
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>

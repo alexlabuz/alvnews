@@ -162,8 +162,8 @@ function updateUserController($twig, $db){
 		}else if($nom == null){
 			$code = 3;
 		}else{
-			$utilisateur = new User($db);
 			if(empty($email)){
+				// Si le mail n'a pas était saisie nous remetons le même
 				$email = $donnees["email"];
 			}
 			$exec = $utilisateur->update($email, $nom, "images/img.jpg", $donnees["role"], $_SESSION['id']);
@@ -203,16 +203,16 @@ function deleteUserController($twig, $db){
 
 		if(password_verify($_POST["password"], $unUtilisateur['mdp'])){
 			$exec = $utilisateur->delete($_SESSION["id"]);
-			session_unset();
-			session_destroy();
-			setcookie('id_user', "", time() + 365*24*3600);
 			if(!$exec){
 				$code = 3;
+			}else{
+				session_unset();
+				session_destroy();
+				setcookie('id_user', "", time() + 365*24*3600);
 			}
 		}else{
 			$code = 4;
 		}
-		
 		// Si l'inscritption à échoué on envoie dans l'url le code d'erreur
 		header("Location:?page=updateUser&code=".$code);
 		exit;
@@ -236,7 +236,6 @@ function updatePasswordController($twig, $db){
 		$code = null;
 
 		if(!password_verify($oldPassword, $unUtilisateur["mdp"])){
-			echo $unUtilisateur["mdp"];
 			$code = 3;
 		}else if($password != $password2){
 			$code = 2;

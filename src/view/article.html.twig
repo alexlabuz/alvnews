@@ -3,23 +3,75 @@
 
 {% block content %}
 
+{% if form.errorMessage is defined %}
+	<div class="alert alert-danger" role="alert">{{form.errorMessage}}</div>
+{% else %}
+
+<!--TITRE-->
 <div class="card bg-dark text-white card-custom align-top rounded-0">
-  <img src="images/img.jpg" class="card-img">
-  <div class="card-img-overlay text-center">
-    <h1 class="card-title">{{article.titre}}</h1>
-    <p class="card-text">Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}</p>
-  </div>
+  	<img src="images/img.jpg" class="card-img">
+  	<div class="card-img-overlay text-center mt-4">
+		<h1 class="card-title">{{article.titre}}</h1>
+		<p class="card-text">Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}</p>
+	</div>
 </div>
-<div class="bg-light text-secondary p-4 rounded-bottom">
+<!--BAR-->
+<div class="p-1 bg-dark">
+{% if session.id is defined%}
+	<a href="#" class="btn btn-secondary text-light">Enregistrer</a>
+
+	{% if article.idUtilisateur == session.id %}
+		<a href="?page=editor&id={{article.id}}" class="btn btn-secondary text-light">Modifier mon article</a>
+	{% endif %}
+{% endif %}
+</div>
+<!--DESCRIPTION-->
+<div class="bg-light text-secondary p-4">
 	<div class="container">
-		<h5>{{article.description}}</h5>
+		<h4>{{article.description}}</h4>
 	</div>
 </div>
 
-<div class="container mt-4">
-	{{article.contenu | raw| nl2br}}
+<!--CONTENU-->
+<div class="container mt-4 pb-4 border-bottom border-black">
+	{{article.contenu | raw | nl2br}}
 </div>
 
-<h2 class="mt-4">Commentaires</h2>
+<div class="container">
+<h2 class="mt-4 ">Commentaires</h2>
+
+<!--FORMULAIRE COMMENTAIRE-->
+<form class="bg-light p-3 mb-3" method="POST" action="?page=addComment">
+{% if session.id is defined %}
+	<label for="commentaire">Saisissez votre commentaire :</label>
+	<input class="form-control input-commentaire" id="commentaire" type="text" name="commentaire"/>
+	<input hidden name="idArticle" value="{{article.id}}" />
+	<div class="mt-2">
+		<button class="btn btn-outline-primary btn-sm" type="submit" name="btEnvoyer">Envoyer</button>
+		<button class="btn btn-outline-secondary btn-sm" type="reset" name="btEnvoyer">Effaçer</button>
+	</div>
+	</button>
+{% else %}
+	<p>Pour pouvoir laisser un commentaire vous devez <a href="?page=connexion">vous connecter</a>.</p>
+{% endif %}
+</form>
+
+<!--COMMENTAIRE-->
+<form class="" method="POST" action="?page=removeComment">
+	<input hidden name="idArticle" value="{{article.id}}">
+{% for c in commentaires %}
+	<div>
+		<p>{{c.nom}} - <small class="text-muted">Le {{c.dateCreation | date("d F Y à G:i")}}</small>
+		{% if c.idUtilisateur == session.id %}
+			<button class="btn btn-outline-danger btn-sm ml-sm-2" type="submit" name="idCommentaire" value="{{c.id}}">Supprimer</button>
+		{% endif %}
+		</p>
+		<p class="ml-2">{{c.text}}</p>
+	</div>
+	<hr>
+{% endfor %}
+</form>
+</div>
+{% endif %}
 
 {% endblock %}

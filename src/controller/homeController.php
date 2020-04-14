@@ -4,22 +4,16 @@ function homeController($twig, $db){
 	$form = array();
 	$article = new Article($db);
 
-	$list = $article->select(0, 15);
+	$page = 0;
+	if(isset($_GET["min"])){
+		$page = $_GET["min"];
+	}
+	$min = $page * 10;
+	$max = $min + 10;
+
+	$list = $article->select($min, $max);
 
 	echo $twig->render("home.html.twig", array("form" => $form, "list" => $list));
-}
-
-function afficheArticleController($twig, $db){
-	$form = array();
-
-	$article = new Article($db);
-	$unArticle = $article->selectById($_GET["id"]);
-
-	if($unArticle == null){
-		$form["errorMessage"] = "Toutes nos excuse mais l'article que vous souhaitez voir n'éxiste pas ou à etait supprimé";
-	}
-
-	echo $twig->render("article.html.twig", array("form" => $form, "article" => $unArticle));
 }
 
 function error404Controller($twig, $db){

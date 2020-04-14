@@ -7,7 +7,7 @@
 {% block content %}
 
 {% if form.errorMessage is defined %}
-		<div class="alert alert-danger mx-auto " style="float:center" role="alert">{{form.errorMessage}}</div>
+	<div class="alert alert-danger mx-auto " style="float:center" role="alert">{{form.errorMessage}}</div>
 {% else %}
 	
 
@@ -25,7 +25,7 @@
 			<!-- INPUT TITRE -->
 			<div class="col-sm-6">
 				<label>Titre *</label>
-				<input type="text" class="form-control" id="titre" name="titre" placeholder="Titre de l'article" value="{{article.titre}}" required>
+				<input type="text" class="form-control" id="titre" name="titre" maxlength="150" placeholder="Titre de l'article" value="{{article.titre}}" required>
 			</div>
 
 			<!-- INPUT THEME -->
@@ -80,9 +80,9 @@
 	<!-- SUBMIT -->
 	<div class="float-right inligne">
 		{% if get.id is defined %}
-			<small>Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</small>
+			<small class="mr-2">Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</small>
 		{% else %}
-			<small>Pas encore publié</small>
+			<small class="mr-2">Pas encore publié</small>
 		{% endif %}
 		<button class="btn btn-primary" type="submit" name="btEnvoyer">Envoyer</button>
 	</div>

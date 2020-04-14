@@ -24,7 +24,7 @@ class Article{
 		$this->delete = $this->db->prepare("DELETE FROM article WHERE id= :id");
 
 		$this->select = $this->db->prepare(
-			"SELECT a.id AS id, titre, a.image, description, dateCreation , visible, t.libelle AS theme, u.nom AS redacteur
+			"SELECT a.id AS id, titre, a.image, description, dateCreation , visible, t.libelle AS theme, t.couleur AS couleur, u.nom AS redacteur
 			FROM article a, theme t , utilisateur u
 			WHERE a.idTheme = t.id
 			AND a.idUtilisateur = u.id
@@ -35,7 +35,8 @@ class Article{
 			"SELECT titre, description, dateCreation, dateModif, a.id AS id
 			FROM article a, utilisateur u
 			WHERE a.idUtilisateur = u.id
-			AND u.id = :id");
+			AND u.id = :id
+			ORDER BY dateCreation DESC");
 
 		$this->selectById = $this->db->prepare(
 			"SELECT a.id AS id, titre, description, a.image AS image, contenu, dateCreation, dateModif, idTheme, idUtilisateur, t.libelle AS theme, u.nom AS redacteur
@@ -66,19 +67,6 @@ class Article{
 		return $r;
 	}
 
-	public function delete($id){
-		$r = true;
-
-		$this->delete->execute(array(":id" => $id));
-
-		if($this->delete->errorCode() != 0){
-			print_r($this->insert->errorInfo());
-			$r = false;
-		}
-
-		return $r;
-	}
-
 	public function update($titre, $description, $image, $contenu, $visible, $idTheme, $idArticle){
 		$r = true;
 
@@ -93,6 +81,19 @@ class Article{
 		));
 
 		if($this->update->errorCode() != 0){
+			print_r($this->insert->errorInfo());
+			$r = false;
+		}
+
+		return $r;
+	}
+
+	public function delete($id){
+		$r = true;
+
+		$this->delete->execute(array(":id" => $id));
+
+		if($this->delete->errorCode() != 0){
 			print_r($this->insert->errorInfo());
 			$r = false;
 		}

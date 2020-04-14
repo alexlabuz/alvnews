@@ -16,9 +16,11 @@ function getPage($db){
 	$listPage["updateTheme"] = "updateThemeController";
 	$listPage["editor"] = "editorController";
 	$listPage["deleteArticle"] = "removeArticleController";
+	$listPage["addComment"] = "addCommentController";
+	$listPage["removeComment"] = "removeCommentController";
 	$listPage['404'] = "error404Controller";
 	$listPage['maintenance'] = "maintenanceController";
-
+	
 	if($db != null){
 		if(isset($_GET["page"])){
 			if(isset($listPage[$_GET["page"]])){
