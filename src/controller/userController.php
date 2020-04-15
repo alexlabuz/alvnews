@@ -198,18 +198,18 @@ function updateUserController($twig, $db){
 // Supprime le profil de l'utilisateur
 function deleteUserController($twig, $db){
 	if(isset($_POST["btSupprimer"])){
-		$utilisateur = new User($db);
+		$utilisateur = new User($db); // Récupère l'utilisateur pour la véfication du mdp
 		$unUtilisateur = $utilisateur->selectById($_SESSION["id"]);
 
 		if(password_verify($_POST["password"], $unUtilisateur['mdp'])){
-			$exec = $utilisateur->delete($_SESSION["id"]);
-			if(!$exec){
-				$code = 3;
-			}else{
-				session_unset();
-				session_destroy();
-				setcookie('id_user', "", time() + 365*24*3600);
-			}
+				$exec = $utilisateur->delete($_SESSION["id"]);
+				if(!$exec){
+					$code = 3;
+				}else{
+					session_unset();
+					session_destroy();
+					setcookie('id_user', "", time() + 365*24*3600);
+				}
 		}else{
 			$code = 4;
 		}

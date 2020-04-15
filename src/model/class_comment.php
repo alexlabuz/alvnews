@@ -17,7 +17,8 @@ class Comment{
 			FROM commentaire c, article a, utilisateur u
 			WHERE c.idArticle = a.id
 			AND c.idUtilisateur = u.id
-			AND a.id = :id");
+			AND a.id = :id
+			ORDER BY dateCreation DESC");
 		
 		$this->selectById = $this->db->prepare("SELECT * FROM commentaire WHERE id = :id");
 

@@ -1,10 +1,17 @@
 {% extends "base.html.twig" %}
 {% block title %}{{article.titre}}{{parent()}} {% endblock %}
 
+{% block head %}
+<meta name="description" content="{{article.description}}" />
+{% endblock %}
+
 {% block content %}
 
 {% if form.errorMessage is defined %}
-	<div class="alert alert-danger" role="alert">{{form.errorMessage}}</div>
+<div class="container text-center">
+	<div class="alert alert-danger mt-4" role="alert">{{form.errorMessage}}</div>
+	<a href="./" class="btn btn-primary">Aller à l'accueil</a>
+</div>
 {% else %}
 
 <!--TITRE-->

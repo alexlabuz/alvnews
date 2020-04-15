@@ -13,7 +13,8 @@ function afficheArticleController($twig, $db){
 	$unArticle = $article->selectById($_GET["id"]);
 
 	if($unArticle == null){
-		$form["errorMessage"] = "Toutes nos excuse mais l'article que vous souhaitez voir n'éxiste pas ou à etait supprimé";
+		$form["errorMessage"] = "Toutes nos excuses mais l'article que vous souhaitez voir n'éxiste pas ou à etait supprimé";
+		$unArticle["titre"] = "Erreur"; // Pour l'affichage dans la <title>
 	}
 
 	$listCommentaire = $commentaire->selectByArticle($_GET["id"]);
@@ -54,20 +55,14 @@ function editorController($twig, $db){
 				// Mise à jour de l'article existant
 				$exec = $article->update($inputTitre, $inputDescription, $inputImage, $inputArticle, $inputVisible, $inputTheme, $_POST["idArticleUpdate"]);
 			}
-			if(!$exec){
-				$error = true;
-			}
-		}else{
-			$error = true;
-		}
+			if(!$exec){$error = true;}
+		}else{$error = true;}
 		
 		if($error){
 			if(!isset($_POST["idArticleUpdate"])){
-				header("Location:?page=editor&code=1");
-				exit;
+				header("Location:?page=editor&code=1");exit;
 			}else{
-				header("Location:?page=editor&id=".$_POST["idArticleUpdate"]."&code=1");
-				exit;
+				header("Location:?page=editor&id=".$_POST["idArticleUpdate"]."&code=1");exit;
 			}
 		}
 
@@ -88,7 +83,7 @@ function editorController($twig, $db){
 	if(isset($_GET["code"]) && $_GET["code"] == 1){
 		$form["errorMessage"] = "Erreur dans l'envoie de l'article";
 	}
-
+	// Affichage du menu déroulant des thèmes
 	$theme = new Theme($db);
 	$form["theme"] = $theme->select();
 
@@ -100,18 +95,18 @@ function removeArticleController($twig, $db){
 		header("Location:?page=home");
 		exit;
 	}
-	$code = 0;
 
 	$article = new Article($db);
 	$unArticle = $article->selectById($_GET["id"]);
+	$code = 1;
 
+	// Nous véifions si l'article appartiens bien à l'utilisateur ou si il est admin
 	if($unArticle["idUtilisateur"] == $_SESSION["id"] ||  $_SESSION["role"] == 3){
 		$exec = $article->delete($_GET["id"]);
-		if(!$exec){
-			$code = 1;
+		if($exec){
+			$code = 0;
 		}
-	}else{
-		$code = 1;
+		
 	}
 
 	header("Location:?page=profil&code=". $code);
