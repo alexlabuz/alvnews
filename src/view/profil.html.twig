@@ -65,6 +65,17 @@
 	<div class="tab-content" id="myTabContent">
 		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="profile-tab">
 			<h1 class="mt-5">Mes enregistrements</h1>
+			{% for e in form.listEnregistre %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{e.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Enregistré le {{e.dateEnregistre | date("d F Y à G:i")}}</h6>
+					<p class="card-text">{{e.description}}</p>
+					<a href="?page=article&id={{e.idArticle}}" class="card-link">Voir l'article</a>
+					<a href="?page=enregistre&id={{e.idArticle}}" class="card-link text-danger">Supprimer l'enregistrement</a>
+				</div>
+			</div>
+			{% endfor %}
 		</div>
 		<div class="tab-pane fade" id="myArticle" role="tabpanel" aria-labelledby="home-tab">
 			<h1 class="mt-5">Mes articles</h1>

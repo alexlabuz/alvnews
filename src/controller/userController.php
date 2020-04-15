@@ -1,5 +1,4 @@
 <?php
-
 // Controleur permettant l'inscription du client
 function inscriptionController($twig, $db){
 	if(isset($_SESSION["id"])){
@@ -127,6 +126,9 @@ function profilController($twig, $db){
 	$article = new Article($db);
 	$form["listArticle"] = $article->selectByUser($donnees["id"]);
 	$form["nbArticle"] = count($form["listArticle"]);
+
+	$enregistre = new Enregistre($db);
+	$form["listEnregistre"] = $enregistre->selectByUser($donnees["id"]);
 
 	// Code erreur renvoyé dans le GET
 	$message[0] = "Les modifications ont bien étais changé";

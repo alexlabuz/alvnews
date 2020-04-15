@@ -10,6 +10,7 @@ function afficheArticleController($twig, $db){
 
 	$article = new Article($db);
 	$commentaire = new Comment($db);
+	$enregistre = new Enregistre($db);
 	$unArticle = $article->selectById($_GET["id"]);
 
 	if($unArticle == null){
@@ -18,6 +19,11 @@ function afficheArticleController($twig, $db){
 	}
 
 	$listCommentaire = $commentaire->selectByArticle($_GET["id"]);
+
+	if($enregistre->selectByUserArticle($_SESSION["id"], $_GET["id"]) != null){	
+		$form["enrgistre"] = true;
+	}
+
 	echo $twig->render("article.html.twig", array("form" => $form, "article" => $unArticle, "commentaires" => $listCommentaire));
 }
 
@@ -106,7 +112,6 @@ function removeArticleController($twig, $db){
 		if($exec){
 			$code = 0;
 		}
-		
 	}
 
 	header("Location:?page=profil&code=". $code);
