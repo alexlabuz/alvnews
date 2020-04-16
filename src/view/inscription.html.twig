@@ -2,6 +2,16 @@
 {% block title %}Inscritption{{parent()}} {% endblock %}
 
 {% block content %}
+
+	{% if get.code == 5 %}
+	<div class="text-center nobs-box-center">
+		<h1 class="m-4">Inscription réussi</h1>
+		<h3 class="m-4">Votre inscription est terminé. Bienvenue sur alLavi news !</h3>
+		<p class="m-4">Connectez-vous dés-maintenant.</p>
+		<a class="btn btn-success btn-lg" href="?page=connexion">Me connecter</a>
+	</div>
+	{% else %}
+	
 	<h1 class="text-center m-4">Inscription</h1>
 
 	{% if form.message is defined %}
@@ -26,4 +36,5 @@
 	</form>
 
 	<p class="text-center m-4">Tu as déjà un compte ? <a href="?page=connexion">connecte toi ici !</a></p>
+	{% endif %}
 {% endblock %}

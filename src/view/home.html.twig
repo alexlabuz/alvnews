@@ -3,44 +3,41 @@
 
 {% block content %}
 
-<div class="container-fluid">
-	<div class="row">
-	
-		<div class="col-sm-2">
-			<h1>Menu</h1>
-			<p>Lorem ipsum dolor sit amet, consectetur adipiscinglestie rutrum. Etiamurabitur elementum risus vitae luctus eleifend. Maecenas scelerisque tellus nec bibendum varius. Class aptent taciti sociosqu ad litora torquent per conubia nostra, per inceptos himenaeos.</p>
+<div class="text-center m-3">
+	<h1>Bienvenue sur alLavi news</h1>
+	<p>Découvrez ici les derniers articles</p>
+</div>
+
+<div class="card-deck mx-auto">
+{% for a in list %}
+	<a class="card-link-custom" href="?page=article&id={{a.id}}">
+	<div class="card mb-3" style="max-width: 540px;">
+	<div class="row no-gutters">
+		<div class="col-md-4">
+			<img src="images/img.jpg" class="card-img" alt="">
 		</div>
-
-		<div class="col-sm-10 p-3">
-			<h1>Bienvenue sur alLavi news</h1>
-			<p>Découvrez ici les derniers articles</p>
-
-			{% for a in list %}
-			<a href="?page=article&id={{a.id}}">
-			<div class="card mb-3 card-custom">
-			<img src="images/img.jpg" class="card-img-top" alt="">
+		<div class="col-md-8">
 			<div class="card-body">
-				<h5 class="card-title">{{a.titre}}	<span class="badge badge-pill" style="background-color:{{a.couleur}}">{{a.theme}}</span></h5>
+				<h5 class="card-title">{{a.titre}} <span class="badge badge-pill text-light" style="background-color:{{a.couleur}}">{{a.theme}}</span></h5>
 				<p class="card-text">{{a.description}}</p>
 				<p class="card-text"><small class="text-muted">Le {{a.dateCreation | date("d F Y à G:i")}} | par {{a.redacteur}}</small></p>
 			</div>
-			</div>
-			</a>
-			{% endfor %}
-
-			<form method="GET" action="?page=home">
-			<nav aria-label="Page navigation example">
-			<ul class="pagination justify-content-center">
-				<li type="submit" class="page-item"><a class="page-link" href="?min=0">1</a></li>
-				<li type="submit" class="page-item"><a class="page-link" href="?min=1">2</a></li>
-				<li type="submit" class="page-item"><a class="page-link" href="?min=2">3</a></li>
-				<li type="submit" class="page-item"><a class="page-link" href="?min=3">4</a></li>
-				<li type="submit" class="page-item"><a class="page-link" href="?min=4">5</a></li>
-			</ul>
-			</nav>
-			</form>
 		</div>
-
 	</div>
+	</div>
+	</a>
+{% endfor %}
 </div>
+
+<form method="GET" action="?page=home">
+	<nav aria-label="Page navigation example">
+	<ul class="pagination justify-content-center">
+		<li type="submit" class="page-item"><a class="page-link" href="?min=0">1</a></li>
+		<li type="submit" class="page-item"><a class="page-link" href="?min=1">2</a></li>
+		<li type="submit" class="page-item"><a class="page-link" href="?min=2">3</a></li>
+		<li type="submit" class="page-item"><a class="page-link" href="?min=3">4</a></li>
+		<li type="submit" class="page-item"><a class="page-link" href="?min=4">5</a></li>
+	</ul>
+	</nav>
+</form>
 {% endblock %}

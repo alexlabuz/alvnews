@@ -12,7 +12,7 @@ function inscriptionController($twig, $db){
 		$nom = $_POST["nom"];
 		$password = $_POST["password"];
 		$password2 = $_POST["password2"];
-		$code = null;
+		$code = 5; // code de réussite
 
 		$utilisateur = new User($db);
 

@@ -9,7 +9,7 @@ function homeController($twig, $db){
 		$page = $_GET["min"];
 	}
 	$min = $page * 10;
-	$max = $min + 10;
+	$max = $min + 16;
 
 	$list = $article->select($min, $max);
 
