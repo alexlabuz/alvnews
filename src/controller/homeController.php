@@ -1,7 +1,6 @@
 <?php
 
 function homeController($twig, $db){
-	$form = array();
 	$article = new Article($db);
 
 	$page = 0;
@@ -9,11 +8,11 @@ function homeController($twig, $db){
 		$page = $_GET["min"];
 	}
 	$min = $page * 10;
-	$max = $min + 16;
+	$max = 10;
 
-	$list = $article->select($min, $max);
+	$list = $article->select($min, $max, 1);
 
-	echo $twig->render("home.html.twig", array("form" => $form, "list" => $list));
+	echo $twig->render("home.html.twig", array("list" => $list));
 }
 
 function error404Controller($twig, $db){

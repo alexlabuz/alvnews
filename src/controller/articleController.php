@@ -20,7 +20,7 @@ function afficheArticleController($twig, $db){
 
 	$listCommentaire = $commentaire->selectByArticle($_GET["id"]);
 
-	if($enregistre->selectByUserArticle($_SESSION["id"], $_GET["id"]) != null){	
+	if(isset($_SESSION["id"]) && $enregistre->selectByUserArticle($_SESSION["id"], $_GET["id"]) != null){	
 		$form["enrgistre"] = true;
 	}
 
@@ -96,6 +96,7 @@ function editorController($twig, $db){
 	echo $twig->render("editor.html.twig", array("form" => $form, "article" => $list));
 }
 
+// Permet de supprimer un article
 function removeArticleController($twig, $db){
 	if(!isset($_SESSION["id"]) || !isset($_GET["id"])){
 		header("Location:?page=home");
@@ -114,6 +115,27 @@ function removeArticleController($twig, $db){
 		}
 	}
 
-	header("Location:?page=profil&code=". $code);
+	// Redirige vers la page précedente
+	header("Location: $_SERVER[HTTP_REFERER]" );
 	exit;
+}
+
+// Permet la gestion administrative des articles
+function gestionArticleController($twig, $db){
+	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
+		header("Location:?page=home");
+		exit;
+	}
+	$article = new Article($db);
+
+	$page = 0;
+	if(isset($_GET["min"])){
+		$page = $_GET["min"];
+	}
+	$min = $page * 15;
+	$max = 15;
+
+	$listArticle = $article->select($min, $max, 0);
+
+	echo $twig->render("gestionArticle.html.twig", array("articles"=>$listArticle));
 }

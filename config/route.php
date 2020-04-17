@@ -12,10 +12,12 @@ function getPage($db){
 	$listPage['updateUser'] = "updateUserController";
 	$listPage['updatePassword'] = "updatePasswordController";
 	$listPage["deleteUser"] = "deleteUserController";
+	$listPage["gestionUser"] = "gestionUserController";
 	$listPage["gestionTheme"] = "themeController";
 	$listPage["updateTheme"] = "updateThemeController";
 	$listPage["editor"] = "editorController";
 	$listPage["deleteArticle"] = "removeArticleController";
+	$listPage["gestionArticle"] = "gestionArticleController";
 	$listPage["addComment"] = "addCommentController";
 	$listPage["removeComment"] = "removeCommentController";
 	$listPage["enregistre"] = "addRemoveEnregistreController";

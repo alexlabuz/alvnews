@@ -15,5 +15,6 @@ function addRemoveEnregistreController($twig, $db){
 		}
 		// Redirige vers la page précedente
 		header ("Location: $_SERVER[HTTP_REFERER]" );
+		exit;
 	}
 }

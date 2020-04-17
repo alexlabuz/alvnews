@@ -24,11 +24,14 @@ $db = connect($config);
 if(isset($_COOKIE["id_user"]) && !isset($_SESSION["id"])){
 	$utilisateur = new User($db);
 	$unUtilisateur = $utilisateur->selectById($_COOKIE["id_user"]);
-	$_SESSION["id"] = $unUtilisateur["id"];
-	$_SESSION["nom"] = $unUtilisateur["nom"];
-	$_SESSION["email"] = $unUtilisateur["email"];
-	$_SESSION["role"] = $unUtilisateur["role"];
-	header("Location:./");
+	if($unUtilisateur != null){
+		$_SESSION["id"] = $unUtilisateur["id"];
+		$_SESSION["nom"] = $unUtilisateur["nom"];
+		$_SESSION["role"] = $unUtilisateur["role"];
+		header("Location:./");
+	}else{
+		setcookie('id_user', "");
+	}
 }
 
 $content = getPage($db);

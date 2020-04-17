@@ -1,6 +1,6 @@
 <?php
 
-// Gestion des théme (affichage en liste, ajout et suppression)
+// Gestion administrative des thémes (affichage en liste, ajout et suppression)
 function themeController($twig, $db){
 	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
 		header("Location:?page=home");

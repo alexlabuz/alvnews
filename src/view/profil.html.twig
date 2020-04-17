@@ -27,7 +27,7 @@
 			{% if user.role != 1 %}
 			<p>Nombre d'article : {{form.nbArticle}}</p>
 			{% endif %}
-			<p>Inscrit depuis le {{ user.dateInscription | date("d F Y") }}</p>
+			<p>Inscrit depuis le {{ user.dateInscription | date("d F Y")}}</p>
 		</div>
 	</div>
 	<!-- BARRE COMMENDE -->
@@ -41,8 +41,8 @@
 		<div class="btn-group" role="group">
 			<a id="btnGroupDrop1" class="btn text-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
 			<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-				<a href="" class="dropdown-item">Gestion des utilisateurs</a>
-				<a href="" class="dropdown-item">Gestion des articles</a>
+				<a href="?page=gestionUser" class="dropdown-item">Gestion des utilisateurs</a>
+				<a href="?page=gestionArticle" class="dropdown-item">Gestion des articles</a>
 				<a href="?page=gestionTheme" class="dropdown-item">Gestion des thémes</a>
 			</div>
 		</div>

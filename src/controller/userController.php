@@ -96,7 +96,7 @@ function connexionController($twig, $db){
 function deconnexionController($twig, $db){
 	session_unset();
  	session_destroy();
- 	setcookie('id_user', "", time() + 365*24*3600);
+ 	setcookie('id_user', "");
  	header("Location:index.php");
 }
 
@@ -264,4 +264,66 @@ function updatePasswordController($twig, $db){
 	}
 
 	echo $twig->render("updatePassword.html.twig", array("form" => $form));
+}
+
+// Permet la gestion administrative des utilisateurs
+function gestionUserController($twig, $db){
+	$form = array();
+	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
+		header("Location:?page=home");
+		exit;
+	}
+	$user = new User($db);
+
+	if(isset($_POST["btModifier"])){
+		$idUser = $_POST["idUser"];
+		$role = $_POST["role"];
+		$nom = $_POST["nom"];
+		$error = 1;
+
+		$unUser = $user->selectById($idUser);
+
+		if(strlen($nom) > 0){
+			$exec = $user->update($unUser["email"], $nom, $unUser["image"], $role, $idUser);
+			if($exec){
+				$error = 0;
+			}
+		}
+
+		header("Location:?page=gestionUser&id=".$idUser."&error=".$error);
+		exit;
+	}
+
+	if(isset($_POST["btSupprimer"])){
+		$error = 1;
+		$exec = $user->delete($_POST["idUser"]);
+		if($exec){
+			$error = 0;
+		}
+
+		header("Location:?page=gestionUser&error=".$error);
+		exit;
+	}
+
+	if(isset($_GET["id"])){
+		$form["user"] = $user->selectById($_GET["id"]);
+		if($form["user"] == null || $form["user"]["role"] == 3){
+			header("Location:?page=gestionUser");
+			exit;
+		}
+	}else{
+		$page = 0;
+		if(isset($_GET["min"])){
+			$page = $_GET["min"];
+		}
+		$min = $page * 30;
+		$max = 30;
+		$form["users"] = $user->select($min, $max);
+	}
+
+	if(isset($_GET["error"])){
+		$form["error"] = $_GET["error"];
+	}
+
+	echo $twig->render("gestionUser.html.twig", array("form" => $form));
 }

@@ -8,6 +8,7 @@ class User{
 	private $update;
 	private $updateMdp;
 	private $delete;
+	private $select;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -29,6 +30,8 @@ class User{
 		$this->updateMdp = $this->db->prepare("UPDATE utilisateur SET mdp = :mdp WHERE id = :id");
 
 		$this->delete = $this->db->prepare("DELETE FROM utilisateur WHERE id = :id");
+
+		$this->select = $this->db->prepare("SELECT * FROM utilisateur ORDER BY nom LIMIT :min, :max");
 	}
 
 	public function insert($email, $nom, $mdp){
@@ -101,5 +104,18 @@ class User{
 		}
 
 		return $r;
+	}
+
+	public function select($min, $max){
+		$this->select->bindParaM(":min", $min, PDO::PARAM_INT);
+		$this->select->bindParaM(":max", $max, PDO::PARAM_INT);
+
+		$this->select->execute();
+		
+		if($this->select->errorCode()!=0){
+			print_r($this->select->errorInfo());
+		}
+
+		return $this->select->fetchAll();
 	}
 }

@@ -28,7 +28,7 @@ class Article{
 			FROM article a, theme t , utilisateur u
 			WHERE a.idTheme = t.id
 			AND a.idUtilisateur = u.id
-			AND a.visible = 1
+			AND a.visible >= :visible
 			ORDER BY dateCreation DESC
 			LIMIT :min, :max");
 
@@ -102,9 +102,10 @@ class Article{
 		return $r;
 	}
 
-	public function select($min, $max){
+	public function select($min, $max, $visible){
 		$this->select->bindParaM(":min", $min, PDO::PARAM_INT);
 		$this->select->bindParaM(":max", $max, PDO::PARAM_INT);
+		$this->select->bindParaM(":visible", $visible, PDO::PARAM_INT);
 
 		$this->select->execute();
 

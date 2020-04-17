@@ -1,0 +1,31 @@
+{% extends "base.html.twig" %}
+{% block title %}Gestion des article{{parent()}}{% endblock %}
+
+{% block content %}
+<div class="container">
+	<h1 class="text-center m-4">Gestion des articles</h1>
+	<p class="text-center">Vous pouvez administrer les articles ici</p>
+	{% for a in articles %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{a.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Le {{a.dateModif | date("d F Y à G:i")}} par {{a.redacteur}}</h6>
+					<p class="card-text">{{a.description}}</p>
+					<a href="?page=article&id={{a.id}}" class="card-link">Voir l'article</a>
+					<a href="?page=editor&id={{a.id}}" class="card-link">Modifier l'article</a>
+					<a href="?page=deleteArticle&id={{a.id}}" class="card-link text-danger">Supprimer l'article</a>
+				</div>
+			</div>
+	{% endfor %}
+</div>
+<br>
+<nav aria-label="Page navigation example">
+<ul class="pagination justify-content-center">
+	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=0">1</a></li>
+	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=1">2</a></li>
+	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=2">3</a></li>
+	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=3">4</a></li>
+	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=4">5</a></li>
+</ul>
+</nav>
+{% endblock %}

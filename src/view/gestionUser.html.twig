@@ -1,0 +1,114 @@
+{% extends "base.html.twig" %}
+{% block title %}Gestion des types{{parent()}}{% endblock %}
+
+{% block content %}
+
+<div class="container">
+{% if form.error is defined %}
+	{% if form.error == 1 %}
+	<div class="alert alert-danger" role="alert">Une erreur s'est produite dans la demande</div>
+	{% else %}
+	<div class="alert alert-success" role="alert">Les modifications ont était apportées avec succées</div>
+	{% endif %}
+{% endif %}
+
+
+<h1 class="text-center m-3">Gestion des utilisateurs</h1>
+{% if form.users is not defined %}
+
+	<h2>{{form.user.nom}}</h2>
+
+	<table class="table table-dark">
+	<thead>
+		<tr>
+			<th scope="col">ID</th>
+			<th scope="col">Nom d'utilisateur</th>
+			<th scope="col">Email</th>
+			<th scope="col">Date d'inscription</th>
+			<th scope="col">Role</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+		<form method="POST" action="?page=gestionUser">
+		<tr>
+			<td>{{form.user.id}}</td>
+			<td><input class="form-control form-control-sm bg-dark text-light" type="text" name="nom" value="{{form.user.nom}}" /></td>
+			<td>{{form.user.email}}</td>
+			<td>{{form.user.dateInscription | date("d F Y") }}</td>
+			<td>
+			<select name="role" class="form-control bg-dark text-light form-control-sm">
+				<option value="1">Client</option>
+				<option value="2" {% if form.user.role == 2 %}selected{% endif %}>Modérateur</option>
+			</select>
+			</td>
+			<input hidden name="idUser" value="{{form.user.id}}" />
+			<td><button type="submit" name="btModifier" class="btn btn-primary btn-sm">Définir le role</button></td>
+		</tr>
+		</form>
+	</tbody>
+	</table>
+
+	<button class="btn btn-danger" id="supprimerCompte" data-toggle="modal" data-target="#exampleModal">Bannir</button>
+		
+	<!-- Modal -->
+	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+	<div class="modal-dialog" role="document">
+		<div class="modal-content">
+		<div class="modal-header">
+			<h5 class="modal-title" id="exampleModalLabel">Cloturer le compte</h5>
+			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+			<span aria-hidden="true">&times;</span>
+			</button>
+		</div>
+		<form method="POST" action="#" class="m-3">
+			<p class="text-danger">Etes-vous sur de supprimer l'utilisateur {{form.user.nom}}<br>Vous ne pourrez plus faire marche arrière</p>
+			<input hidden name="idUser" value="{{form.user.id}}" />
+			<div class="modal-footer">
+				<button type="submit" class="btn btn-danger" name="btSupprimer">Supprimer {{form.user.nom}}</button>
+			</div>
+		</form>
+		</div>
+	</div>
+	</div>
+
+{% else %}
+
+	<table class="table">
+	<thead class="thead-dark">
+		<tr>
+			<th scope="col">ID</th>
+			<th scope="col">Nom d'utilisateur</th>
+			<th scope="col">Email</th>
+			<th scope="col">Date d'inscription</th>
+			<th scope="col">Role</th>
+			<th scope="col"></th>
+		</tr>
+	</thead>
+	<tbody>
+	{% for u in form.users %}
+		<tr>
+			<td>{{u.id}}</td>
+			<td>{{u.nom}}</td>
+			<td>{{u.email}}</td>
+			<td>{{u.dateInscription | date("d F Y") }}</td>
+			<td>{{u.role}}</td>
+			<td>{% if u.role != 3 %}<a href="?page=gestionUser&id={{u.id}}">Réglage</a>{% endif %}</td>
+		</tr>
+	{% endfor %}
+	</tbody>
+	</table>
+	<br>
+	<nav aria-label="Page navigation example">
+	<ul class="pagination justify-content-center">
+		<li class="page-item"><a class="page-link" href="?page=gestionUser&min=0">1</a></li>
+		<li class="page-item"><a class="page-link" href="?page=gestionUser&min=1">2</a></li>
+		<li class="page-item"><a class="page-link" href="?page=gestionUser&min=2">3</a></li>
+		<li class="page-item"><a class="page-link" href="?page=gestionUser&min=3">4</a></li>
+		<li class="page-item"><a class="page-link" href="?page=gestionUser&min=4">5</a></li>
+	</ul>
+	</nav>
+
+{% endif %}
+</div>
+{% endblock %}
