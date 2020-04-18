@@ -283,7 +283,7 @@ function gestionUserController($twig, $db){
 
 		$unUser = $user->selectById($idUser);
 
-		if(strlen($nom) > 0){
+		if($nom != null && $role != null){
 			$exec = $user->update($unUser["email"], $nom, $unUser["image"], $role, $idUser);
 			if($exec){
 				$error = 0;

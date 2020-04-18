@@ -2,7 +2,7 @@
 {% block title %}{{article.titre}}{{parent()}} {% endblock %}
 
 {% block head %}
-<meta name="description" content="{{article.description}}" />
+	<meta name="description" content="{{article.description}}" />
 	<meta name="author" content="{{article.redacteur}}" />
 	<meta name="date" content="{{article.dateCreation | date("Y-m-d")}}" scheme="YYYY-MM-DD" />
 {% endblock %}
