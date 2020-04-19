@@ -130,14 +130,6 @@ function profilController($twig, $db){
 	$enregistre = new Enregistre($db);
 	$form["listEnregistre"] = $enregistre->selectByUser($donnees["id"]);
 
-	// Code erreur renvoyé dans le GET
-	$message[0] = "Les modifications ont bien étais changé";
-	$message[1] = "Une erreur s'est produite, veuillez réésayer";
-
-	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
-		$form["message"] = $message[$_GET["code"]];
-	}
-
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
 

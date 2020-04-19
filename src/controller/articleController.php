@@ -97,33 +97,37 @@ function editorController($twig, $db){
 }
 
 // Permet de supprimer un article
-function removeArticleController($twig, $db){
-	if(!isset($_SESSION["id"]) || !isset($_GET["id"])){
+function deleteArticleController($twig, $db){
+	if(!isset($_SESSION["id"])){
 		header("Location:?page=home");
 		exit;
 	}
+	$cocher = $_POST["cocher"];
+	if(!empty($cocher)){
+		$article = new Article($db);
+		$code = 0;
 
-	$article = new Article($db);
-	$unArticle = $article->selectById($_GET["id"]);
-	$code = 1;
-
-	// Nous véifions si l'article appartiens bien à l'utilisateur ou si il est admin
-	if($unArticle["idUtilisateur"] == $_SESSION["id"] ||  $_SESSION["role"] == 3){
-		$exec = $article->delete($_GET["id"]);
-		if($exec){
-			$code = 0;
+		foreach ($cocher as $id){
+			$unArticle = $article->selectById($id);
+			// Nous véifions si l'article appartiens bien à l'utilisateur ou si il est admin
+			if($unArticle["idUtilisateur"] == $_SESSION["id"] || $_SESSION["role"] == 3){
+				$exec = $article->delete($id);
+				if(!$exec){
+					$code = 1;
+				}
+			}else{$code = 1;}
 		}
-	}
+	}else{$code = null;}
 
 	// Redirige vers la page précedente
-	header("Location: $_SERVER[HTTP_REFERER]" );
+	header("Location: $_SERVER[HTTP_REFERER]&code=".$code);
 	exit;
 }
 
 // Permet la gestion administrative des articles
 function gestionArticleController($twig, $db){
 	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
-		header("Location:?page=home");
+		//header("Location:?page=home");
 		exit;
 	}
 	$article = new Article($db);

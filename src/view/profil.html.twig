@@ -3,16 +3,15 @@
 
 {% block content %}
 
-{% if form.message is defined %}
-	<div class="container">
+{% if get.code != null %}
+	<div class="container mt-3">
 	{% if get.code == 0 %}
-		<div class="alert alert-success mx-auto" style="float:center" role="alert">{{form.message}}</div>
+		<div class="alert alert-success mx-auto" style="float:center" role="alert">Les modifications ont bien étais changé</div>
 	{% else %}
-		<div class="alert alert-danger mx-auto " style="float:center" role="alert">{{form.message}}</div>
+		<div class="alert alert-danger mx-auto " style="float:center" role="alert">Une erreur s'est produite, veuillez réésayer</div>
 	{% endif %}
 	</div>
 {% endif %}
-
 <!-- AFFICHAGE INFO PROFIL -->
 <div class="container bg-dark text-light">
 	<div class="row border-bottom border-light p-2">
@@ -31,43 +30,49 @@
 		</div>
 	</div>
 	<!-- BARRE COMMENDE -->
-	<div class="btn-group-fluid">
-		<a href="?page=updateUser" class="btn text-light">Modifier profil</a>
-		<a href="?page=updatePassword" class="btn text-light">Modifier mot de passe</a>
-		{% if user.role >= 2 %}
-		<a href="?page=editor" class="btn text-light">Rédiger un article</a>
-		{% endif %}
-		{% if user.role == 3 %}
-		<div class="btn-group" role="group">
-			<a id="btnGroupDrop1" class="btn text-light dropdown-toggle" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">Administration</a>
-			<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
-				<a href="?page=gestionUser" class="dropdown-item">Gestion des utilisateurs</a>
-				<a href="?page=gestionArticle" class="dropdown-item">Gestion des articles</a>
-				<a href="?page=gestionTheme" class="dropdown-item">Gestion des thémes</a>
+	<nav class="navbar navbar-expand-lg navbar-dark">
+		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarProfil">
+    		<span class="navbar-toggler-icon"></span>
+  		</button>
+		<div class="collapse navbar-collapse" id="navbarProfil">
+			<a href="?page=updateUser" class="nav-item nav-link text-light">Modifier profil</a>
+			<a href="?page=updatePassword" class="nav-item nav-link text-light">Modifier mot de passe</a>
+			{% if user.role >= 2 %}
+			<a href="?page=editor" class="nav-item nav-link text-light">Rédiger un article</a>
+			{% endif %}
+			{% if user.role == 3 %}
+			<div class="btn-group" role="group">
+				<a id="btnGroupDrop1" class="nav-item nav-link text-light dropdown-toggle" data-toggle="dropdown">Administration</a>
+				<div class="dropdown-menu" aria-labelledby="btnGroupDrop1">
+  					<h6 class="dropdown-header">Outils d'administration</h6>
+					<a href="?page=gestionUser" class="dropdown-item">Gestion des utilisateurs</a>
+					<a href="?page=gestionArticle" class="dropdown-item">Gestion des articles</a>
+					<a href="?page=gestionTheme" class="dropdown-item">Gestion des thémes</a>
+				</div>
 			</div>
+			{% endif %}
+			<a href="?page=deconnexion" class="nav-item nav-link bg-danger text-light">Déconnexion</a>
 		</div>
-		{% endif %}
-		<a href="?page=deconnexion" class="btn btn-danger">Déconnexion</a>
-	</div>
+	</nav>
 </div>
 
 <div class="container">
 
-	<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
-		<li class="nav-item">
-			<a class="nav-link active" data-toggle="tab" href="#home" role="tab">Mes enregistrements</a>
-		</li>
-		{% if user.role != 1 %}
-		<li class="nav-item">
-			<a class="nav-link" data-toggle="tab" href="#myArticle" role="tab">Mes articles</a>
-		</li>
-		{% endif %}
-	</ul>
-	
-	<div class="tab-content" id="myTabContent">
-		<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="profile-tab">
-			<h1 class="mt-5"><b>Mes enregistrements</b></h1>
+<ul class="nav nav-tabs mt-3" id="myTab" role="tablist">
+	<li class="nav-item">
+		<a class="nav-link active" data-toggle="tab" href="#home" role="tab">Mes enregistrements</a>
+	</li>
+	{% if user.role != 1 %}
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#myArticle" role="tab">Mes articles</a>
+	</li>
+	{% endif %}
+</ul>
 
+<div class="tab-content" id="myTabContent">
+	<div class="tab-pane fade show active" id="home" role="tabpanel" aria-labelledby="profile-tab">
+		<h1 class="mt-5"><b>Mes enregistrements</b></h1>
+		{% if form.listEnregistre != null %}
 			{% for e in form.listEnregistre %}
 			<div class="card mt-3">
 				<div class="card-body">
@@ -79,10 +84,17 @@
 				</div>
 			</div>
 			{% endfor %}
-		</div>
-		<div class="tab-pane fade" id="myArticle" role="tabpanel" aria-labelledby="home-tab">
-			<h1 class="mt-5"><b>Mes articles</b></h1>
-
+		{% else %}
+			<h4 class="text-center m-5">Pas d'article enregistré</h4>
+		{% endif %}
+	</div>
+	<div class="tab-pane fade" id="myArticle" role="tabpanel" aria-labelledby="home-tab">
+		<form method="POST" action="?page=deleteArticle">
+		<h1 class="mt-5">
+			<b>Mes articles</b>
+			<button type="submit" class="btn btn-danger btn-sm ml-2" name="btEfface">Supprimer la sélection</button>
+		</h1>
+		{% if form.listArticle != null %}
 			{% for a in form.listArticle %}
 			<div class="card mt-3">
 				<div class="card-body">
@@ -91,12 +103,17 @@
 					<p class="card-text">{{a.description}}</p>
 					<a href="?page=article&id={{a.id}}" class="card-link">Voir l'article</a>
 					<a href="?page=editor&id={{a.id}}" class="card-link">Modifier l'article</a>
-					<a href="?page=deleteArticle&id={{a.id}}" class="card-link text-danger">Supprimer l'article</a>
+					<label class="card-link text-danger" for="{{a.id}}">Supprimer l'article</label>
+					<input class="card-link" type="checkbox" id="{{a.id}}" name="cocher[]" value="{{a.id}}" />
 				</div>
 			</div>
 			{% endfor %}
-		</div>
+		{% else %}
+			<h4 class="text-center m-5">Pas d'article rédigé</h4>
+		{% endif %}
+		</form>
 	</div>
+</div>
 
 </div>
 {% endblock %}

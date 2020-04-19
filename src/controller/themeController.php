@@ -33,17 +33,17 @@ function themeController($twig, $db){
 	// Suppresion de thème(s)
 	if(isset($_POST["btEfface"])){
 		$coche = $_POST["coche"];
-		$code = 0;
+		$code = null;
 
 		if(!empty($coche)){
 			foreach($coche as $id){
 				$exec = $theme->delete($id);
-				if(!$exec){
+				if($exec){
+					$code = 0;
+				}else{
 					$code = 1;
 				}
 			}
-		}else{
-			$code = null; // Si aucun theme choché on envoie pas de message
 		}
 
 		header("Location:?page=gestionTheme&code=". $code);

@@ -1,10 +1,23 @@
 {% extends "base.html.twig" %}
-{% block title %}Gestion des article{{parent()}}{% endblock %}
+{% block title %}Gestion des articles{{parent()}}{% endblock %}
 
 {% block content %}
+
+{% if get.code != null %}
+	<div class="container mt-3">
+	{% if get.code == 0 %}
+		<div class="alert alert-success mx-auto" style="float:center" role="alert">Les modifications ont bien étais changé</div>
+	{% else %}
+		<div class="alert alert-danger mx-auto " style="float:center" role="alert">Une erreur s'est produite, veuillez réésayer</div>
+	{% endif %}
+	</div>
+{% endif %}
 <div class="container">
 	<h1 class="text-center m-4">Gestion des articles</h1>
 	<p class="text-center">Vous pouvez administrer les articles ici</p>
+	
+	<form method="POST" action="?page=deleteArticle">
+	<button type="submit" class="btn btn-danger" name="btEfface">Supprimer la sélection</button>
 	{% for a in articles %}
 			<div class="card mt-3">
 				<div class="card-body">
@@ -13,10 +26,13 @@
 					<p class="card-text">{{a.description}}</p>
 					<a href="?page=article&id={{a.id}}" class="card-link">Voir l'article</a>
 					<a href="?page=editor&id={{a.id}}" class="card-link">Modifier l'article</a>
-					<a href="?page=deleteArticle&id={{a.id}}" class="card-link text-danger">Supprimer l'article</a>
+					<label class="card-link text-danger" for="{{a.id}}">Supprimer l'article</label>
+					<input class="card-link" type="checkbox" id="{{a.id}}" name="cocher[]" value="{{a.id}}" />
 				</div>
 			</div>
 	{% endfor %}
+	</form>
+
 </div>
 <br>
 <nav aria-label="Page navigation example">
