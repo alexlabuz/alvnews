@@ -1,23 +1,21 @@
 {% extends "base.html.twig" %}
-{% block title %}Inscritption{{parent()}} {% endblock %}
+{% block title %}Inscritption{{parent()}}{% endblock %}
 
 {% block content %}
-
+<div class="log_in bg-light">
 	{% if get.code == 5 %}
-	<div class="text-center nobs-box-center">
-		<h1 class="m-4">Inscription réussi</h1>
-		<h3 class="m-4">Votre inscription est terminé. Bienvenue sur alLavi news !</h3>
-		<p class="m-4">Connectez-vous dés-maintenant.</p>
+	<div>
+		<h1 class="mb-4">Inscription réussi</h1>
+		<h3 class="mb-4">Votre inscription est terminé. Bienvenue sur alLavi news !</h3>
+		<p class="mb-4">Connectez-vous dés-maintenant.</p>
 		<a class="btn btn-success btn-lg" href="?page=connexion">Me connecter</a>
 	</div>
 	{% else %}
-	
 	<h1 class="text-center m-4">Inscription</h1>
-
 	{% if form.message is defined %}
-		<div class="alert alert-danger mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
+		<div class="alert alert-danger block-custom" role="alert">{{form.message}}</div>
 	{% endif %}
-	<form method="POST" action="index.php?page=inscription" class="bg-primary text-light p-4 mx-auto rounded block-custom">
+	<form method="POST" action="index.php?page=inscription" class="p-4 bg-white border border-dark rounded block-custom">
 		<div class="form-group">
 			<label for="email">Adresse email *</label>
 			<input type="email" class="form-control" id="email" name="email" required />
@@ -31,10 +29,11 @@
 			<input type="password" class="form-control" id="password" name="password" required/>
 			<input type="password" class="form-control" id="password2" name="password2" required/>
 		</div>
-
-		<button type="submit" name="btInscrire" class="btn btn-light">S'inscrire</button>
+		<button type="submit" name="btInscrire" class="btn btn-primary">S'inscrire</button>
 	</form>
 
-	<p class="text-center m-4">Tu as déjà un compte ? <a href="?page=connexion">connecte toi ici !</a></p>
+	<p class="m-3">Tu as déjà un compte ? <a href="?page=connexion">connecte toi ici !</a></p>
+	<a href="./">Retour à l'accueil du site</a> 
 	{% endif %}
+</div>
 {% endblock %}

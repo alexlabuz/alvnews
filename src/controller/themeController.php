@@ -53,7 +53,7 @@ function themeController($twig, $db){
 	// Affichage des thème
 	$listType = $theme->select();
 
-	$message[0] = "Votre demande à est effectuée avec succée";
+	$message[0] = "Votre demande à était effectuée avec succée";
 	$message[1] = "Une erreur s'est produite, veuillez réésayer";
 	$message[2] = "Le type existe déjà";
 

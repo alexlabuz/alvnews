@@ -44,6 +44,7 @@ function inscriptionController($twig, $db){
 		$form["message"] = $message[$_GET["code"]];
 	}
 	
+	$form["nonavbar"] = true;
 	echo $twig->render("inscription.html.twig", array("form" => $form));
 }
 
@@ -81,14 +82,15 @@ function connexionController($twig, $db){
 		}
  
 		// Si la connexion à échoué on envoie dans l'url l'erreur
-		header("Location:?page=connexion&error=true");
+		header("Location:?page=connexion&code=1");
 		exit;
 	}
 
-	if(isset($_GET["error"])){
-		$form["error"] = $_GET["error"];
+	if(isset($_GET["code"])){
+		$form["error"] = $_GET["code"];
 	}
 
+	$form["nonavbar"] = true;
 	echo $twig->render("connexion.html.twig", array("form" => $form));
 }
 
@@ -147,7 +149,7 @@ function updateUserController($twig, $db){
 	if(isset($_POST['btUpdate'])){
 		$email = $_POST["email"];	
 		$nom = $_POST["nom"];
-		$image = $_POST["image"];
+		$image = "images/img.jpg";
 		$code = null;
 
 		$utilisateur = new User($db);
@@ -160,7 +162,7 @@ function updateUserController($twig, $db){
 				// Si le mail n'a pas était saisie nous remetons le même
 				$email = $donnees["email"];
 			}
-			$exec = $utilisateur->update($email, $nom, "images/img.jpg", $donnees["role"], $_SESSION['id']);
+			$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
 			if(!$exec){
 				$code = 3;
 			}else{

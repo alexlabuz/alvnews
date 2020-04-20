@@ -40,7 +40,7 @@ class Article{
 			ORDER BY dateCreation DESC");
 
 		$this->selectById = $this->db->prepare(
-			"SELECT a.id AS id, titre, description, a.image AS image, contenu, dateCreation, dateModif, idTheme, idUtilisateur, t.libelle AS theme, u.nom AS redacteur
+			"SELECT a.id AS id, titre, description, a.image AS image, contenu, dateCreation, dateModif, idUtilisateur, t.libelle AS theme, t.couleur AS couleur, u.nom AS redacteur
 			FROM article a, theme t, utilisateur u
 			WHERE a.idTheme = t.id 
 			AND a.idUtilisateur = u.id

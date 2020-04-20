@@ -1,16 +1,10 @@
 @font-face {
-	font-family: "Comfortaa";
-	src: url("Comfortaa-Regular.ttf") format("truetype");
+	font-family: "Sarala";
+	src: url("../font/Sarala-Regular.woff2") format("woff2"),
+		url("../font/Sarala-Regular.woff") format("woff");
 }
-html, body{height: 100%;}
-body{
-	font-family:Comfortaa;
-}
-
-.block-custom{
-	max-width: 500px;
-	box-shadow: 5px 5px 5px grey;
-}
+html, body, .baseDiv, .log_in{height: 100%;}
+body{font-family:Sarala;}
 
 .img-profile{
 	width: 150px;
@@ -39,11 +33,14 @@ body{
 	max-width: 520px;
 }
 
-/*--autre--*/
-.nobs-box-center{
-	position: absolute;
-	top:50%;
-	left: 50%;
-	transform: translate(-50%,-50%);
-	width: 100%;
+/*--Page de connexion et inscription--*/
+.log_in{
+	display:flex;
+    align-items:center;
+    flex-direction:column;
+    justify-content:center;
+}
+.block-custom{
+	max-width:500px;
+	width:95%;
 }

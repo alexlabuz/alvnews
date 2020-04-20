@@ -1,5 +1,4 @@
 <?php
-
 // Permet d'afficher l'article au public
 function afficheArticleController($twig, $db){
 	if(!isset($_GET["id"])){
@@ -42,7 +41,7 @@ function editorController($twig, $db){
 	if(isset($_POST["btEnvoyer"])){
 		$inputTitre = $_POST["titre"];
 		$inputDescription = $_POST["description"];
-		$inputImage = null;
+		$inputImage = "images/img.jpg";
 		$inputArticle = $_POST["article"];
 		$inputTheme = $_POST["theme"];
 		$inputVisible = 0;

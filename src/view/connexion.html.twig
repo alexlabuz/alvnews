@@ -2,13 +2,12 @@
 {% block title %}Connexion{{parent()}}{% endblock %}
 
 {% block content %}
-	<h1 class="text-center m-4">Connexion</h1>
-
+<div class="log_in bg-light">
+	<h1>Connexion</h1>
 	{% if form.error is defined %}
-		<div class="alert alert-danger block-custom mx-auto" role="alert">Les identifients sont incorrects</div>
+		<div class="alert alert-danger block-custom" role="alert">Les identifients sont incorrects</div>
 	{% endif %}
-
-	<form method="POST" action="index.php?page=connexion" class="bg-primary text-light p-4 mx-auto rounded block-custom">
+	<form method="POST" action="index.php?page=connexion" class="p-4 bg-white border border-dark rounded block-custom">
 		<div class="form-group">
 			<label for="email">Adresse email</label>
 			<input type="text" class="form-control" id="email" name="email" required />
@@ -21,8 +20,10 @@
 			<input class="form-check-input" type="checkbox" name="resteConnecte" id="resteConnecte" >
 			<label class="form-check-label" for="resteConnecte">Conserver la connexion</label>
 		</div>
-		<button type="submit" name="btConnecter" class="btn btn-light mt-3">Se connecter</button>
+		<button type="submit" name="btConnecter" class="btn btn-primary mt-3">Se connecter</button>
 	</form>
 
-	<p class="text-center m-4">Tu n'as pas de compte ? pas de problème <a href="?page=inscription">inscrit-toi maintenant !</a></p>
+	<p class="m-3">Tu n'as pas de compte ? pas de problème <a href="?page=inscription">inscrit-toi maintenant !</a></p>
+	<a href="./">Retour à l'accueil du site</a> 
+</div>
 {% endblock %}
