@@ -1,6 +1,12 @@
 {% extends "base.html.twig" %}
 {% block title %}Inscritption{{parent()}}{% endblock %}
 
+{% block head %}
+<style>
+html, body, .baseDiv, .log_in{height: 100%;}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="log_in bg-light">
 	{% if get.code == 5 %}

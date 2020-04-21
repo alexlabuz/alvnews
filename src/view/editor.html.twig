@@ -33,7 +33,6 @@
 				<label for="theme">Thème *</label>
 				<select class="form-control" id="theme" name="theme" required>
 					{% for t in form.theme %}
-							<p></p>
 						{% if article.idTheme == t.id %}
 							<option value="{{t.id}}" selected>{{t.libelle}}</option>
 						{% else %}

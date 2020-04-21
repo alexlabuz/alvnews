@@ -1,0 +1,34 @@
+{% extends "base.html.twig" %}
+{% block title %}{{form.title}}{{parent()}}{% endblock %}
+
+{% block content %}
+
+<div class="container text-center">
+	<h1 class="m-4">Recherche</h1>
+	<form method="POST" action="?page=search">
+		<div class="form-row text-center">
+			<input class="form-control col-10 p-4" type="search" id="search" name="search" value="{{get.search}}" placeholder="Faite votre recherche ici ...">
+			<button class="btn btn-primary col-2" type="submit" name="btRecherche">Recherche</button>
+		</div>
+	</form>
+
+	<div class="mt-4 text-left">
+	{% if form.resultat is defined %}
+		{% if form.resultat != null %}
+			{% for a in form.resultat %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{a.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Rédigé le {{a.dateCreation | date("d F Y à G:i")}}</h6>
+					<p class="card-text">{{a.description}}</p>
+					<a href="?page=article&id={{a.id}}" class="card-link">Voir l'article</a>
+				</div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<h3>Aucun resultat</h3>
+		{% endif %}
+	{% endif %}	
+	</div>
+</div>
+{% endblock %}

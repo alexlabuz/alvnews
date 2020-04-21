@@ -3,7 +3,6 @@
 	src: url("../font/Sarala-Regular.woff2") format("woff2"),
 		url("../font/Sarala-Regular.woff") format("woff");
 }
-html, body, .baseDiv, .log_in{height: 100%;}
 body{font-family:Sarala;}
 
 .img-profile{
@@ -11,11 +10,15 @@ body{font-family:Sarala;}
 	height: 150px;
 }
 /*--Page d'accueil--*/
+.carousel img{
+	height: 500px;
+	opacity: 0.7;
+}
+
 .card-link-custom, .card-link-custom:link{
 	color: black;
 	text-decoration: none;
 }
-
 .card-deck .card, .card-deck img{
 	height:200px;
 }

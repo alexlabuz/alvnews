@@ -8,6 +8,7 @@ class Article{
 	private $select;
 	private $selectByUser;
 	private $selectById;
+	private $search;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -40,11 +41,18 @@ class Article{
 			ORDER BY dateCreation DESC");
 
 		$this->selectById = $this->db->prepare(
-			"SELECT a.id AS id, titre, description, a.image AS image, contenu, dateCreation, dateModif, idUtilisateur, t.libelle AS theme, t.couleur AS couleur, u.nom AS redacteur
+			"SELECT a.id AS id, titre, description, a.image AS image, contenu, dateCreation, dateModif, idUtilisateur,t.id AS idTheme, t.libelle AS theme, t.couleur AS couleur, u.nom AS redacteur
 			FROM article a, theme t, utilisateur u
 			WHERE a.idTheme = t.id 
 			AND a.idUtilisateur = u.id
 			AND a.id = :id");
+			
+		$this->search = $this->db->prepare("SELECT id, titre, description, dateCreation 
+			FROM article
+			WHERE (LOWER(titre) LIKE LOWER(:titre)
+			OR LOWER(description) LIKE LOWER(:description))
+			AND visible = 1
+			ORDER BY titre");
 	}
 
 	public function insert($titre, $description, $image, $contenu, $visible, $idTheme, $idUtilisateur){
@@ -134,6 +142,16 @@ class Article{
 		}
 
 		return $this->selectById->fetch();
+	}
+
+	public function search($inTitre, $inDescription){
+		$this->search->execute(array(":titre" => "%".$inTitre."%", ":description" => "%".$inDescription."%"));
+
+		if($this->search->errorCode() != 0){
+			print_r($this->search->errorInfo());
+		}
+
+		return $this->search->fetchAll();
 	}
 
 }

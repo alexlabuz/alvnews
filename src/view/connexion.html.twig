@@ -1,6 +1,12 @@
 {% extends "base.html.twig" %}
 {% block title %}Connexion{{parent()}}{% endblock %}
 
+{% block head %}
+<style>
+html, body, .baseDiv, .log_in{height: 100%;}
+</style>
+{% endblock %}
+
 {% block content %}
 <div class="log_in bg-light">
 	<h1>Connexion</h1>

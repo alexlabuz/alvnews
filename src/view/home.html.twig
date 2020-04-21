@@ -1,5 +1,5 @@
 {% extends "base.html.twig" %}
-{% block title %}Accueil{{parent()}} {% endblock %}
+{% block title %}Accueil{{parent()}}{% endblock %}
 
 {% block content %}
 
@@ -8,8 +8,43 @@
 	<p>Découvrez ici les derniers articles</p>
 </div>
 
-<div class="card-deck mx-auto">
-{% for a in list %}
+{% if get.min is not defined or get.min == 0 %}
+<!--CAROUSEL-->
+<div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
+  <ol class="carousel-indicators">
+	{% for a in article %}
+    <li data-target="#carouselExampleCaptions" data-slide-to="{{loop.index - 1}}"{% if loop.first %} class="active"{% endif %}></li>
+	{% endfor %}
+  </ol>
+  <div class="carousel-inner">
+	{% for a in article %}
+    <div class="carousel-item{% if loop.first %} active{% endif %}">
+	<a href="?page=article&id={{a.id}}">
+		<div style="background:black">
+      		<img src="images/img.jpg" class="d-block w-100 mb-4" alt="...">
+		</div>
+      	<div class="carousel-caption d-md-block">
+        	<h3>{{a.titre}}</h3>
+        	<p>{{a.description}}</p>
+      	</div>
+	</a>
+    </div>
+	{% endfor %}
+  </div>
+  <a class="carousel-control-prev" href="#carouselExampleCaptions" role="button" data-slide="prev">
+    <span class="carousel-control-prev-icon" aria-hidden="true"></span>
+    <span class="sr-only">Previous</span>
+  </a>
+  <a class="carousel-control-next" href="#carouselExampleCaptions" role="button" data-slide="next">
+    <span class="carousel-control-next-icon" aria-hidden="true"></span>
+    <span class="sr-only">Next</span>
+  </a>
+</div>
+{% endif %}
+
+<!-- CARD -->
+<div class="card-deck mx-auto align-items-middle">
+{% for a in article %}
 	<a class="card-link-custom" href="?page=article&id={{a.id}}">
 	<div class="card mb-3" style="max-width: 540px;">
 	<div class="row no-gutters">
@@ -29,6 +64,7 @@
 {% endfor %}
 </div>
 
+<!-- PAGINATION -->
 <nav aria-label="Page navigation example">
 <ul class="pagination justify-content-center">
 	<li type="submit" class="page-item"><a class="page-link" href="?min=0">1</a></li>
