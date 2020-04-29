@@ -22,6 +22,7 @@ function getPage($db){
 	$listPage["addComment"] = "addCommentController";
 	$listPage["removeComment"] = "removeCommentController";
 	$listPage["enregistre"] = "addRemoveEnregistreController";
+	$listPage['suggestion'] = "suggestionController";
 	$listPage['404'] = "error404Controller";
 	$listPage['maintenance'] = "maintenanceController";
 	

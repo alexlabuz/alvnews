@@ -7,8 +7,8 @@ function homeController($twig, $db){
 	if(isset($_GET["min"])){
 		$page = $_GET["min"];
 	}
-	$min = $page * 9;
-	$max = 9;
+	$min = $page * 8;
+	$max = 8;
 
 	$articleList = $article->select($min, $max, 1);
 
@@ -31,6 +31,19 @@ function searchController($twig, $db){
 	}
 
 	echo $twig->render("search.html.twig", array("form"=>$form));
+}
+
+// Génére le resultat de la recherche en JSON pour la recherche instané
+function suggestionController($twig, $db){
+	$form = array();
+	if(!empty($_GET["search"])){
+		$search = $_GET["search"];
+		$form["title"] = $search;
+		$article = new Article($db);
+		$form["resultat"] = $article->search($search, $search);
+
+		echo json_encode($form["resultat"]);
+	}
 }
 
 function error404Controller($twig, $db){

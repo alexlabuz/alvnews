@@ -19,8 +19,8 @@
 	</button>
 	<div class="collapse navbar-collapse" id="navbarNav">
 		<ul class="navbar-nav mr-auto">
-			<li class="nav-item active">
-				<a class="nav-link" href="?page=home">Accueil</a>
+			<li class="nav-item">
+				<a class="nav-link" href="./">Accueil</a>
 			</li>
 	{% if session.id is defined %}
 	<div class="dropdown">
@@ -46,9 +46,11 @@
 			</li>
 	{% endif %}
 		</ul>
-		<form class="form-inline my-2 my-lg-0" method="POST" action="?page=search">
-			<input class="form-control mr-sm-2" type="search" placeholder="Recherche sur le site" name="search" aria-label="Search">
+		<form class="form-inline my-2 my-lg-0 form-search" method="POST" action="?page=search">
+			<input class="form-control mr-sm-2 input-search" type="search" placeholder="Recherche sur le site" name="search" aria-label="Search">
 			<button class="btn btn-outline-light my-2 my-sm-0" name="btRecherche" type="submit">Rechercher</button>
+			<!--Suggestion instané (search.js)-->
+			<ul class="list-group list-group-flush suggestion"></ul>
 		</form>
 	</div>
 </nav>
@@ -58,6 +60,8 @@
 {% block content %}{% endblock %}
 </div>
 
+<script src="js/ajax.js"></script>
+<script src="js/search.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>

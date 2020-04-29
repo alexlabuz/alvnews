@@ -5,10 +5,24 @@
 }
 body{font-family:Sarala;}
 
-.img-profile{
-	width: 150px;
-	height: 150px;
+/*--Tamplate--*/
+nav.navbar{
+	position: sticky;
+	top: 0;
+	z-index: 2;
 }
+/*--Recherche instantané---*/
+.form-search{position: relative;}
+.suggestion{
+	position:absolute;
+	display:none;
+	top:40px;
+}
+.suggestion a{
+	color:black;
+	text-decoration: none;
+}
+
 /*--Page d'accueil--*/
 .carousel img{
 	height: 500px;
@@ -19,10 +33,14 @@ body{font-family:Sarala;}
 	color: black;
 	text-decoration: none;
 }
-.card-deck .card, .card-deck img{
-	height:200px;
+
+@media(min-width:776px){
+	.list-article .card, .list-article img{
+		height: 200px;
+	}
 }
-.card-deck:hover > *{
+
+.list-article .card:hover > *{
 	color:black;
 }
 
@@ -46,4 +64,10 @@ body{font-family:Sarala;}
 .block-custom{
 	max-width:500px;
 	width:95%;
+}
+
+/*--Page profile--*/
+.img-profile{
+	width: 150px;
+	height: 150px;
 }

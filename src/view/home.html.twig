@@ -3,12 +3,13 @@
 
 {% block content %}
 
-<div class="text-center m-3">
-	<h1>Bienvenue sur alLavi news</h1>
-	<p>Découvrez ici les derniers articles</p>
-</div>
 
 {% if get.min is not defined or get.min == 0 %}
+<div class="container mt-3">
+	<h1><b>alLavi news</b></h1>
+</div>
+
+<div class="container mt-3"><h2 class="mb-3">A la une</h2></div>
 <!--CAROUSEL-->
 <div id="carouselExampleCaptions" class="carousel slide" data-ride="carousel">
   <ol class="carousel-indicators">
@@ -43,7 +44,9 @@
 {% endif %}
 
 <!-- CARD -->
-<div class="card-deck mx-auto align-items-middle">
+<div class="container">
+<h2 class="mb-3">Les dernière news</h2>
+<div class="card-deck list-article">
 {% for a in article %}
 	<a class="card-link-custom" href="?page=article&id={{a.id}}">
 	<div class="card mb-3" style="max-width: 540px;">
@@ -62,6 +65,7 @@
 	</div>
 	</a>
 {% endfor %}
+</div>
 </div>
 
 <!-- PAGINATION -->
