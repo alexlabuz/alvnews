@@ -12,10 +12,10 @@
 		{% endif %}
 	{% endif %}
 
-	<form method="POST" action="index.php?page=updateUser" class="bg-primary text-light p-4 mx-auto rounded block-custom">
+	<form method="POST" action="index.php?page=updateUser" enctype="multipart/form-data" class="bg-primary text-light p-4 mx-auto rounded block-custom">
 		<div class="form-group">
 			<label for="email">Adresse email</label>
-			<input type="email" class="form-control" id="email" name="email" placeholder="{{user.email}}" />
+			<input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required/>
 		</div>
 		<div class="form-group">
 			<label for="nom">Nom</label>
@@ -24,12 +24,29 @@
 		<div class="form-group">
 			<label for="image">Photo de profil</label>
 			<input type="file" class="form-control" id="image" name="image"/>
+			<small>Taille max 2 Mo | format autorisé : jpg, png.</small>
 		</div>
 
 		<button type="submit" name="btUpdate" class="btn btn-light">Mettre à jour</button>
 	</form>
+	
+	<form method="POST" action="index.php?page=updateUser" class="bg-primary text-light p-2 mx-auto rounded mt-4 block-custom">
+		{% if user.image != null %}
+		<div class="row">
+		<div class=" col-3">
+			<img src="images/profil/{{user.image}}" class="img-thumbnail img-mini">
+		</div>
+		<div class="col-5 align-self-center">
+			<p>Ma photo de profil</p>
+			<button type="submit" name="btSuprimmeImage" class="btn btn-light btn-sm">Supprimer</button>
+		</div>
+		</div>
+		{% else %}
+			<p class="m-2">Pas de photo de profil</p>
+		{% endif %}
+	</form>
 
-	<div class="bg-danger text-light p-4 mt-5 mx-auto rounded block-custom">
+	<div class="bg-danger text-light p-4 mt-4 mx-auto rounded block-custom">
 		<p>Cloturer mon compte</p>
 		<button class="btn btn-light" id="supprimerCompte" data-toggle="modal" data-target="#exampleModal">Supprimer mon compte</button>
 	</div>

@@ -66,8 +66,12 @@ nav.navbar{
 	width:95%;
 }
 
-/*--Page profile--*/
+/*--Image profile--*/
 .img-profile{
 	width: 150px;
 	height: 150px;
+}
+.img-mini{
+	width: 80px;
+	height: 80px;
 }

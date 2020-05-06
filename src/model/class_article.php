@@ -47,10 +47,11 @@ class Article{
 			AND a.idUtilisateur = u.id
 			AND a.id = :id");
 			
-		$this->search = $this->db->prepare("SELECT id, titre, description, dateCreation 
+		$this->search = $this->db->prepare(
+			"SELECT id, titre, description, dateCreation 
 			FROM article
-			WHERE (LOWER(titre) LIKE LOWER(:titre)
-			OR LOWER(description) LIKE LOWER(:description))
+			WHERE (LOWER(titre) LIKE LOWER(:search)
+			OR LOWER(description) LIKE LOWER(:search))
 			AND visible = 1
 			ORDER BY titre");
 	}
@@ -144,8 +145,8 @@ class Article{
 		return $this->selectById->fetch();
 	}
 
-	public function search($inTitre, $inDescription){
-		$this->search->execute(array(":titre" => "%".$inTitre."%", ":description" => "%".$inDescription."%"));
+	public function search($search){
+		$this->search->execute(array(":search" => "%".$search."%", ":description" => "%".$search."%"));
 
 		if($this->search->errorCode() != 0){
 			print_r($this->search->errorInfo());

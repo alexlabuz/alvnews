@@ -149,19 +149,25 @@ function updateUserController($twig, $db){
 	if(isset($_POST['btUpdate'])){
 		$email = $_POST["email"];	
 		$nom = $_POST["nom"];
-		$image = "images/img.jpg";
-		$code = null;
+		$image = $donnees["image"]; // Si aucune image sélectionné on remet l'ancienne
+		$code = 0; // Code de réussite
 
-		$utilisateur = new User($db);
-		if($utilisateur->connect($email)){
+		$upload = new Upload(["jpg", "png", "JPG", "PNG"], "images/profil", 2000000);
+		$fichier = $upload->enregistrer("image");
+
+		if($fichier["nom"] != null){
+			/* Supprimer l'ancienne photo de profil */
+			if(file_exists("images/profil/".$donnees["image"])){
+				unlink("images/profil/".$donnees["image"]); 
+			}
+			$image = $fichier["nom"];
+		}
+
+		if(($utilisateur->connect($email)) && ($email != $donnees["email"])){
 			$code = 2;
-		}else if($nom == null){
+		}else if($nom == null || $email == null){
 			$code = 3;
 		}else{
-			if(empty($email)){
-				// Si le mail n'a pas était saisie nous remetons le même
-				$email = $donnees["email"];
-			}
 			$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
 			if(!$exec){
 				$code = 3;
@@ -169,7 +175,6 @@ function updateUserController($twig, $db){
 				// Réussite de la demande
 				$_SESSION["nom"] = $nom;
 				$_SESSION["email"] = $email;
-				$code = 0;
 			}
 		}
 

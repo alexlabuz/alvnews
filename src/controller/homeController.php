@@ -27,7 +27,7 @@ function searchController($twig, $db){
 		$search = $_GET["search"];
 		$form["title"] = $search;
 		$article = new Article($db);
-		$form["resultat"] = $article->search($search, $search);
+		$form["resultat"] = $article->search($search);
 	}
 
 	echo $twig->render("search.html.twig", array("form"=>$form));
@@ -37,10 +37,8 @@ function searchController($twig, $db){
 function suggestionController($twig, $db){
 	$form = array();
 	if(!empty($_GET["search"])){
-		$search = $_GET["search"];
-		$form["title"] = $search;
 		$article = new Article($db);
-		$form["resultat"] = $article->search($search, $search);
+		$form["resultat"] = $article->search($_GET["search"]);
 
 		echo json_encode($form["resultat"]);
 	}
