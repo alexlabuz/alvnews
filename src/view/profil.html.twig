@@ -8,19 +8,26 @@
 	{% if get.code == 0 %}
 		<div class="alert alert-success mx-auto" style="float:center" role="alert">Les modifications ont bien étais changé</div>
 	{% else %}
-		<div class="alert alert-danger mx-auto " style="float:center" role="alert">Une erreur s'est produite, veuillez réésayer</div>
+		<div class="alert alert-danger mx-auto" style="float:center" role="alert">Une erreur s'est produite, veuillez réésayer</div>
 	{% endif %}
 	</div>
 {% endif %}
 <!-- AFFICHAGE INFO PROFIL -->
 <div class="container bg-dark text-light">
 	<div class="row border-bottom border-light p-2">
+		<!-- PHOTO PROFILE -->
 		<div class="col-lg-2 align-self-center">
-			<img src="images/profil/{{user.image}}" alt="photo de profil" class="img-thumbnail img-profile">
+		{% if user.image != null %}
+			<img src="images/profil/{{user.image}}" alt="photo de profil" class="img-thumbnail img-profile img-cover">
+		{% else %}
+			<img src="images/default/profil.png" alt="photo de profil" class="img-thumbnail img-profile img-cover">
+		{% endif %}
 		</div>
+		<!-- NOM UTILISATEUR -->
 		<div class="col-lg-3 align-self-center">
 			<h2>{{user.nom}}</h2>
 		</div>
+		<!-- INFO UTILISATEUR -->
 		<div class="col-sm-7 align-self-center">
 			<p>{{ form.roleText }} alLavi news</p>
 			{% if user.role != 1 %}
@@ -29,6 +36,7 @@
 			<p>Inscrit depuis le {{ user.dateInscription | date("d F Y")}}</p>
 		</div>
 	</div>
+
 	<!-- BARRE COMMENDE -->
 	<nav class="navbar navbar-expand-lg navbar-dark">
 		<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarProfil">

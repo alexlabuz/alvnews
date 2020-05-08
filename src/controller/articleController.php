@@ -6,6 +6,7 @@ function afficheArticleController($twig, $db){
 		exit;
 	}
 	$form = array();
+	$form["url"] = url();
 
 	$article = new Article($db);
 	$commentaire = new Comment($db);
@@ -33,15 +34,15 @@ function editorController($twig, $db){
 		exit;
 	}
 	$form = array();
-	$article = new Article($db);
 	$user = new User($db);
 	$unUtilisateur = $user->selectById($_SESSION["id"]);
+	$article = new Article($db);
 
 	// Appui sur le bouton d'envoie d'article
 	if(isset($_POST["btEnvoyer"])){
 		$inputTitre = $_POST["titre"];
 		$inputDescription = $_POST["description"];
-		$inputImage = "images/img.jpg";
+		$image = null;
 		$inputArticle = $_POST["article"];
 		$inputTheme = $_POST["theme"];
 		$inputVisible = 0;
@@ -51,16 +52,36 @@ function editorController($twig, $db){
 		$idUser = $unUtilisateur["id"];
 		$error = false;
 
-		// Vérifie si il s'agit d'un nouveau article ou si c'est une mise à jour
+		$upload = new Upload(["jpg", "JPG", "png", "PNG"], "images/article", 2000000);
+		$fichier = $upload->enregistrer("image");
+		
 		if($inputTitre != null && $inputTheme != null){
+
+			// Vérifie si il s'agit d'un nouveau article ou si c'est une mise à jour
 			if(!isset($_POST["idArticleUpdate"])){
+				// Envoie de l'image
+				if($fichier["nom"] != null){
+					$image = $fichier["nom"];
+				}
 				// Création d'un nouvel article
-				$exec = $article->insert($inputTitre, $inputDescription, $inputImage, $inputArticle, $inputVisible, $inputTheme, $idUser);
+				$exec = $article->insert($inputTitre, $inputDescription, $image, $inputArticle, $inputVisible, $inputTheme, $idUser);
 			}else{
+				// Envoie de l'image
+				$donnees = $article->selectById($_POST["idArticleUpdate"]);
+				if($fichier["nom"] != null){
+					/* Supprimer l'ancienne photo de profil */
+					if(file_exists("images/article/".$donnees["image"])){
+						unlink("images/article/".$donnees["image"]); 
+					}
+					$image = $fichier["nom"];
+				}else{
+					$image = $donnees["image"];
+				}
 				// Mise à jour de l'article existant
-				$exec = $article->update($inputTitre, $inputDescription, $inputImage, $inputArticle, $inputVisible, $inputTheme, $_POST["idArticleUpdate"]);
+				$exec = $article->update($inputTitre, $inputDescription, $image, $inputArticle, $inputVisible, $inputTheme, $_POST["idArticleUpdate"]);
 			}
 			if(!$exec){$error = true;}
+
 		}else{$error = true;}
 		
 		if($error){
@@ -75,12 +96,12 @@ function editorController($twig, $db){
 		exit;
 	}
 
-	$list = array();
+	$unArticle = null;
 	if(isset($_GET["id"])){
-		$list = $article->selectById($_GET["id"]);
-		if($list == null){
+		$unArticle = $article->selectById($_GET["id"]);
+		if($unArticle == null){
 			$form["errorMessage"] = "L'article n'existe pas";
-		}elseif($list["idUtilisateur"] != $unUtilisateur["id"] && $unUtilisateur["role"] != 3){
+		}elseif($unArticle["idUtilisateur"] != $unUtilisateur["id"] && $unUtilisateur["role"] != 3){
 			$form["errorMessage"] = "Mais cet article ne vous appartient pas dis-donc !";
 		}
 	}
@@ -92,7 +113,7 @@ function editorController($twig, $db){
 	$theme = new Theme($db);
 	$form["theme"] = $theme->select();
 
-	echo $twig->render("editor.html.twig", array("form" => $form, "article" => $list));
+	echo $twig->render("editor.html.twig", array("form" => $form, "article" => $unArticle));
 }
 
 // Permet de supprimer un article
@@ -114,6 +135,10 @@ function deleteArticleController($twig, $db){
 				if(!$exec){
 					$code = 1;
 				}
+				/* Supprimer l'ancienne photo de profil */
+				if(file_exists("images/article/".$unArticle["image"])){
+					unlink("images/article/".$unArticle["image"]); 
+				}
 			}else{$code = 1;}
 		}
 	}else{$code = null;}
@@ -126,7 +151,7 @@ function deleteArticleController($twig, $db){
 // Permet la gestion administrative des articles
 function gestionArticleController($twig, $db){
 	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
-		//header("Location:?page=home");
+		header("Location:?page=home");
 		exit;
 	}
 	$article = new Article($db);
@@ -141,4 +166,24 @@ function gestionArticleController($twig, $db){
 	$listArticle = $article->select($min, $max, 0);
 
 	echo $twig->render("gestionArticle.html.twig", array("articles"=>$listArticle));
+}
+
+// Retourne l'url actuellement ouverte
+function url(){
+	if(isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on') 
+	$url = "https"; 
+	else
+	$url = "http"; 
+	
+	// Ajoutez // à l'URL.
+	$url .= "://"; 
+	
+	// Ajoutez l'hôte (nom de domaine, ip) à l'URL.
+	$url .= $_SERVER['HTTP_HOST']; 
+	
+	// Ajouter l'emplacement de la ressource demandée à l'URL
+	$url .= $_SERVER['REQUEST_URI']; 
+		
+	// Afficher l'URL
+	return $url; 
 }

@@ -24,7 +24,7 @@
 		<div class="form-group">
 			<label for="image">Photo de profil</label>
 			<input type="file" class="form-control" id="image" name="image"/>
-			<small>Taille max 2 Mo | format autorisé : jpg, png.</small>
+			<small>Taille max : 2 Mo | format autorisé : jpg, png.</small>
 		</div>
 
 		<button type="submit" name="btUpdate" class="btn btn-light">Mettre à jour</button>
@@ -34,11 +34,11 @@
 		{% if user.image != null %}
 		<div class="row">
 		<div class=" col-3">
-			<img src="images/profil/{{user.image}}" class="img-thumbnail img-mini">
+			<img src="images/profil/{{user.image}}" class="img-thumbnail img-mini img-cover">
 		</div>
 		<div class="col-5 align-self-center">
 			<p>Ma photo de profil</p>
-			<button type="submit" name="btSuprimmeImage" class="btn btn-light btn-sm">Supprimer</button>
+			<button type="submit" name="btSupprimeImage" class="btn btn-light btn-sm">Supprimer</button>
 		</div>
 		</div>
 		{% else %}

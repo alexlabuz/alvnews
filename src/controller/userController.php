@@ -149,7 +149,7 @@ function updateUserController($twig, $db){
 	if(isset($_POST['btUpdate'])){
 		$email = $_POST["email"];	
 		$nom = $_POST["nom"];
-		$image = $donnees["image"]; // Si aucune image sélectionné on remet l'ancienne
+		$image = $donnees["image"]; // Si aucune image est sélectionné on remet l'ancienne
 		$code = 0; // Code de réussite
 
 		$upload = new Upload(["jpg", "png", "JPG", "PNG"], "images/profil", 2000000);
@@ -165,7 +165,7 @@ function updateUserController($twig, $db){
 
 		if(($utilisateur->connect($email)) && ($email != $donnees["email"])){
 			$code = 2;
-		}else if($nom == null || $email == null){
+		}else if($nom == null || $email == null || $fichier["message"] != null){
 			$code = 3;
 		}else{
 			$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
@@ -178,7 +178,21 @@ function updateUserController($twig, $db){
 			}
 		}
 
-		// Si l'inscritption à échoué on envoie dans l'url le code d'erreur
+		header("Location:?page=updateUser&code=".$code);
+		exit;
+	}
+
+	if(isset($_POST["btSupprimeImage"])){
+		$code = 1;
+		$exec = $utilisateur->update($donnees["email"], $donnees["nom"],null ,$donnees["role"], $_SESSION["id"]);
+		if($exec){
+			/* Supprimer l'ancienne photo de profil */
+			if(file_exists("images/profil/".$donnees["image"])){
+				unlink("images/profil/".$donnees["image"]); 
+				$code = 0;
+			}
+		}
+		
 		header("Location:?page=updateUser&code=".$code);
 		exit;
 	}
@@ -210,6 +224,10 @@ function deleteUserController($twig, $db){
 					session_unset();
 					session_destroy();
 					setcookie('id_user', "", time() + 365*24*3600);
+					/* Supprimer l'ancienne photo de profil */
+					if(file_exists("images/profil/".$unUtilisateur["image"])){
+						unlink("images/profil/".$unUtilisateur["image"]); 
+					}
 				}
 		}else{
 			$code = 4;
