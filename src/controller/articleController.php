@@ -14,7 +14,7 @@ function afficheArticleController($twig, $db){
 	$unArticle = $article->selectById($_GET["id"]);
 
 	if($unArticle == null){
-		$form["errorMessage"] = "Toutes nos excuses mais l'article que vous souhaitez voir n'éxiste pas ou à etait supprimé";
+		$form["errorMessage"] = "Toutes nos excuses mais l'article que vous souhaitez voir n'éxiste pas ou à était supprimé";
 		$unArticle["titre"] = "Erreur"; // Pour l'affichage dans la <title>
 	}
 
@@ -154,18 +154,24 @@ function gestionArticleController($twig, $db){
 		header("Location:?page=home");
 		exit;
 	}
+	$form = array();
 	$article = new Article($db);
 
 	$page = 0;
 	if(isset($_GET["min"])){
 		$page = $_GET["min"];
 	}
-	$min = $page * 15;
-	$max = 15;
+	
+	$max = 10; // Maximum d'article à afficher par page
+	$min = $page * $max;
 
-	$listArticle = $article->select($min, $max, 0);
+	$nbEntree = $article->selectCount(0)["nombre"]; // Récupère tout les articles de la table
+	$articleList = $article->select($min, $max, 0);
 
-	echo $twig->render("gestionArticle.html.twig", array("articles"=>$listArticle));
+	$form["nbDePage"] = ceil($nbEntree/$max);
+	$form["numeroPage"] = $page;
+
+	echo $twig->render("gestionArticle.html.twig", array("form" => $form, "articles" => $articleList));
 }
 
 // Retourne l'url actuellement ouverte

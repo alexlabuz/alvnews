@@ -131,6 +131,7 @@ function profilController($twig, $db){
 
 	$enregistre = new Enregistre($db);
 	$form["listEnregistre"] = $enregistre->selectByUser($donnees["id"]);
+	$form["nbEnregistre"] = count($form["listEnregistre"]);
 
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
@@ -323,19 +324,26 @@ function gestionUserController($twig, $db){
 	}
 
 	if(isset($_GET["id"])){
+		// Si un id d'utilisateur est passé dans l'url on affiche les info de celui-ci
 		$form["user"] = $user->selectById($_GET["id"]);
 		if($form["user"] == null || $form["user"]["role"] == 3){
 			header("Location:?page=gestionUser");
 			exit;
 		}
 	}else{
+		// Si aucun utilisateur n'est passé dans l'url on affiche la liste des utilisateur
 		$page = 0;
 		if(isset($_GET["min"])){
 			$page = $_GET["min"];
 		}
-		$min = $page * 30;
-		$max = 30;
+		$max = 20;
+		$min = $page * $max;
+
+		$nbEntree = $user->selectCount();
 		$form["users"] = $user->select($min, $max);
+
+		$form["nbDePage"] = ceil($nbEntree["nombre"] / $max);
+		$form["numeroPage"] = $page;
 	}
 
 	if(isset($_GET["error"])){

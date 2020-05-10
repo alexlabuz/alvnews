@@ -26,11 +26,11 @@
 		<button type="submit" name="btAjouter" class="btn btn-light mt-3">Ajouter</button>
 	</form>
 
-	<h2>Liste des types</h2>
+	<h2>Liste des thèmes ({{form.nbDeTheme}})</h2>
 
 	<form method="POST" action="?page=gestionTheme">
 	<table class="table table-striped">
-		<thead>
+		<thead class="thead-dark">
 			<tr>
 			<th scope="col">Libelle</th>
 			<th scope="col">Couleur</th>
@@ -49,9 +49,9 @@
 		{% endfor %}
 		</tbody>
 	</table>
-	<div class="float-right">
+	<div class="float-right inligne mb-3">
+		<a class="text-danger">Cela supprimera <b>tout les articles</b> associées !</a>
 		<button class="btn btn-danger" type="submit" name="btEfface">Effacer la sélection</button>
-		<p class="text-danger">Cela supprimera <b>tout les articles</b> associées !</p>
 	</div>
 	</form>
 </div>

@@ -52,6 +52,7 @@ function themeController($twig, $db){
 
 	// Affichage des thème
 	$listType = $theme->select();
+	$form["nbDeTheme"] = count($listType);
 
 	$message[0] = "Votre demande à était effectuée avec succée";
 	$message[1] = "Une erreur s'est produite, veuillez réésayer";

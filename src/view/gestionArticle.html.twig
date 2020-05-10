@@ -16,6 +16,26 @@
 	<h1 class="text-center m-4">Gestion des articles</h1>
 	<p class="text-center">Vous pouvez administrer les articles ici</p>
 	
+	<!-- PAGINATION -->
+	<nav>
+	<ul class="pagination justify-content-center mt-3">
+		<li class="page-item{% if form.numeroPage == 0 %} disabled{% endif %}">
+		<a class="page-link" href="?page=gestionArticle&min={{form.numeroPage - 1}}" aria-label="Previous">
+			<span aria-hidden="true">&laquo;</span>
+		</a>
+		</li>
+		{% for i in 1..form.nbDePage %}
+		<li class="page-item{% if i == form.numeroPage +1 %} active{% endif %}"><a class="page-link" href="?page=gestionArticle&min={{i-1}}">{{i}}</a></li>
+		{% endfor %}
+		<li class="page-item{% if form.numeroPage == form.nbDePage - 1 %} disabled{% endif %}">
+		<a class="page-link" href="?page=gestionArticle&min={{form.numeroPage + 1}}" aria-label="Next">
+			<span aria-hidden="true">&raquo;</span>
+		</a>
+		</li>
+	</ul>
+	</nav>
+
+	<!-- LISTE D'ARTICLES -->
 	<form method="POST" action="?page=deleteArticle">
 	<button type="submit" class="btn btn-danger" name="btEfface">Supprimer la sélection</button>
 	{% for a in articles %}
@@ -34,14 +54,5 @@
 	</form>
 
 </div>
-<br>
-<nav aria-label="Page navigation example">
-<ul class="pagination justify-content-center">
-	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=0">1</a></li>
-	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=1">2</a></li>
-	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=2">3</a></li>
-	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=3">4</a></li>
-	<li class="page-item"><a class="page-link" href="?page=gestionArticle&min=4">5</a></li>
-</ul>
-</nav>
+
 {% endblock %}

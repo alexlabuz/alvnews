@@ -9,6 +9,7 @@ class Article{
 	private $selectByUser;
 	private $selectById;
 	private $search;
+	private $selectCount;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -48,12 +49,16 @@ class Article{
 			AND a.id = :id");
 			
 		$this->search = $this->db->prepare(
-			"SELECT id, titre, description, dateCreation 
+			"SELECT id, titre, description, dateCreation
 			FROM article
 			WHERE (LOWER(titre) LIKE LOWER(:search)
 			OR LOWER(description) LIKE LOWER(:search))
 			AND visible = 1
-			ORDER BY titre");
+			ORDER BY titre
+			LIMIT :min, :max");
+
+			
+		$this->selectCount = $this->db->prepare("SELECT COUNT(id) AS nombre FROM article WHERE visible >= :visible");
 	}
 
 	public function insert($titre, $description, $image, $contenu, $visible, $idTheme, $idUtilisateur){
@@ -145,14 +150,28 @@ class Article{
 		return $this->selectById->fetch();
 	}
 
-	public function search($search){
-		$this->search->execute(array(":search" => "%".$search."%", ":description" => "%".$search."%"));
+	public function search($search, $min, $max){
+		$this->search->bindParaM(":min", $min, PDO::PARAM_INT);
+		$this->search->bindParaM(":max", $max, PDO::PARAM_INT);
+		$this->search->bindValue(":search", "%".$search."%", PDO::PARAM_STR);
+		$this->search->bindValue(":description", "%".$search."%", PDO::PARAM_STR);
+		$this->search->execute();
 
 		if($this->search->errorCode() != 0){
 			print_r($this->search->errorInfo());
 		}
 
 		return $this->search->fetchAll();
+	}
+	
+	public function selectCount($visible){
+		$this->selectCount->execute(array(":visible"=> $visible));
+
+		if($this->selectCount->errorCode() != 0){
+			print_r($this->selectCount->errorInfo());
+		}
+
+		return $this->selectCount->fetch();
 	}
 
 }

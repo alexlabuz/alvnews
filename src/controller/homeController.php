@@ -1,18 +1,24 @@
 <?php
-
+// Controleur qui récupère les articles de la page d'accueil
 function homeController($twig, $db){
+	$form = array();
 	$article = new Article($db);
 
 	$page = 0;
 	if(isset($_GET["min"])){
 		$page = $_GET["min"];
 	}
-	$min = $page * 8;
-	$max = 8;
-
+	
+	$max = 8; // Maximum d'article à afficher par page
+	$min = $page * $max;
+	
+	$nbEntree = $article->selectCount(1)["nombre"]; // Récupère tout les articles visibles
 	$articleList = $article->select($min, $max, 1);
 
-	echo $twig->render("home.html.twig", array("article" => $articleList));
+	$form["nbDePage"] = ceil($nbEntree/$max);
+	$form["numeroPage"] = $page;
+
+	echo $twig->render("home.html.twig", array("form" => $form, "article" => $articleList));
 }
 
 function searchController($twig, $db){
@@ -27,7 +33,15 @@ function searchController($twig, $db){
 		$search = $_GET["search"];
 		$form["title"] = $search;
 		$article = new Article($db);
-		$form["resultat"] = $article->search($search);
+
+		$page = 0;
+		if(isset($_GET["min"])){
+			$page = $_GET["min"];
+		}
+		$max = 10;
+		$min = $page * $max;
+
+		$form["resultat"] = $article->search($search, $min, $max);
 	}
 
 	echo $twig->render("search.html.twig", array("form"=>$form));
@@ -38,7 +52,7 @@ function suggestionController($twig, $db){
 	$form = array();
 	if(!empty($_GET["search"])){
 		$article = new Article($db);
-		$form["resultat"] = $article->search($_GET["search"]);
+		$form["resultat"] = $article->search($_GET["search"], 0, 5);
 
 		echo json_encode($form["resultat"]);
 	}

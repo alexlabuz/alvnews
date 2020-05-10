@@ -9,6 +9,7 @@ class User{
 	private $updateMdp;
 	private $delete;
 	private $select;
+	private $selectCount;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -32,6 +33,8 @@ class User{
 		$this->delete = $this->db->prepare("DELETE FROM utilisateur WHERE id = :id");
 
 		$this->select = $this->db->prepare("SELECT * FROM utilisateur ORDER BY nom LIMIT :min, :max");
+
+		$this->selectCount = $this->db->prepare("SELECT count(*) AS nombre FROM utilisateur");
 	}
 
 	public function insert($email, $nom, $mdp){
@@ -117,5 +120,15 @@ class User{
 		}
 
 		return $this->select->fetchAll();
+	}
+	
+	public function selectCount(){
+		$this->selectCount->execute();
+		
+		if($this->selectCount->errorCode()!=0){
+			print_r($this->selectCount->errorInfo());
+		}
+
+		return $this->selectCount->fetch();
 	}
 }
