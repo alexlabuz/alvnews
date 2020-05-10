@@ -15,7 +15,6 @@ function getPage($db){
 	$listPage["deleteUser"] = "deleteUserController";
 	$listPage["gestionUser"] = "gestionUserController";
 	$listPage["gestionTheme"] = "themeController";
-	$listPage["updateTheme"] = "updateThemeController";
 	$listPage["editor"] = "editorController";
 	$listPage["deleteArticle"] = "deleteArticleController";
 	$listPage["gestionArticle"] = "gestionArticleController";

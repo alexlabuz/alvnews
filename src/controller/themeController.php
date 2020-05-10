@@ -25,35 +25,64 @@ function themeController($twig, $db){
 				$code = 1;
 			}
 		}
-
 		header("Location:?page=gestionTheme&code=". $code);
+		exit;
+	}
+	
+	// Mise à jour de thème
+	if(isset($_POST["btModifier"])){
+		$nameTheme = $_POST["nameTheme"];
+		$colorTheme = $_POST["colorTheme"];
+		$idTheme = $_POST["idTheme"];
+		$code = 0;
+
+		if($nameTheme != null && $colorTheme != null){
+			$exec = $theme->update($nameTheme, $colorTheme, $idTheme);
+			if($exec){
+				header("Location:?page=gestionTheme&code=0");
+				exit;
+			}else{
+				$code = 1;
+			}
+		}
+		header("Location:?page=updateTheme&id=".$idTheme."&code=".$code);
 		exit;
 	}
 
 	// Suppresion de thème(s)
 	if(isset($_POST["btEfface"])){
 		$coche = $_POST["coche"];
-		$code = null;
+		$code = 0;
 
 		if(!empty($coche)){
 			foreach($coche as $id){
 				$exec = $theme->delete($id);
-				if($exec){
-					$code = 0;
-				}else{
+				if(!$exec){
 					$code = 1;
 				}
 			}
 		}
-
 		header("Location:?page=gestionTheme&code=". $code);
 		exit;
 	}
 
-	// Affichage des thème
-	$listType = $theme->select();
-	$form["nbDeTheme"] = count($listType);
+	$listType = array();
 
+	// On vérifie si un id de thème est passé en paramètre
+	if(isset($_GET["id"])){
+		// Si oui on propose de le modifier
+		$form["theme"] = $theme->selectById($_GET["id"]);
+		// On vérifie si l'id existe dans la db
+		if(!$form["theme"]){
+			header("Location:?page=gestionTheme");
+			exit;
+		}
+	}else{
+		// Affichage des thèmes
+		$listType = $theme->select();
+		$form["nbDeTheme"] = count($listType);
+	}
+		
 	$message[0] = "Votre demande à était effectuée avec succée";
 	$message[1] = "Une erreur s'est produite, veuillez réésayer";
 	$message[2] = "Le type existe déjà";
@@ -63,45 +92,4 @@ function themeController($twig, $db){
 	}
 
 	echo $twig->render("gestionTheme.html.twig", array("form" => $form, "listeType" => $listType));
-}
-
-// Permet de mettre à jour une thème
-function updateThemeController($twig, $db){
-	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
-		header("Location:?page=home");
-		exit;
-	}
-	$form = array();
-	$theme = new Theme($db);
-
-	// Mise à jour de thème
-	if(isset($_POST["btAjouter"])){
-		$nameTheme = $_POST["nameTheme"];
-		$colorTheme = $_POST["colorTheme"];
-		$idTheme = $_POST["idTheme"];
-
-		if($nameTheme != null && $colorTheme != null){
-			$exec = $theme->update($nameTheme, $colorTheme, $idTheme);
-			if($exec){
-				header("Location:?page=gestionTheme&code=0");
-				exit;
-			}
-		}
-
-		header("Location:?page=updateTheme&id=".$idTheme."&error=true");
-		exit;
-	}
-
-	$unTheme = $theme->selectById($_GET["id"]);
-	// On vérifie si l'id est saisie et si il existe dans la db
-	if(!isset($_GET["id"]) || !$unTheme){
-		header("Location:?page=gestionTheme");
-		exit;
-	}
-
-	if(isset($_GET["error"])){
-		$form["error"] = $_GET["error"];
-	}
-	
-	echo $twig->render("updateTheme.html.twig", array("form" => $form, "theme" => $unTheme));
 }

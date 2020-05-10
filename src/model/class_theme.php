@@ -14,7 +14,7 @@ class Theme{
 
 		$this->insert = $this->db->prepare("INSERT INTO theme(libelle, couleur)VALUE( :libelle, :couleur)");
 
-		$this->select = $this->db->prepare("SELECT * FROM theme ORDER BY libelle");
+		$this->select = $this->db->prepare("SELECT * FROM theme ORDER BY LOWER(libelle)");
 
 		$this->selectByName = $this->db->prepare("SELECT * FROM theme WHERE libelle = :libelle");
 

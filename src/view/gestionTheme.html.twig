@@ -13,6 +13,26 @@
 		{% endif %}
 	{% endif %}
 
+	{% if form.theme is defined %}
+
+		<!-- MODIFIER UN THEME -->
+		<form method="POST" action="index.php?page=gestionTheme" class="bg-secondary text-light p-4 m-3 mx-auto rounded">
+			<h2>Modifier le thème {{form.theme.libelle}}</h2><form>
+			<div class="form-row">
+				<div class="col">
+					<input type="text" name="nameTheme" class="form-control" value="{{form.theme.libelle}}" required>
+				</div>
+				<div class="col">
+					<input type="text" name="colorTheme" class="form-control" value="{{form.theme.couleur}}" required>
+				</div>
+				<input type="hidden" name="idTheme" value="{{get.id}}" />
+			</div>
+			<button type="submit" name="btModifier" class="btn btn-light mt-3">Modifier</button>
+		</form>
+
+	{% else %}
+
+	<!-- LISTE DE THEME (AJOUT OU SUPPRESSION) -->
 	<form method="POST" action="index.php?page=gestionTheme" class="bg-secondary text-light p-4 m-3 mx-auto rounded">
 	<h2>Ajouter un type</h2><form>
 		<div class="form-row">
@@ -43,7 +63,7 @@
 			<tr>
 				<td>{{t.libelle}}</td>
 				<td>{{t.couleur}}</td>
-				<td><a class="btn btn-primary btn-sm" href="?page=updateTheme&id={{t.id}}">Modifier</a></td>
+				<td><a class="btn btn-primary btn-sm" href="?page=gestionTheme&id={{t.id}}">Modifier</a></td>
 				<td><input class="form-check-input" type="checkbox" name="coche[]" value="{{t.id}}" id="efface"></td>
 			</tr>
 		{% endfor %}
@@ -54,5 +74,8 @@
 		<button class="btn btn-danger" type="submit" name="btEfface">Effacer la sélection</button>
 	</div>
 	</form>
+
+{% endif %}
 </div>
+
 {% endblock %}

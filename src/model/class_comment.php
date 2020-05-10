@@ -13,7 +13,7 @@ class Comment{
 		$this->insert = $this->db->prepare("INSERT INTO commentaire(text, dateCreation, idArticle, idUtilisateur) VALUE(:text, NOW(), :idArticle, :idUtilisateur)");
 
 		$this->selectByArticle = $this->db->prepare(
-			"SELECT text, c.dateCreation AS dateCreation, nom, u.image AS imageUtilisateur, u.id AS idUtilisateur, c.id AS id
+			"SELECT text, c.dateCreation AS dateCreation, nom, u.image AS imageUtilisateur, u.id AS idUtilisateur, c.id AS id, u.image AS imageUser
 			FROM commentaire c, article a, utilisateur u
 			WHERE c.idArticle = a.id
 			AND c.idUtilisateur = u.id

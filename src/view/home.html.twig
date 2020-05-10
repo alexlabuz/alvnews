@@ -22,9 +22,9 @@
 	<a href="?page=article&id={{a.id}}">
 		<div style="background:black">
 		{% if a.image != null %}
-      		<img src="images/article/{{a.image}}" class="d-block w-100 mb-4 img-cover" alt="...">
+      		<img src="images/article/{{a.image}}" class="d-block w-100 mb-4" alt="...">
 		{% else %}
-      		<img src="images/default/article.jpg" class="d-block w-100 mb-4 img-cover" alt="...">
+      		<img src="images/default/article.jpg" class="d-block w-100 mb-4" alt="...">
 		{% endif %}
 		</div>
       	<div class="carousel-caption d-md-block">
@@ -62,9 +62,9 @@
 	<div class="row no-gutters">
 		<div class="col-md-4">
 		{% if a.image != null %}
-			<img src="images/article/{{a.image}}" class="card-img img-cover" alt="image de l'article {{a.titre}}">
+			<img src="images/article/{{a.image}}" class="card-img" alt="image de l'article {{a.titre}}">
 		{% else %}
-			<img src="images/default/article.jpg" class="card-img img-cover" alt="image de l'article {{a.titre}}">
+			<img src="images/default/article.jpg" class="card-img" alt="image de l'article {{a.titre}}">
 		{% endif %}
 		</div>
 		<div class="col-md-8">

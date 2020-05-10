@@ -21,6 +21,7 @@ function homeController($twig, $db){
 	echo $twig->render("home.html.twig", array("form" => $form, "article" => $articleList));
 }
 
+// Controleur de la page recherche
 function searchController($twig, $db){
 	if(isset($_POST["btRecherche"])){
 		header("Location:?page=search&search=".$_POST["search"]);
@@ -34,14 +35,7 @@ function searchController($twig, $db){
 		$form["title"] = $search;
 		$article = new Article($db);
 
-		$page = 0;
-		if(isset($_GET["min"])){
-			$page = $_GET["min"];
-		}
-		$max = 10;
-		$min = $page * $max;
-
-		$form["resultat"] = $article->search($search, $min, $max);
+		$form["resultat"] = $article->search($search, 0, 10); // Récupère les 10 premiers résultats
 	}
 
 	echo $twig->render("search.html.twig", array("form"=>$form));

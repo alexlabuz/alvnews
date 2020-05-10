@@ -54,7 +54,7 @@ class Article{
 			WHERE (LOWER(titre) LIKE LOWER(:search)
 			OR LOWER(description) LIKE LOWER(:search))
 			AND visible = 1
-			ORDER BY titre
+			ORDER BY dateCreation DESC
 			LIMIT :min, :max");
 
 			

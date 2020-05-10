@@ -19,14 +19,14 @@
 <!--TITRE-->
 <div class="card bg-dark text-white align-top rounded-0">
 	{% if article.image != null %}
-		<img src="images/article/{{article.image}}" class="card-img img-cover img-article" alt="image de l'article {{article.titre}}">
+		<img src="images/article/{{article.image}}" class="card-img img-article" alt="image de l'article {{article.titre}}">
 	{% else %}
-		<img src="images/default/article.jpg" class="card-img img-cover img-article" alt="image de l'article {{article.titre}}">
+		<img src="images/default/article.jpg" class="card-img img-article" alt="image de l'article {{article.titre}}">
 	{% endif %}
-  	<div class="card-img-overlay text-center mt-3">
+  	<div class="card-img-overlay text-center mt-2">
 		<h1 class="card-title">{{article.titre}}</h1>
-		<p class="card-text">Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}<br>
-		<span class="badge badge-pill text-light" style="background-color:{{article.couleur}}">{{article.theme}}</span></p>
+		<p class="card-text mb-2">Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}</p>
+		<span class="badge badge-pill text-light" style="background-color:{{article.couleur}}">{{article.theme}}</span>
 	</div>
 </div>
 
@@ -50,7 +50,7 @@
 	<a class="ml-2 text-white-50" style="font-family:arial">Article modifié le {{article.dateModif | date("d F Y à G:i")}}</a>
 	</div>
 
-	<div class="">
+	<div>
 		<a href="http://www.facebook.com/sharer.php?u={{form.url | raw}}&t={{article.titre}}" class="btn btn-secondary" style="background-color:#4267B2;">Partager sur Facebook</a>
 		<a href="http://twitter.com/share?url={{form.url | raw}}&text={{article.titre}}" class="btn btn-secondary" style="background-color:#1DA1F2;">Partager sur Twitter</a>
 	</div>
@@ -69,7 +69,7 @@
 </div>
 
 <div class="container">
-<h2 class="mt-4 ">Commentaires</h2>
+<h2 class="mt-4 ">Commentaires ({{form.nbCommentaires}})</h2>
 
 <!--FORMULAIRE COMMENTAIRE-->
 <form class="bg-light p-3 mb-3" method="POST" action="?page=addComment">
@@ -88,11 +88,13 @@
 </form>
 
 <!--COMMENTAIRE-->
-<form class="" method="POST" action="?page=removeComment">
+<form method="POST" action="?page=removeComment">
 	<input hidden name="idArticle" value="{{article.id}}">
 {% for c in commentaires %}
-	<div>
-		<p>{{c.nom}} - <small class="text-muted">Le {{c.dateCreation | date("d F Y à G:i")}}</small>
+	<div class="commentaireList">
+		<p class="mb-1">
+		<img src="{% if c.imageUser != null %}images/profil/{{c.imageUser}}{% else %}images/default/profil.png{% endif %}" class="img-thumbnail mr-1">
+		<a>{{c.nom}} - <small class="text-muted">Le {{c.dateCreation | date("d F Y à G:i")}}</small></a>
 		{% if c.idUtilisateur == session.id %}
 			<button class="btn btn-outline-danger btn-sm ml-sm-2" type="submit" name="idCommentaire" value="{{c.id}}">Supprimer</button>
 		{% endif %}

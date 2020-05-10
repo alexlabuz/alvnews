@@ -19,6 +19,7 @@ function afficheArticleController($twig, $db){
 	}
 
 	$listCommentaire = $commentaire->selectByArticle($_GET["id"]);
+	$form["nbCommentaires"] = count($listCommentaire);
 
 	if(isset($_SESSION["id"]) && $enregistre->selectByUserArticle($_SESSION["id"], $_GET["id"]) != null){	
 		$form["enrgistre"] = true;
@@ -52,7 +53,7 @@ function editorController($twig, $db){
 		$idUser = $unUtilisateur["id"];
 		$error = false;
 
-		$upload = new Upload(["jpg", "JPG", "png", "PNG"], "images/article", 2000000);
+		$upload = new Upload(["jpg","jpeg", "JPG", "png", "PNG"], "images/article", 2000000);
 		$fichier = $upload->enregistrer("image");
 		
 		if($inputTitre != null && $inputTheme != null){
@@ -82,6 +83,7 @@ function editorController($twig, $db){
 			}
 			if(!$exec){$error = true;}
 
+			if($fichier["message"] != null){$error = true;} // Si il y a une erreur dans l'envoie de fichier
 		}else{$error = true;}
 		
 		if($error){
