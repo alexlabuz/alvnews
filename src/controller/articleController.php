@@ -115,6 +115,7 @@ function editorController($twig, $db){
 	$theme = new Theme($db);
 	$form["theme"] = $theme->select();
 
+	$form["nofooter"] = true;
 	echo $twig->render("editor.html.twig", array("form" => $form, "article" => $unArticle));
 }
 

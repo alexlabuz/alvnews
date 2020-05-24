@@ -17,11 +17,13 @@
 	<div class="row border-bottom border-light p-2">
 		<!-- PHOTO PROFILE -->
 		<div class="col-lg-2 align-self-center">
+		<a href="?page=updateUser">
 		{% if user.image != null %}
 			<img src="images/profil/{{user.image}}" alt="photo de profil" class="img-thumbnail img-profile">
 		{% else %}
 			<img src="images/default/profil.png" alt="photo de profil" class="img-thumbnail img-profile">
 		{% endif %}
+		</a>
 		</div>
 		<!-- NOM UTILISATEUR -->
 		<div class="col-lg-3 align-self-center">

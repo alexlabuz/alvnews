@@ -5,6 +5,8 @@
 }
 body{font-family:Sarala;}
 
+.footer p{font-size: 12px;}
+
 /*--Tamplate--*/
 nav.navbar{
 	position: sticky;

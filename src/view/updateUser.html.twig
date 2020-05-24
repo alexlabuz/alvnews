@@ -24,7 +24,7 @@
 		<div class="form-group">
 			<label for="image">Photo de profil</label>
 			<input type="file" class="form-control" id="image" name="image"/>
-			<small>Taille max : 2 Mo | format autorisé : jpg, png.</small>
+			<small>Taille max : 2 Mo | formats autorisés : JPG, PNG.</small>
 		</div>
 
 		<button type="submit" name="btUpdate" class="btn btn-light">Mettre à jour</button>
@@ -33,7 +33,7 @@
 	<form method="POST" action="index.php?page=updateUser" class="bg-primary text-light p-2 mx-auto rounded mt-4 block-custom">
 		{% if user.image != null %}
 		<div class="row">
-		<div class=" col-3">
+		<div class="col-3">
 			<img src="images/profil/{{user.image}}" class="img-thumbnail img-mini">
 		</div>
 		<div class="col-5 align-self-center">

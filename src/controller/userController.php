@@ -45,6 +45,7 @@ function inscriptionController($twig, $db){
 	}
 	
 	$form["nonavbar"] = true;
+	$form["nofooter"] = true;
 	echo $twig->render("inscription.html.twig", array("form" => $form));
 }
 
@@ -91,6 +92,7 @@ function connexionController($twig, $db){
 	}
 
 	$form["nonavbar"] = true;
+	$form["nofooter"] = true;
 	echo $twig->render("connexion.html.twig", array("form" => $form));
 }
 

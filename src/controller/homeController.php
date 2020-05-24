@@ -35,9 +35,24 @@ function searchController($twig, $db){
 		$form["title"] = $search;
 		$article = new Article($db);
 
-		$form["resultat"] = $article->search($search, 0, 10); // Récupère les 10 premiers résultats
+
+		$page = 0;
+		if(isset($_GET["min"])){
+			$page = $_GET["min"];
+		}
+
+		$max = 5;
+		$min = $page * $max;
+
+		$nbEntree = $article->searchCount($search)["nombre"];
+		$form["resultat"] = $article->search($search, $min, $max);
+
+		$form["search"] = $_GET["search"];
+		$form["nbDePage"] = ceil($nbEntree / $max);
+		$form["numeroPage"] = $page;
 	}
 
+	$form["nofooter"] = true;
 	echo $twig->render("search.html.twig", array("form"=>$form));
 }
 

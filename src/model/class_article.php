@@ -9,6 +9,7 @@ class Article{
 	private $selectByUser;
 	private $selectById;
 	private $search;
+	private $searchCount;
 	private $selectCount;
 
 	public function __construct($db){
@@ -57,7 +58,13 @@ class Article{
 			ORDER BY dateCreation DESC
 			LIMIT :min, :max");
 
-			
+		$this->searchCount = $this->db->prepare(
+			"SELECT COUNT(id) AS nombre
+			FROM article
+			WHERE (LOWER(titre) LIKE LOWER(:search)
+			OR LOWER(description) LIKE LOWER(:search))
+			AND visible = 1");
+
 		$this->selectCount = $this->db->prepare("SELECT COUNT(id) AS nombre FROM article WHERE visible >= :visible");
 	}
 
@@ -154,7 +161,6 @@ class Article{
 		$this->search->bindParaM(":min", $min, PDO::PARAM_INT);
 		$this->search->bindParaM(":max", $max, PDO::PARAM_INT);
 		$this->search->bindValue(":search", "%".$search."%", PDO::PARAM_STR);
-		$this->search->bindValue(":description", "%".$search."%", PDO::PARAM_STR);
 		$this->search->execute();
 
 		if($this->search->errorCode() != 0){
@@ -162,6 +168,16 @@ class Article{
 		}
 
 		return $this->search->fetchAll();
+	}
+
+	public function searchCount($search){
+		$this->searchCount->execute(array(":search" => "%".$search."%"));
+
+		if($this->searchCount->errorCode() != 0){
+			print_r($this->searchCount->errorInfo());
+		}
+
+		return $this->searchCount->fetch();
 	}
 	
 	public function selectCount($visible){

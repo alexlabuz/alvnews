@@ -44,6 +44,13 @@
 				<a class="nav-link" href="?page=connexion">Connexion</a>
 			</li>
 	{% endif %}
+			<li class="nav-item">
+				<a class="nav-link" target="_blank" href="https://github.com/alexlabuz/alvnews">GitHub</a>
+			</li>
+			<!-- Animation de chargement (load.js) -->
+			<li class="spinner-border text-light ml-2 mt-1" role="status">
+  				<span class="sr-only">Loading...</span>
+			</li>
 		</ul>
 		<form class="form-inline my-2 my-lg-0 form-search" method="POST" action="?page=search">
 			<input class="form-control mr-sm-2 input-search" type="search" placeholder="Recherche sur le site" name="search" aria-label="Search">
@@ -59,8 +66,17 @@
 {% block content %}{% endblock %}
 </div>
 
+{% if form.nofooter is not defined %}
+<div class="container-fluid bg-secondary overflow-hidden p-2 footer">
+	<div class="container">
+	<p class="text-light m-0">alLavi news 2020 | Projet SI6 pour le Lycée Guy Mollet d'ARRAS | <a class="text-light" href="https://github.com/alexlabuz/alvnews" target="_blank">Code source</a></p>
+	</div>
+</div>
+{% endif %}
+
 <script src="js/ajax.js"></script>
 <script src="js/search.js"></script>
+<script src="js/load.js"></script>
 <script src="https://code.jquery.com/jquery-3.4.1.slim.min.js" integrity="sha384-J6qa4849blE2+poT4WnyKhv5vZF5SrPo0iEjwBvKU7imGFAV0wwj1yYfoRSJoZ+n" crossorigin="anonymous"></script>
 <!--<script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js" integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo" crossorigin="anonymous"></script>-->
 <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/js/bootstrap.min.js" integrity="sha384-wfSDF2E50Y2D1uUdj0O3uMBJnjuUD4Ih7YwaYd1iqfktj0Uod8GCExl3Og8ifwB6" crossorigin="anonymous"></script>
