@@ -106,10 +106,6 @@ function deconnexionController($twig, $db){
 
 // Affiche le profil de l'utilisateur
 function profilController($twig, $db){
-	if(!isset($_SESSION["id"])){
-		header("Location:?page=connexion");
-		exit;
-	}
 	$form = array();
 
 	$utilisateur = new User($db);
@@ -140,10 +136,6 @@ function profilController($twig, $db){
 
 // Met à jour le profil de l'utilisateur
 function updateUserController($twig, $db){
-	if(!isset($_SESSION["id"])){
-		header("Location:?page=connexion");
-		exit;
-	}
 	$form = array();
 
 	$utilisateur = new User($db);

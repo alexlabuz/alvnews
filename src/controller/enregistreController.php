@@ -1,5 +1,5 @@
 <?php
-
+// Fonction qui ajoute ou supprime un enregistrement à l'utilisateur
 function addRemoveEnregistreController($twig, $db){
 	if(isset($_GET["id"])){
 		$enregistre = new Enregistre($db);

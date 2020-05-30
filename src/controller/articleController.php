@@ -1,5 +1,5 @@
 <?php
-// Permet d'afficher l'article au public
+// Permet d'affichage de l'article
 function afficheArticleController($twig, $db){
 	if(!isset($_GET["id"])){
 		header("Location:./");
@@ -30,10 +30,6 @@ function afficheArticleController($twig, $db){
 
 // Permet d'ajouter ou modifier un article
 function editorController($twig, $db){
-	if(!isset($_SESSION["id"]) || $_SESSION["role"] == 1){
-		header("Location:?page=home");
-		exit;
-	}
 	$form = array();
 	$user = new User($db);
 	$unUtilisateur = $user->selectById($_SESSION["id"]);
@@ -121,10 +117,6 @@ function editorController($twig, $db){
 
 // Permet de supprimer un article
 function deleteArticleController($twig, $db){
-	if(!isset($_SESSION["id"])){
-		header("Location:?page=home");
-		exit;
-	}
 	$cocher = $_POST["cocher"];
 	if(!empty($cocher)){
 		$article = new Article($db);
@@ -153,10 +145,6 @@ function deleteArticleController($twig, $db){
 
 // Permet la gestion administrative des articles
 function gestionArticleController($twig, $db){
-	if(!isset($_SESSION["id"]) || $_SESSION["role"] != 3){
-		header("Location:?page=home");
-		exit;
-	}
 	$form = array();
 	$article = new Article($db);
 

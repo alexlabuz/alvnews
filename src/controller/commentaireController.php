@@ -1,5 +1,5 @@
 <?php
-
+// Fonction qui ajoute un commentaire
 function addCommentController($twig, $db){
 	if(isset($_POST["btEnvoyer"])){
 		$commentaire = new Comment($db);
@@ -16,6 +16,7 @@ function addCommentController($twig, $db){
 	}
 }
 
+// Fonction qui supprime un commentaire
 function removeCommentController($twig, $db){
 	if(isset($_POST["idCommentaire"])){
 		$commentaire = new Comment($db);

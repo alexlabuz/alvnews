@@ -3,41 +3,57 @@
 function getPage($db){
 	$listPage = array();
 
-	$listPage['home'] = "homeController";
-	$listPage['search'] = "searchController";
-	$listPage['article'] = "afficheArticleController";
-	$listPage['inscription'] = "inscriptionController";
-	$listPage['connexion'] = "connexionController";
-	$listPage['deconnexion'] = "deconnexionController";
-	$listPage['profil'] = "profilController";
-	$listPage['updateUser'] = "updateUserController";
-	$listPage['updatePassword'] = "updatePasswordController";
-	$listPage["deleteUser"] = "deleteUserController";
-	$listPage["gestionUser"] = "gestionUserController";
-	$listPage["gestionTheme"] = "themeController";
-	$listPage["editor"] = "editorController";
-	$listPage["deleteArticle"] = "deleteArticleController";
-	$listPage["gestionArticle"] = "gestionArticleController";
-	$listPage["addComment"] = "addCommentController";
-	$listPage["removeComment"] = "removeCommentController";
-	$listPage["enregistre"] = "addRemoveEnregistreController";
-	$listPage['suggestion'] = "suggestionController";
-	$listPage['404'] = "error404Controller";
-	$listPage['maintenance'] = "maintenanceController";
+	$listPage['home'] = "homeController;0";
+	$listPage['search'] = "searchController;0";
+	$listPage['article'] = "afficheArticleController;0";
+	$listPage['inscription'] = "inscriptionController;0";
+	$listPage['connexion'] = "connexionController;0";
+	$listPage['deconnexion'] = "deconnexionController;1";
+	$listPage['profil'] = "profilController;1";
+	$listPage['updateUser'] = "updateUserController;1";
+	$listPage['updatePassword'] = "updatePasswordController;1";
+	$listPage["deleteUser"] = "deleteUserController;1";
+	$listPage["gestionUser"] = "gestionUserController;3";
+	$listPage["gestionTheme"] = "themeController;3";
+	$listPage["editor"] = "editorController;2";
+	$listPage["deleteArticle"] = "deleteArticleController;2";
+	$listPage["gestionArticle"] = "gestionArticleController;3";
+	$listPage["addComment"] = "addCommentController;1";
+	$listPage["removeComment"] = "removeCommentController;1";
+	$listPage["enregistre"] = "addRemoveEnregistreController;1";
+	$listPage['suggestion'] = "suggestionController;0";
+	$listPage['404'] = "error404Controller;0";
+	$listPage['maintenance'] = "maintenanceController;0";
 	
 	if($db != null){
-		if(isset($_GET["page"])){
-			if(isset($listPage[$_GET["page"]])){
-				$page = $listPage[$_GET["page"]];
-			}else{
-				$page = $listPage["404"];
-			}
+		if(!isset($_GET["page"])){
+			$page = "home";
+		}elseif(!isset($listPage[$_GET["page"]])){
+			$page = "404"; // ou home
 		}else{
-			$page = $listPage["home"];
+			$page = $_GET["page"];
 		}
 	}else{
-		$page = $listPage["maintenance"];
+		$page = "maintenance";
 	}
 
-	return $page;
+	$explose = explode(";", $listPage[$page]);
+	$controller = $explose[0];
+	$role = $explose[1];
+
+	if($role != 0){
+		if(isset($_SESSION["id"])){
+			if($_SESSION["role"] >= $role){
+				$content = $controller;
+			}else{
+				$content = "homeController";
+			}
+		}else{
+			$content = "homeController";
+		}
+	}else{
+		$content = $controller;
+	}
+
+	return $content;
 }
