@@ -3,11 +3,20 @@
 function getPage($db){
 	$listPage = array();
 
+	/**
+	 * ---> ROLE <---
+	 * 0 : accessible par tous
+	 * 1 : accessible par les clients connecté
+	 * 2 : accessible par les modérateurs connecté
+	 * 3 : accessible par les administrateurs connecté
+	 */
+
 	$listPage['home'] = "homeController;0";
 	$listPage['search'] = "searchController;0";
 	$listPage['article'] = "afficheArticleController;0";
 	$listPage['inscription'] = "inscriptionController;0";
 	$listPage['connexion'] = "connexionController;0";
+	$listPage['validation'] = "validationController;0";
 	$listPage['deconnexion'] = "deconnexionController;1";
 	$listPage['profil'] = "profilController;1";
 	$listPage['updateUser'] = "updateUserController;1";

@@ -13,6 +13,7 @@ function inscriptionController($twig, $db){
 		$password = $_POST["password"];
 		$password2 = $_POST["password2"];
 		$code = 5; // code de réussite
+		$idGenere = uniqid();
 
 		$utilisateur = new User($db);
 
@@ -24,9 +25,11 @@ function inscriptionController($twig, $db){
 			$code = 1;
 		}else{
 			$utilisateur = new User($db);
-			$exec = $utilisateur->insert($email, $nom, password_hash($password, PASSWORD_DEFAULT));
+			$exec = $utilisateur->insert($email, $nom, password_hash($password, PASSWORD_DEFAULT), $idGenere);
 			if(!$exec){
 				$code = 2;
+			}else{
+				envoieMailVerif($email, $db);
 			}
 		}
 
@@ -64,36 +67,71 @@ function connexionController($twig, $db){
 		if(isset($_POST['resteConnecte'])){
 			$resteConnecte = true;
 		}
+		$code = 1;
 
 		$utilisateur = new User($db);
 		$unUtilisateur = $utilisateur->connect($email);
 
 		if($unUtilisateur){
 			if(password_verify($password, $unUtilisateur['mdp'])){
-				$_SESSION["id"] = $unUtilisateur["id"];
-				$_SESSION["nom"] = $unUtilisateur["nom"];
-				$_SESSION["email"] = $unUtilisateur["email"];
-				$_SESSION["role"] = $unUtilisateur["role"];
-				if($resteConnecte){
-					setcookie('id_user', $unUtilisateur["id"], time() + 365*24*3600);
+				// Vérifie si le compte est actif
+				if($unUtilisateur["valide"] == 1){
+					$_SESSION["id"] = $unUtilisateur["id"];
+					$_SESSION["nom"] = $unUtilisateur["nom"];
+					$_SESSION["role"] = $unUtilisateur["role"];
+					if($resteConnecte){
+						setcookie('id_user', $unUtilisateur["id"], time() + 365*24*3600);
+					}
+					header("Location:?page=profil");
+					exit;
+				}else{
+					envoieMailVerif($unUtilisateur["email"], $db);
+					$code = 2;
 				}
-				header("Location:?page=profil");
-				exit;
 			}
 		}
  
 		// Si la connexion à échoué on envoie dans l'url l'erreur
-		header("Location:?page=connexion&code=1");
+		header("Location:?page=connexion&code=".$code);
 		exit;
 	}
 
-	if(isset($_GET["code"])){
-		$form["error"] = $_GET["code"];
+	// Code erreur renvoyé dans le GET
+	$message[0] = "Votre inscription est terminé, vous pouvez dès à présent vous connecter";
+	$message[1] = "Les identifients sont incorrects";
+	$message[2] = "Votre compte n'est pas actif, nous vous avons envoyé un mail d'activation";
+	
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
 	}
 
 	$form["nonavbar"] = true;
 	$form["nofooter"] = true;
 	echo $twig->render("connexion.html.twig", array("form" => $form));
+}
+
+// Permet d'activer un compte utilisateur
+function validationController($twig, $db){
+	// Vérifie si les paramètre sont passé dans l'url
+	if(isset($_GET["email"]) && isset($_GET["idgenere"])){
+		$user = new User($db);
+		$unUser = $user->connect($_GET["email"]);
+		// Vérifie si l'utilisateur existre
+		if($unUser){
+			// Vérifie si sont profil n'est pas encore actif et si l'idgenre corresponds
+			if($unUser["valide"] == 0 && ($_GET["idgenere"] == $unUser["idGenere"])){
+				$exec = $user->activeProfil($unUser["id"]);
+				// Si succées de requête
+				if($exec){
+					header("Location:?page=connexion&code=0");
+					exit;
+				}
+			}
+		}
+
+	}
+	header("Location:./");
+	exit;
 }
 
 // Déconnecte l'utilisateur
@@ -345,4 +383,35 @@ function gestionUserController($twig, $db){
 	}
 
 	echo $twig->render("gestionUser.html.twig", array("form" => $form));
+}
+
+// Permet d'envoyer un mail d'activation de profil
+function envoieMailVerif($email, $db){
+	$user = new User($db);
+	$unUser = $user->connect($email);
+
+	if($unUser && $unUser["valide"] == 0){
+		$serveur = $_SERVER["HTTP_HOST"];
+		$page = $_SERVER["SCRIPT_NAME"];
+		$idGenere = $unUser["idGenere"];
+		$lien = "http://$serveur$page?page=validation&email=$email&idgenere=$idGenere";
+
+		$objet = "Confirmer votre inscription - alLavi news";
+		$message = "
+		<html>
+		<head></head>
+		<body>
+			<h1>alLavi news</h1>
+			<p>Bienvenue sur allavi news, <a href=\"$lien\">cliquez ici</a> pour valider votre profil,
+			ou allez sur le lien ci-dessous</p>
+			<a href=\"".$lien."\">$lien</a>
+			<p>Bonne journée</p>
+		</body>
+		</html>
+		";
+
+		$headers[] = "MIME-Version: 1.0";
+		$headers[] = "Content-type: text/html; charset=utf-8";
+		mail($email, $objet, $message, implode("\n", $headers));
+	}
 }

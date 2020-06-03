@@ -11,17 +11,16 @@ html, body, .baseDiv, .log_in{height: 100%;}
 <div class="log_in bg-light">
 	{% if get.code == 5 %}
 	<div>
-		<h1 class="mb-4">Inscription réussi</h1>
-		<h3 class="mb-4">Votre inscription est terminé. Bienvenue sur alLavi news !</h3>
-		<p class="mb-4">Connectez-vous dés-maintenant.</p>
-		<a class="btn btn-success btn-lg" href="?page=connexion">Me connecter</a>
+		<h1 class="mb-4">C'est presque fini !</h1>
+		<h3 class="mb-4">Il ne vous reste juste à valider le mail de confirmation qui vous à était envoyé</h3>
+		<a class="btn btn-success btn-lg" href="./">Accueil du site</a>
 	</div>
 	{% else %}
 	<h1 class="text-center m-4">Inscription</h1>
 	{% if form.message is defined %}
 		<div class="alert alert-danger block-custom" role="alert">{{form.message}}</div>
 	{% endif %}
-	<form method="POST" action="index.php?page=inscription" class="p-4 bg-white border border-dark rounded block-custom">
+	<form method="POST" action="index.php?page=inscription" class="p-4 bg-white border border-dark rounded block-custom jsAnimateLoadForm">
 		<div class="form-group">
 			<label for="email">Adresse email *</label>
 			<input type="email" class="form-control" id="email" name="email" required />
@@ -35,11 +34,14 @@ html, body, .baseDiv, .log_in{height: 100%;}
 			<input type="password" class="form-control" id="password" name="password" required/>
 			<input type="password" class="form-control" id="password2" name="password2" required/>
 		</div>
-		<button type="submit" name="btInscrire" class="btn btn-primary">S'inscrire</button>
+		<button type="submit" name="btInscrire" id="validBt" class="btn btn-primary">S'inscrire</button>
 	</form>
 
 	<p class="m-3">Tu as déjà un compte ? <a href="?page=connexion">connecte toi ici !</a></p>
 	<a href="./">Retour à l'accueil du site</a> 
 	{% endif %}
 </div>
+
+<!-- SCRIPT -->
+<script src="js/loadingButton.js"></script>
 {% endblock %}

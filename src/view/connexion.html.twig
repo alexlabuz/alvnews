@@ -10,10 +10,14 @@ html, body, .baseDiv, .log_in{height: 100%;}
 {% block content %}
 <div class="log_in bg-light">
 	<h1>Connexion</h1>
-	{% if form.error is defined %}
-		<div class="alert alert-danger block-custom" role="alert">Les identifients sont incorrects</div>
+	{% if form.message is defined %}
+		{% if get.code == 0 %}
+			<div class="alert alert-success block-custom" role="alert">{{form.message}}</div>
+		{% else %}
+			<div class="alert alert-danger block-custom" role="alert">{{form.message}}</div>
+		{% endif %}
 	{% endif %}
-	<form method="POST" action="index.php?page=connexion" class="p-4 bg-white border border-dark rounded block-custom">
+	<form method="POST" action="index.php?page=connexion" class="p-4 bg-white border border-dark rounded block-custom jsAnimateLoadForm">
 		<div class="form-group">
 			<label for="email">Adresse email</label>
 			<input type="text" class="form-control" id="email" name="email" required />
@@ -26,10 +30,13 @@ html, body, .baseDiv, .log_in{height: 100%;}
 			<input class="form-check-input" type="checkbox" name="resteConnecte" id="resteConnecte" >
 			<label class="form-check-label" for="resteConnecte">Conserver la connexion</label>
 		</div>
-		<button type="submit" name="btConnecter" class="btn btn-primary mt-3">Se connecter</button>
+		<button type="submit" name="btConnecter" id="validBt" class="btn btn-primary mt-3">Se connecter</button>
 	</form>
 
 	<p class="m-3">Tu n'as pas de compte ? pas de problème <a href="?page=inscription">inscrit-toi maintenant !</a></p>
 	<a href="./">Retour à l'accueil du site</a> 
 </div>
+
+<!-- SCRIPT -->
+<script src="js/loadingButton.js"></script>
 {% endblock %}

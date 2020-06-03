@@ -10,13 +10,14 @@ class User{
 	private $delete;
 	private $select;
 	private $selectCount;
+	private $activeProfil;
 
 	public function __construct($db){
 		$this->db = $db;
 
 		$this->insert = $this->db->prepare(
-			"INSERT INTO utilisateur(email, nom, mdp, dateInscription)
-			VALUE (:email , :nom , :mdp , NOW())");
+			"INSERT INTO utilisateur(email, nom, mdp, dateInscription, idGenere)
+			VALUE (:email , :nom , :mdp , NOW(), :idGenere)");
 
 		$this->connect = $this->db->prepare("SELECT * FROM utilisateur WHERE email = :email");
 
@@ -35,12 +36,14 @@ class User{
 		$this->select = $this->db->prepare("SELECT * FROM utilisateur ORDER BY nom LIMIT :min, :max");
 
 		$this->selectCount = $this->db->prepare("SELECT count(*) AS nombre FROM utilisateur");
+
+		$this->activeProfil = $this->db->prepare("UPDATE utilisateur SET valide = 1 WHERE id = :id");
 	}
 
-	public function insert($email, $nom, $mdp){
+	public function insert($email, $nom, $mdp, $idGenere){
 		$r = true;
 
-		$this->insert->execute(array(":email"=>$email,":nom"=>$nom,":mdp"=>$mdp));
+		$this->insert->execute(array(":email"=>$email,":nom"=>$nom,":mdp"=>$mdp, ":idGenere"=>$idGenere));
 
 		if($this->insert->errorCode()!=0){
 			print_r($this->insert->errorInfo());
@@ -130,5 +133,18 @@ class User{
 		}
 
 		return $this->selectCount->fetch();
+	}
+	
+	public function activeProfil($id){
+		$r = true;
+
+		$this->activeProfil->execute(array(":id"=>$id));
+
+		if($this->activeProfil->errorCode()!=0){
+			print_r($this->activeProfil->errorInfo());
+			$r = false;
+		}
+
+		return $r;
 	}
 }
