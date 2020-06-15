@@ -1,0 +1,23 @@
+{% extends "base.html.twig" %}
+{% block title %}Mot de passe oublié{{parent()}}{% endblock %}
+
+{% block content %}
+	<h1 class="text-center m-4">Mot de passe oublié ?</h1>
+
+	{% if form.message is defined %}
+		<div class="alert alert-danger mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
+	{% endif %}
+
+	<form method="POST" action="?page=updateForgotMdp&email={{get.email}}&idgenere={{get.idgenere}}" class="bg-primary text-light p-4 mx-auto rounded block-custom">
+		<p>Email : {{user.email}}</p>
+		<div class="form-group">
+			<label for="password">Mot de passe</label>
+			<input type="password" class="form-control" id="password" name="password" required/>
+		</div>
+		<div class="form-group">
+			<label for="password">Confirmer mot de passe</label>
+			<input type="password" class="form-control" id="password2" name="password2" required/>
+		</div>
+		<button type="submit" name="btUpdate" class="btn btn-light">Valider</button>
+	</form>
+{% endblock %}

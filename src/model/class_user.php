@@ -11,6 +11,7 @@ class User{
 	private $select;
 	private $selectCount;
 	private $activeProfil;
+	private $updateIdGenere;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -38,6 +39,8 @@ class User{
 		$this->selectCount = $this->db->prepare("SELECT count(*) AS nombre FROM utilisateur");
 
 		$this->activeProfil = $this->db->prepare("UPDATE utilisateur SET valide = 1 WHERE id = :id");
+
+		$this->updateIdGenere = $this->db->prepare("UPDATE utilisateur SET idGenere = :idGenere WHERE id = :id");
 	}
 
 	public function insert($email, $nom, $mdp, $idGenere){
@@ -142,6 +145,19 @@ class User{
 
 		if($this->activeProfil->errorCode()!=0){
 			print_r($this->activeProfil->errorInfo());
+			$r = false;
+		}
+
+		return $r;
+	}
+
+	public function updateIdGenere($idGenere, $idUser){
+		$r = true;
+
+		$this->updateIdGenere->execute(array(":idGenere" => $idGenere, ":id"=>$idUser));
+
+		if($this->updateIdGenere->errorCode()!=0){
+			print_r($this->updateIdGenere->errorInfo());
 			$r = false;
 		}
 

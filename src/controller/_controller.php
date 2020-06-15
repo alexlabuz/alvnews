@@ -5,3 +5,4 @@ require_once("themeController.php");
 require_once("articleController.php");
 require_once("commentaireController.php");
 require_once("enregistreController.php");
+require_once("emailController.php");

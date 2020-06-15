@@ -23,6 +23,8 @@ function getPage($db){
 	$listPage['updatePassword'] = "updatePasswordController;1";
 	$listPage["deleteUser"] = "deleteUserController;1";
 	$listPage["gestionUser"] = "gestionUserController;3";
+	$listPage["forgotPassword"] = "forgotPasswordController;0";
+	$listPage["updateForgotMdp"] = "updateForgotMdpController;0";
 	$listPage["gestionTheme"] = "themeController;3";
 	$listPage["editor"] = "editorController;2";
 	$listPage["deleteArticle"] = "deleteArticleController;2";

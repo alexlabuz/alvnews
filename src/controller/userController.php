@@ -82,6 +82,7 @@ function connexionController($twig, $db){
 					if($resteConnecte){
 						setcookie('id_user', $unUtilisateur["id"], time() + 365*24*3600);
 					}
+					$utilisateur->updateIdGenere("", $unUtilisateur["id"]); // Vide le champ "idGenere"
 					header("Location:?page=profil");
 					exit;
 				}else{
@@ -97,6 +98,7 @@ function connexionController($twig, $db){
 	}
 
 	// Code erreur renvoyé dans le GET
+	$message[-1] = "Votre mot de passe à bien était changé";
 	$message[0] = "Votre inscription est terminé, vous pouvez dès à présent vous connecter";
 	$message[1] = "Les identifients sont incorrects";
 	$message[2] = "Votre compte n'est pas actif, nous vous avons envoyé un mail d'activation";
@@ -123,9 +125,11 @@ function validationController($twig, $db){
 				$exec = $user->activeProfil($unUser["id"]);
 				// Si succées de requête
 				if($exec){
+					$user->updateIdGenere("", $unUser["id"]);
 					header("Location:?page=connexion&code=0");
 					exit;
 				}
+				
 			}
 		}
 
@@ -385,33 +389,79 @@ function gestionUserController($twig, $db){
 	echo $twig->render("gestionUser.html.twig", array("form" => $form));
 }
 
-// Permet d'envoyer un mail d'activation de profil
-function envoieMailVerif($email, $db){
-	$user = new User($db);
-	$unUser = $user->connect($email);
+// Permet la saisie et l'envoie d'un mail lors de l'oublie d'un mot de passe
+function forgotPasswordController($twig, $db){
+	$form = array();
 
-	if($unUser && $unUser["valide"] == 0){
-		$serveur = $_SERVER["HTTP_HOST"];
-		$page = $_SERVER["SCRIPT_NAME"];
-		$idGenere = $unUser["idGenere"];
-		$lien = "http://$serveur$page?page=validation&email=$email&idgenere=$idGenere";
+	if(isset($_POST["btValider"])){
+		$email = $_POST["email"];
+		$code = 0;
+		$idGenere = uniqid();
 
-		$objet = "Confirmer votre inscription - alLavi news";
-		$message = "
-		<html>
-		<head></head>
-		<body>
-			<h1>alLavi news</h1>
-			<p>Bienvenue sur allavi news, <a href=\"$lien\">cliquez ici</a> pour valider votre profil,
-			ou allez sur le lien ci-dessous</p>
-			<a href=\"".$lien."\">$lien</a>
-			<p>Bonne journée</p>
-		</body>
-		</html>
-		";
+		$user = new User($db);
+		$unUser = $user->connect($email);
 
-		$headers[] = "MIME-Version: 1.0";
-		$headers[] = "Content-type: text/html; charset=utf-8";
-		mail($email, $objet, $message, implode("\n", $headers));
+		if($unUser == null){
+			$code = 1;
+		}else{
+			$user->updateIdGenere($idGenere, $unUser["id"]);
+			envoieMailMdp($unUser["email"], $db);
+		}
+
+		header("location: ?page=forgotPassword&code=".$code);
+		exit;
+	}
+
+	$message[0] = "Un mail vous à était envoyé afin de changer votre mot de passe";
+	$message[1] = "Le mail ne correspond à aucun compte";
+
+	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
+		$form["message"] = $message[$_GET["code"]];
+	}
+
+	$form["nonavbar"] = true;
+	$form["nofooter"] = true;
+	echo $twig->render("forgotPassword.html.twig", array("form" => $form));
+}
+
+// Permet de changer le mot de passe en cas d'oublie
+function updateForgotMdpController($twig, $db){
+	if(isset($_GET["email"]) && isset($_GET["idgenere"])){
+		$user = new User($db);
+		$unUser = $user->connect($_GET["email"]);
+
+		if($unUser != null && ($unUser["idGenere"] == $_GET["idgenere"])){
+			$form = array();
+
+			if(isset($_POST["btUpdate"])){
+				$password = $_POST["password"];
+				$password2 = $_POST["password2"];
+				$code = 1;
+
+				if($password == $password2){
+					$exec = $user->updateMdp(password_hash($password, PASSWORD_DEFAULT), $unUser["id"]);
+					if($exec){
+						$user->updateIdGenere("", $unUser["id"]);
+						header("Location:?page=connexion&code=-1");
+						exit;
+					}
+				}
+
+				header("location:?page=updateForgotMdp&email=".$_GET["email"]."&idgenere=".$_GET["idgenere"]."&code=".$code);
+				exit;
+			}
+			
+			if(isset($_GET["code"])){
+				$form["message"] = "Les 2 mots de passes ne corresponde pas, veuillez réesayer";
+			}
+
+			echo $twig->render("updateForgotMdp.html.twig", array("form" => $form, "user" => $unUser));
+		}else{
+			header("Location:./");
+			exit;
+		}
+	}else{
+		header("Location:./");
+		exit;
 	}
 }
