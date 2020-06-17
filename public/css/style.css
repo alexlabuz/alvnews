@@ -5,6 +5,17 @@
 }
 body{font-family:Sarala;}
 
+body::-webkit-scrollbar{
+	width: 15px;
+}
+body::-webkit-scrollbar-track{
+	background-color: grey;
+}
+body::-webkit-scrollbar-thumb{
+	border-radius: 1em;
+	background-color: black;
+}
+
 .footer p{font-size: 12px;}
 
 /*--Tamplate--*/
@@ -78,6 +89,7 @@ nav.navbar{
 .block-custom{
 	max-width:500px;
 	width:95%;
+	margin-bottom: 8px;
 }
 
 /*--Image profile--*/

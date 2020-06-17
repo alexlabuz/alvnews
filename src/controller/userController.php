@@ -83,7 +83,7 @@ function connexionController($twig, $db){
 						setcookie('id_user', $unUtilisateur["id"], time() + 365*24*3600);
 					}
 					$utilisateur->updateIdGenere("", $unUtilisateur["id"]); // Vide le champ "idGenere"
-					header("Location:?page=profil");
+					header("Location:./");
 					exit;
 				}else{
 					envoieMailVerif($unUtilisateur["email"], $db);

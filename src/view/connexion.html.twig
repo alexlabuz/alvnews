@@ -9,7 +9,7 @@ html, body, .baseDiv, .log_in{height: 100%;}
 
 {% block content %}
 <div class="log_in bg-light">
-	<h1>Connexion</h1>
+	<h1 class="mb-4">Connexion</h1>
 	{% if form.message is defined %}
 		{% if get.code <= 0 %}
 			<div class="alert alert-success block-custom" role="alert">{{form.message}}</div>

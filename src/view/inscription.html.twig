@@ -16,7 +16,7 @@ html, body, .baseDiv, .log_in{height: 100%;}
 		<a class="btn btn-success btn-lg" href="./">Accueil du site</a>
 	</div>
 	{% else %}
-	<h1 class="text-center m-4">Inscription</h1>
+	<h1 class="mb-4">Inscription</h1>
 	{% if form.message is defined %}
 		<div class="alert alert-danger block-custom" role="alert">{{form.message}}</div>
 	{% endif %}
