@@ -72,6 +72,5 @@ function error404Controller($twig, $db){
 }
 
 function maintenanceController($twig, $db){
-	echo "Maintenance";
-	//echo $twig->render("maintenance.html.twig", array());
+	echo $twig->render("maintenance.html.twig", array());
 }

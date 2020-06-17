@@ -2,6 +2,9 @@
 {% block title %}Erreur 404{{parent()}} {% endblock %}
 
 {% block content %}
+<div class="text-center m-4 text-danger">
 	<h1>Erreur 404</h1>
-	<p>Le contenu auquel vous souhaitez accéder n'existe plus</p>
+	<div class="alert alert-danger mt-4" role="alert">Le contenu auquel vous souhaitez accéder n'existe plus</div>
+	<a href="./"><button class="btn btn-primary">Aller à l'accueil</button></a>
+</div>
 {% endblock %}
