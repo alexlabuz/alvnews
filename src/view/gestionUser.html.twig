@@ -1,5 +1,5 @@
 {% extends "base.html.twig" %}
-{% block title %}Gestion des types{{parent()}}{% endblock %}
+{% block title %}Gestion des utilisateurs{{parent()}}{% endblock %}
 
 {% block content %}
 
@@ -61,7 +61,7 @@
 			</button>
 		</div>
 		<form method="POST" action="#" class="m-3">
-			<p class="text-danger">Etes-vous sur de supprimer l'utilisateur {{form.user.nom}}<br>Vous ne pourrez plus faire marche arrière</p>
+			<p class="text-danger">Etes-vous sur de supprimer l'utilisateur {{form.user.nom}}<br>Vous ne pourrez plus faire marche arrière !</p>
 			<input hidden name="idUser" value="{{form.user.id}}" />
 			<div class="modal-footer">
 				<button type="submit" class="btn btn-danger" name="btSupprimer">Supprimer {{form.user.nom}}</button>

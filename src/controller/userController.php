@@ -39,9 +39,9 @@ function inscriptionController($twig, $db){
 	}
 
 	// Code erreur renvoyé dans le GET
-	$message[1] = "Les 2 mots de passe ne corresponde pas";
+	$message[1] = "Les 2 mots de passe ne correspondent pas";
 	$message[2] = "Une erreur s'est produite, veuillez réésayer";
-	$message[3] = "Le mail saisie déjà existe déjà";
+	$message[3] = "Le mail saisi existe déjà";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
 		$form["message"] = $message[$_GET["code"]];
@@ -235,10 +235,10 @@ function updateUserController($twig, $db){
 	}
 
 	// Code erreur renvoyé dans le GET
-	$message[0] = "Les modifications ont bien étais changé";
-	$message[2] = "Le mail saisie déjà existe déjà";
+	$message[0] = "Les modifications ont bien étais pris en compte";
+	$message[2] = "Le mail saisi déjà existe déjà";
 	$message[3] = "Une erreur s'est produite, veuillez réésayer";
-	$message[4] = "Le mot de passe est incorrect, veuillez réésayer";
+	$message[4] = "Le mot de passe est incorrect, veuillez réessayer";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
 		$form["message"] = $message[$_GET["code"]];
@@ -310,7 +310,7 @@ function updatePasswordController($twig, $db){
 	}
 
 	$message[1] = "Echec lors de la demande";
-	$message[2] = "Les 2 mot de passe sont différent, veuillez réésayer";
+	$message[2] = "Les 2 mots de passe ne correspondent pas";
 	$message[3] = "Le mot de passe actuel est incorect";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){

@@ -1,9 +1,9 @@
 {% extends "base.html.twig" %}
-{% block title %}Gestion des types{{parent()}}{% endblock %}
+{% block title %}Gestion des thèmes{{parent()}}{% endblock %}
 
 {% block content %}
 <div class="container">
-	<h1 class="text-center m-3">Gestion des types</h1>
+	<h1 class="text-center m-3">Gestion des thèmes</h1>
 
 	{% if form.message is defined %}
 		{% if get.code == 0 %}
@@ -34,10 +34,10 @@
 
 	<!-- LISTE DE THEME (AJOUT OU SUPPRESSION) -->
 	<form method="POST" action="index.php?page=gestionTheme" class="bg-secondary text-light p-4 m-3 mx-auto rounded">
-	<h2>Ajouter un type</h2><form>
+	<h2>Ajouter un thème</h2><form>
 		<div class="form-row">
 			<div class="col">
-					<input type="text" name="nameTheme" class="form-control" placeholder="Nom du théme" required>
+					<input type="text" name="nameTheme" class="form-control" placeholder="Nom du thème" required>
 			</div>
 			<div class="col">
 				<input type="text" name="colorTheme" class="form-control" placeholder="Couleur" required>
@@ -70,7 +70,7 @@
 		</tbody>
 	</table>
 	<div class="float-right inligne mb-3">
-		<a class="text-danger">Cela supprimera <b>tout les articles</b> associées !</a>
+		<a class="text-danger">Cela supprimera <b>tous les articles</b> associés !</a>
 		<button class="btn btn-danger" type="submit" name="btEfface">Effacer la sélection</button>
 	</div>
 	</form>

@@ -79,9 +79,9 @@ function themeController($twig, $db){
 		$form["nbDeTheme"] = count($listType);
 	}
 		
-	$message[0] = "Votre demande à était effectuée avec succée";
+	$message[0] = "Votre demande a été effectuée avec succés";
 	$message[1] = "Une erreur s'est produite, veuillez réésayer";
-	$message[2] = "Le type existe déjà";
+	$message[2] = "Le thème existe déjà";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
 		$form["message"] = $message[$_GET["code"]];
