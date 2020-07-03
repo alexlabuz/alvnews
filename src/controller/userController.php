@@ -99,7 +99,7 @@ function connexionController($twig, $db){
 
 	// Code erreur renvoyé dans le GET
 	$message[-1] = "Votre mot de passe à bien était changé";
-	$message[0] = "Votre inscription est terminé, vous pouvez dès à présent vous connecter";
+	$message[0] = "Votre inscription est terminée, vous pouvez dès à présent vous connecter";
 	$message[1] = "Les identifients sont incorrects";
 	$message[2] = "Votre compte n'est pas actif, nous vous avons envoyé un mail d'activation";
 	
