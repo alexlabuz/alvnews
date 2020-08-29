@@ -386,6 +386,9 @@ function gestionUserController($twig, $db){
 		$form["error"] = $_GET["error"];
 	}
 
+	// Tableau qui contiens les nom textuel des roles dans l'ordre
+	$form["textRole"] = ["Client", "Modérateur", "Administrateur"];
+
 	echo $twig->render("gestionUser.html.twig", array("form" => $form));
 }
 

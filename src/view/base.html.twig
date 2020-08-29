@@ -13,7 +13,7 @@
 <body>
 
 {% if form.nonavbar is not defined %}
-<nav class="navbar navbar-expand-sm navbar-dark bg-secondary">
+<nav class="navbar navbar-expand-sm navbar-dark bg-secondary sticky-top homeNavBar">
 	<a class="navbar-brand" href="./"><b>alLavi news</b></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -69,7 +69,7 @@
 </div>
 
 {% if form.nofooter is not defined %}
-<div class="container-fluid bg-secondary overflow-hidden p-2 footer">
+<div class="container-fluid bg-secondary overflow-hidden p-2 mt-3 footer">
 	<div class="container">
 	<p class="text-light m-0">alLavi news 2020 | Projet SI6 pour le Lycée Guy Mollet d'ARRAS | <a class="text-light" href="https://github.com/alexlabuz/alvnews" target="_blank">Code source</a></p>
 	</div>

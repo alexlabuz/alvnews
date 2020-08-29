@@ -32,12 +32,15 @@ html, body, .baseDiv, .log_in{height: 100%;}
 		<div class="form-group">
 			<label for="password">Mot de passe *</label>
 			<input type="password" class="form-control" id="password" name="password" required/>
+		</div>
+		<div class="form-group">
+			<label for="password">Confirmation *</label>
 			<input type="password" class="form-control" id="password2" name="password2" required/>
 		</div>
 		<button type="submit" name="btInscrire" class="btn btn-primary">S'inscrire</button>
 	</form>
 
-	<p class="m-3">Tu as déjà un compte ? <a href="?page=connexion">connecte toi ici !</a></p>
+	<p class="m-3 text-center">Tu as déjà un compte ? <a href="?page=connexion">connecte toi ici !</a></p>
 	<a href="./">Retour à l'accueil du site</a> 
 	{% endif %}
 </div>

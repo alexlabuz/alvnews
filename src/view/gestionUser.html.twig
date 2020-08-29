@@ -18,36 +18,40 @@
 {% if form.users is not defined %}
 	<!-- PAGE UTILISATEUR -->
 	<h2>{{form.user.nom}}</h2>
+	
+	<div class="table-responsive-sm">
 	<table class="table table-dark">
-	<thead>
-		<tr>
-			<th scope="col">ID</th>
-			<th scope="col">Nom d'utilisateur</th>
-			<th scope="col">Email</th>
-			<th scope="col">Date d'inscription</th>
-			<th scope="col">Role</th>
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-		<form method="POST" action="?page=gestionUser">
-		<tr>
-			<td>{{form.user.id}}</td>
-			<td><input class="form-control form-control-sm bg-dark text-light" type="text" name="nom" value="{{form.user.nom}}" required /></td>
-			<td>{{form.user.email}}</td>
-			<td>{{form.user.dateInscription | date("d F Y") }}</td>
-			<td>
-			<select name="role" class="form-control bg-dark text-light form-control-sm" required>
-				<option value="1">Client</option>
-				<option value="2"{% if form.user.role == 2 %} selected{% endif %}>Modérateur</option>
-			</select>
-			</td>
-			<input hidden name="idUser" value="{{form.user.id}}" />
-			<td><button type="submit" name="btModifier" class="btn btn-primary btn-sm">Valider les modifications</button></td>
-		</tr>
-		</form>
-	</tbody>
+		<thead>
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">Nom d'utilisateur</th>
+				<th scope="col">Email</th>
+				<th scope="col">Date d'inscription</th>
+				<th scope="col">Role</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+			<form method="POST" action="?page=gestionUser">
+			<tr>
+				<td>{{form.user.id}}</td>
+				<td><input class="form-control form-control-sm bg-dark text-light" type="text" name="nom" value="{{form.user.nom}}" required /></td>
+				<td>{{form.user.email}}</td>
+				<td>{{form.user.dateInscription | date("d F Y") }}</td>
+				<td>
+				<select name="role" class="form-control bg-dark text-light form-control-sm" required>
+					<option value="1">Client</option>
+					<option value="2"{% if form.user.role == 2 %} selected{% endif %}>Modérateur</option>
+				</select>
+				</td>
+				<input hidden name="idUser" value="{{form.user.id}}" />
+				<td><button type="submit" name="btModifier" class="btn btn-primary btn-sm">Valider les modifications</button></td>
+			</tr>
+			</form>
+		</tbody>
 	</table>
+	</div>
+
 	<button class="btn btn-danger mb-3" id="supprimerCompte" data-toggle="modal" data-target="#exampleModal">Bannir</button>
 		
 	<!-- Modal -->
@@ -72,6 +76,7 @@
 	</div>
 {% else %}
 	<!-- LISTE UTILISATEURS -->
+
 	<!-- PAGINATION -->
 	<nav>
 	<ul class="pagination justify-content-center">
@@ -91,30 +96,32 @@
 	</ul>
 	</nav>
 
+	<div class="table-responsive-sm">
 	<table class="table table-striped">
-	<thead class="thead-dark">
-		<tr>
-			<th scope="col">ID</th>
-			<th scope="col">Nom d'utilisateur</th>
-			<th scope="col">Email</th>
-			<th scope="col">Date d'inscription</th>
-			<th scope="col">Role</th>
-			<th scope="col"></th>
-		</tr>
-	</thead>
-	<tbody>
-	{% for u in form.users %}
-		<tr>
-			<td>{{u.id}}</td>
-			<td>{{u.nom}}</td>
-			<td>{{u.email}}</td>
-			<td>{{u.dateInscription | date("d F Y") }}</td>
-			<td>{{u.role}}</td>
-			<td>{% if u.role != 3 %}<a href="?page=gestionUser&id={{u.id}}">Réglage</a>{% endif %}</td>
-		</tr>
-	{% endfor %}
-	</tbody>
+		<thead class="thead-dark">
+			<tr>
+				<th scope="col">ID</th>
+				<th scope="col">Nom d'utilisateur</th>
+				<th scope="col">Email</th>
+				<th scope="col">Date d'inscription</th>
+				<th scope="col">Role</th>
+				<th scope="col"></th>
+			</tr>
+		</thead>
+		<tbody>
+		{% for u in form.users %}
+			<tr>
+				<td>{{u.id}}</td>
+				<td>{{u.nom}}</td>
+				<td>{{u.email}}</td>
+				<td>{{u.dateInscription | date("d F Y") }}</td>
+				<td>{{form.textRole[u.role - 1]}}</td>
+				<td>{% if u.role != 3 %}<a href="?page=gestionUser&id={{u.id}}">Réglage</a>{% endif %}</td>
+			</tr>
+		{% endfor %}
+		</tbody>
 	</table>
+	</div>
 {% endif %}
 </div>
 
