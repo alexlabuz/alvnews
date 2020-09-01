@@ -31,7 +31,7 @@
 		</div>
 		<!-- INFO UTILISATEUR -->
 		<div class="col-sm-7 align-self-center">
-			<p>{{ form.roleText }} alLavi news</p>
+			<p>{{ form.textRole[user.role -1] }} alLavi news</p>
 			{% if user.role != 1 %}
 			<p>Nombre d'article : {{form.nbArticle}}</p>
 			{% endif %}

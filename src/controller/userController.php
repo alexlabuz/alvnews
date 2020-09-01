@@ -153,17 +153,8 @@ function profilController($twig, $db){
 	$utilisateur = new User($db);
 	$donnees = $utilisateur->selectById($_SESSION["id"]);
 
-	switch($donnees["role"]){
-		case 1:
-			$form["roleText"] = "Utilisateur";
-		break;
-		case 2:
-			$form["roleText"] = "Modérateur";
-		break;
-		case 3:
-			$form["roleText"] = "Administrateur";
-		break;
-	}
+	// Tableau qui contiens les nom textuel des roles dans l'ordre
+	$form["textRole"] = ["Utilisateur", "Modérateur", "Administrateur"];
 
 	$article = new Article($db);
 	$form["listArticle"] = $article->selectByUser($donnees["id"]);

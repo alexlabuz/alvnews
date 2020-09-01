@@ -18,7 +18,7 @@
 {% else %}
 
 <!--TITRE-->
-<div class="card bg-dark text-white align-top rounded-0">
+<div class="card bg-dark text-white rounded-0">
 	{% if article.image != null %}
 		<img src="images/article/{{article.image}}" class="card-img img-article" alt="image de l'article {{article.titre}}">
 	{% else %}
@@ -26,7 +26,11 @@
 	{% endif %}
   	<div class="card-img-overlay text-center mt-2">
 		<h1 class="card-title">{{article.titre}}</h1>
-		<p class="card-text mb-2">Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}</p>
+		<p class="card-text mb-2">
+			Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}
+			<img src="{% if article.imageUser != null %}images/profil/{{article.imageUser}}{% else %}images/default/profil.png{% endif %}" alt="photo de profile du rédacteur" class="img-profile-redacteur rounded ml-1" />
+		</p>
+		
 		<span class="badge badge-pill text-light" style="background-color:{{article.couleur}}">{{article.theme}}</span>
 	</div>
 </div>
@@ -36,7 +40,6 @@
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarArticle">
    		<span class="navbar-toggler-icon"></span>
 	</button>
-
 	<div class="collapse navbar-collapse" id="navbarArticle">
 		{% if session.id is defined %}
 			{% if form.enrgistre is defined %}
@@ -48,20 +51,16 @@
 			{% else %}
 				<a href="?page=enregistre&id={{article.id}}" class="nav-item nav-link text-light">Enregistrer l'article</a>
 			{% endif %}
-
 			{% if article.idUtilisateur == session.id %}
 				<a href="?page=editor&id={{article.id}}" class="nav-item nav-link text-light">Modifier mon article</a>
 			{% endif %}
-
 		{% endif %}
-
 		<a class="nav-item nav-link text-white-50 mr-auto">Article modifié le {{article.dateModif | date("d F Y à G:i")}}</a>
-			
+
 		<a href="http://www.facebook.com/sharer.php?u={{form.url | raw}}&t={{article.titre}}" class="nav-item nav-link text-white" style="background-color:#4267B2;">Partager sur Facebook</a>
 		<a href="http://twitter.com/share?url={{form.url | raw}}&text={{article.titre}}" class="nav-item nav-link text-white" style="background-color:#1DA1F2;">Partager sur Twitter</a>
 	</div>
 </nav>
-
 
 <!--DESCRIPTION-->
 <div class="bg-light text-secondary p-3">

@@ -19,13 +19,11 @@
 	{% for a in article %}
     <div class="carousel-item{% if loop.first %} active{% endif %}">
 	<a href="?page=article&id={{a.id}}">
-		<div style="background:black">
 		{% if a.image != null %}
-      		<img src="images/article/{{a.image}}" class="d-block w-100 mb-4" alt="...">
+      		<img src="images/article/{{a.image}}" class="d-block w-100 mb-4" alt="image de l'article {{a.titre}}">
 		{% else %}
-      		<img src="images/default/article.jpg" class="d-block w-100 mb-4" alt="...">
+      		<img src="images/default/article.jpg" class="d-block w-100 mb-4" alt="image de l'article {{a.titre}}">
 		{% endif %}
-		</div>
       	<div class="carousel-caption d-md-block">
         	<h3>{{a.titre}}</h3>
         	<p class="d-none d-sm-block">{{a.description}}</p>
@@ -68,7 +66,8 @@
 		</div>
 		<div class="col-md-8">
 			<div class="card-body">
-				<h5 class="card-title">{{a.titre}} <span class="badge badge-pill text-light" style="background-color:{{a.couleur}}">{{a.theme}}</span></h5>
+				<h5 class="card-title mb-1">{{a.titre}}</h5>
+				<span class="badge badge-pill text-light mb-1" style="background-color:{{a.couleur}}">{{a.theme}}</span>
 				<p class="card-text">{{a.description}}</p>
 				<p class="card-text"><small class="text-muted">Le {{a.dateCreation | date("d F Y à G:i")}} | par {{a.redacteur}}</small></p>
 			</div>

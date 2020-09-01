@@ -28,7 +28,7 @@ if(isset($_COOKIE["id_user"]) && !isset($_SESSION["id"])){
 		$_SESSION["id"] = $unUtilisateur["id"];
 		$_SESSION["nom"] = $unUtilisateur["nom"];
 		$_SESSION["role"] = $unUtilisateur["role"];
-		header("Location:./");
+		header("Location:".url());
 	}else{
 		setcookie('id_user', "");
 	}

@@ -9,7 +9,7 @@
 	h2{font-size: 24px;}
 	h3{font-size: 21px;}
 	h5{font-size: 18px;}
-	p, a{font-size: 14px;}
+	p,a{font-size: 14px;}
 }
 
 body{font-family:Sarala;}
@@ -28,7 +28,7 @@ body::-webkit-scrollbar-thumb{
 
 /*--Tamplate--*/
 nav.homeNavBar{
-	z-index: 2;
+	z-index:11;
 }
 /*--Recherche instantané---*/
 .form-search{position: relative;}
@@ -45,7 +45,7 @@ nav.homeNavBar{
 /*--Page d'accueil--*/
 .carousel img{
 	height: 500px;
-	opacity: 0.7;
+	filter: brightness(0.6);
 }
 @media(max-width:776px){
 	.carousel img{
@@ -76,8 +76,13 @@ nav.homeNavBar{
 	}
 }
 .img-article{
-	opacity: 0.6;
-	height: 170px;
+	filter: brightness(0.6);
+	height: 180px;
+}
+
+.img-profile-redacteur{
+	width: 30px;
+	height: 30px;
 }
 
 .input-commentaire{
