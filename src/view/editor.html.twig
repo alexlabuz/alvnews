@@ -67,7 +67,7 @@
 	
 	<!-- INPUT VISIBLE -->
 	<div class="form-group form-check float-left">
-		<input type="checkbox" class="form-check-input" name="visible" id="visible" checked />
+		<input type="checkbox" class="form-check-input" name="visible" id="visible"{% if article.visible == 1 or article == null %} checked{% endif %} />
 		<label class="form-check-label" for="visible">Publication visible</label>
 	</div>
 

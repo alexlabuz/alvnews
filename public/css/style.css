@@ -53,20 +53,15 @@ nav.homeNavBar{
 	}
 }
 
-.card-link-custom, .card-link-custom:link, .card-link-custom:hover{
-	color: black;
-	text-decoration: none;
-}
-.card-link-custom .card{max-width:540px;}
-
+.list-article .card{max-width:540px;}
 @media(min-width:776px){
 	.list-article .card, .list-article img{
 		height: 220px;
 	}
 }
-
-.list-article .card:hover > *{
-	color:black;
+.list-article a{
+	text-decoration: none;
+	color: black;
 }
 
 /*--Page d'article--*/
