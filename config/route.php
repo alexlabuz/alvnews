@@ -14,6 +14,7 @@ function getPage($db){
 	$listPage['home'] = "homeController;0";
 	$listPage['search'] = "searchController;0";
 	$listPage['article'] = "afficheArticleController;0";
+	$listPage['theme'] = "listeThemeController;0";
 	$listPage['inscription'] = "inscriptionController;0";
 	$listPage['connexion'] = "connexionController;0";
 	$listPage['validation'] = "validationController;0";

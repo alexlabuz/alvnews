@@ -1,5 +1,27 @@
 <?php
 
+
+function listeThemeController($twig, $db){
+	$form = array();
+	$listeTheme = array();
+	$listeArticle = array();
+	$theme = new Theme($db);
+
+	if(empty($_GET["cat"])){
+		$listeTheme = $theme->selectDistinct();
+	}else{
+		$article = new Article($db);
+		$listeArticle = $article->selectByTheme($_GET["cat"]);
+		$form["theme"] = $theme->selectById($_GET["cat"]);
+		
+		if($listeArticle == null){
+			$form["errorMessage"] = "Ce thème n'existe pas";
+		}
+	}
+
+	echo $twig->render("theme.html.twig", array("form" => $form, "themes" => $listeTheme, "articles" => $listeArticle));
+}
+
 // Gestion administrative des thémes (affichage en liste, ajout et suppression)
 function themeController($twig, $db){
 	$form = array();

@@ -8,6 +8,7 @@ class Article{
 	private $select;
 	private $selectByUser;
 	private $selectById;
+	private $selectByTheme;
 	private $search;
 	private $searchCount;
 	private $selectCount;
@@ -49,6 +50,15 @@ class Article{
 			AND a.idUtilisateur = u.id
 			AND a.id = :id");
 			
+		$this->selectByTheme = $this->db->prepare(
+		"SELECT a.id AS id, titre, a.image AS image, description, dateCreation , visible, u.nom AS redacteur
+		FROM article a, theme t , utilisateur u
+		WHERE a.idTheme = t.id
+		AND a.idUtilisateur = u.id
+		AND a.visible >= :visible
+		AND t.id = :idTheme
+		ORDER BY dateCreation DESC");
+
 		$this->search = $this->db->prepare(
 			"SELECT id, titre, description, dateCreation
 			FROM article
@@ -156,6 +166,17 @@ class Article{
 
 		return $this->selectById->fetch();
 	}
+
+	public function selectByTheme($idTheme){
+		$this->selectByTheme->execute(array(":idTheme" => $idTheme, "visible" => 1));
+
+		if($this->selectByTheme->errorCode() != 0){
+			print_r($this->selectByTheme->errorInfo());
+		}
+
+		return $this->selectByTheme->fetchAll();
+	}
+
 
 	public function search($search, $min, $max){
 		$this->search->bindParaM(":min", $min, PDO::PARAM_INT);

@@ -17,7 +17,7 @@
 </div>
 {% else %}
 
-<!--TITRE-->
+<!--HEADER-->
 <div class="card bg-dark text-white rounded-0">
 	{% if article.image != null %}
 		<img src="images/article/{{article.image}}" class="card-img img-article" alt="image de l'article {{article.titre}}">
@@ -28,7 +28,7 @@
 		<h1 class="card-title">{{article.titre}}</h1>
 		<p class="card-text mb-2">
 			Article rédigé le {{article.dateCreation | date("d F Y à G:i")}} par {{article.redacteur}}
-			<img src="{% if article.imageUser != null %}images/profil/{{article.imageUser}}{% else %}images/default/profil.png{% endif %}" alt="photo de profile du rédacteur" class="img-profile-redacteur rounded ml-1" />
+			<img src="{% if article.imageUser != null %}images/profil/{{article.imageUser}}{% else %}images/default/profil.png{% endif %}" alt="photo de profile du rédacteur" class="img-profile-redacteur rounded-circle ml-1" />
 		</p>
 		
 		<span class="badge badge-pill text-light" style="background-color:{{article.couleur}}">{{article.theme}}</span>

@@ -4,6 +4,7 @@ class Theme{
 	private $db;
 	private $insert;
 	private $select;
+	private $selectDistinct;
 	private $selectByName;
 	private $selectById;
 	private $update;
@@ -16,11 +17,13 @@ class Theme{
 
 		$this->select = $this->db->prepare("SELECT * FROM theme ORDER BY LOWER(libelle)");
 
+		$this->selectDistinct = $this->db->prepare("SELECT DISTINCT t.libelle, t.couleur, t.id FROM theme t, article a WHERE a.idTheme = t.id ORDER BY t.libelle");
+
 		$this->selectByName = $this->db->prepare("SELECT * FROM theme WHERE libelle = :libelle");
 
 		$this->selectById = $this->db->prepare("SELECT * FROM theme WHERE id = :id");
 
-		$this->update = $this->db->prepare("UPDATE theme SET libelle= :libelle, couleur= :couleur WHERE id= :id");
+		$this->update = $this->db->prepare("UPDATE theme SET libelle = :libelle, couleur= :couleur WHERE id = :id");
 
 		$this->delete = $this->db->prepare("DELETE FROM theme WHERE id= :id");
 	}
@@ -48,6 +51,15 @@ class Theme{
 		return $this->select->fetchAll();
 	}
 
+	public function selectDistinct(){
+		$this->selectDistinct->execute();
+
+		if($this->selectDistinct->errorCode()!=0){
+			print_r($this->selectDistinct->errorInfo());
+		}
+
+		return $this->selectDistinct->fetchAll();
+	}
 
 	public function selectByName($nameType){
 		$this->selectByName->execute(array(":libelle" => $nameType));
