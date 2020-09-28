@@ -28,7 +28,7 @@ body::-webkit-scrollbar-thumb{
 
 /*--Tamplate--*/
 nav.homeNavBar{
-	z-index:11;
+	z-index:16;
 }
 /*--Recherche instantané---*/
 .form-search{position: relative;}

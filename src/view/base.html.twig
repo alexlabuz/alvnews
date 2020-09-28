@@ -5,7 +5,7 @@
 	<meta charset="utf-8" />
 	<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 	<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.4.1/css/bootstrap.min.css" integrity="sha384-Vkoo8x4CGsO3+Hhxv8T/Q5PaXtkKtu6ug5TOeNV6gBiFeWPGFN9MuhOf23Q9Ifjh" crossorigin="anonymous">
-	<link rel="stylesheet" href="css/style.css">
+	<link rel="stylesheet" href="css/style.css?1">
 	<link rel="icon" type="image/png" sizes="32x32" href="images/favicon-32x32.png" />
 	<link rel="apple-touch-icon" sizes="120x120" href="images/apple-icon-120x120.png" />
 {% block head %}{% endblock %}
@@ -13,7 +13,7 @@
 <body>
 
 {% if form.nonavbar is not defined %}
-<nav class="navbar navbar-expand-md navbar-dark bg-secondary sticky-top homeNavBar">
+<nav class="navbar navbar-expand-md navbar-dark bg-dark sticky-top homeNavBar">
 	<a class="navbar-brand" href="./"><b>alLavi news</b></a>
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
 		<span class="navbar-toggler-icon"></span>
@@ -59,7 +59,12 @@
 		</ul>
 		<form class="form-inline my-2 my-lg-0 form-search" method="POST" action="?page=search">
 			<input class="form-control mr-sm-2 input-search" type="search" placeholder="Recherche sur le site" name="search" aria-label="Search">
-			<button class="btn btn-outline-light my-2 my-sm-0" name="btRecherche" type="submit">Rechercher</button>
+			<button class="btn btn-outline-light my-2 my-sm-0" name="btRecherche" type="submit">Rechercher
+			<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-search mb-1 ml-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				<path fill-rule="evenodd" d="M10.442 10.442a1 1 0 0 1 1.415 0l3.85 3.85a1 1 0 0 1-1.414 1.415l-3.85-3.85a1 1 0 0 1 0-1.415z"/>
+				<path fill-rule="evenodd" d="M6.5 12a5.5 5.5 0 1 0 0-11 5.5 5.5 0 0 0 0 11zM13 6.5a6.5 6.5 0 1 1-13 0 6.5 6.5 0 0 1 13 0z"/>
+			</svg>
+			</button>
 			<!--Suggestion instané (search.js)-->
 			<ul class="list-group list-group-flush suggestion"></ul>
 		</form>
@@ -72,9 +77,9 @@
 </div>
 
 {% if form.nofooter is not defined %}
-<div class="container-fluid bg-secondary overflow-hidden p-2 mt-3 footer">
+<div class="container-fluid bg-dark overflow-hidden p-2 mt-3 text-light footer">
 	<div class="container">
-	<p class="text-light m-0">alLavi news 2020 | Projet SI6 pour le Lycée Guy Mollet d'ARRAS | <a class="text-light" href="https://github.com/alexlabuz/alvnews" target="_blank">Code source</a></p>
+	<p class="m-1">alLavi news 2020 | Projet SI6 pour le Lycée Guy Mollet d'ARRAS | <a class="text-light" href="https://github.com/alexlabuz/alvnews" target="_blank">Code source</a></p>
 	</div>
 </div>
 {% endif %}

@@ -406,7 +406,7 @@ function forgotPasswordController($twig, $db){
 		exit;
 	}
 
-	$message[0] = "Un mail vous à était envoyé afin de changer votre mot de passe";
+	$message[0] = "Un mail vous a était envoyé afin de changer votre mot de passe";
 	$message[1] = "Le mail ne correspond à aucun compte";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
