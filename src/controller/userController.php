@@ -143,7 +143,7 @@ function deconnexionController($twig, $db){
 	session_unset();
  	session_destroy();
  	setcookie('id_user', "");
- 	header("Location:index.php");
+ 	header("Location:index.php?singout=1");
 }
 
 // Affiche le profil de l'utilisateur

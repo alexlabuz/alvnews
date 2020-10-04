@@ -18,6 +18,11 @@ function homeController($twig, $db){
 	$form["nbDePage"] = ceil($nbEntree/$max);
 	$form["numeroPage"] = $page;
 
+	// Lorsque l'utilisateur est rediriger sur la page d'accueil après s'être deconnecter
+	if(isset($_GET["singout"])){
+		$form["message"] = "Vous avez bien était déconnecté.";
+	}
+
 	echo $twig->render("home.html.twig", array("form" => $form, "article" => $articleList));
 }
 

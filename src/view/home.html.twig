@@ -4,6 +4,15 @@
 {% block content %}
 
 {% if form.numeroPage == 0 %}
+
+{% if form.message %}
+	<div class="container mt-3">
+	<div class="alert alert-success" role="alert">
+		{{form.message}}
+	</div>
+	</div>
+{% endif %}
+
 <div class="container mt-3">
 	<h1><b>alLavi news</b></h1>
 	<h2 class="mb-3">A la une</h2>
