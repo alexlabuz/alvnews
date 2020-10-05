@@ -80,10 +80,11 @@
 	<div class="float-right inligne">
 		{% if get.id is defined %}
 			<small class="mr-2">Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</small>
+			<button class="btn btn-primary" type="submit" name="btEnvoyer">Mettre à jour</button>
 		{% else %}
 			<small class="mr-2">Pas encore publié</small>
+			<button class="btn btn-primary" type="submit" name="btEnvoyer">Publier</button>
 		{% endif %}
-		<button class="btn btn-primary" type="submit" name="btEnvoyer">Envoyer</button>
 	</div>
 </form>
 </div>

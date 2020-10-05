@@ -1,6 +1,5 @@
 <?php
-
-
+// Controleur de la page des thèmes
 function listeThemeController($twig, $db){
 	$form = array();
 	$listeTheme = array();
@@ -8,7 +7,7 @@ function listeThemeController($twig, $db){
 	$theme = new Theme($db);
 
 	if(empty($_GET["cat"])){
-		$listeTheme = $theme->selectDistinct();
+		$listeTheme = $theme->selectGroupBy();
 	}else{
 		$article = new Article($db);
 		$listeArticle = $article->selectByTheme($_GET["cat"]);

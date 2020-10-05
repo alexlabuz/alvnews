@@ -4,7 +4,7 @@ class Theme{
 	private $db;
 	private $insert;
 	private $select;
-	private $selectDistinct;
+	private $selectGroupBy;
 	private $selectByName;
 	private $selectById;
 	private $update;
@@ -17,7 +17,7 @@ class Theme{
 
 		$this->select = $this->db->prepare("SELECT * FROM theme ORDER BY LOWER(libelle)");
 
-		$this->selectDistinct = $this->db->prepare("SELECT DISTINCT t.libelle, t.couleur, t.id FROM theme t, article a WHERE a.idTheme = t.id ORDER BY t.libelle");
+		$this->selectGroupBy = $this->db->prepare("SELECT t.id, t.libelle, t.couleur, COUNT(a.titre) AS nbArticle FROM article a, theme t WHERE a.idTheme = t.id GROUP BY t.id ORDER BY t.libelle");
 
 		$this->selectByName = $this->db->prepare("SELECT * FROM theme WHERE libelle = :libelle");
 
@@ -51,14 +51,14 @@ class Theme{
 		return $this->select->fetchAll();
 	}
 
-	public function selectDistinct(){
-		$this->selectDistinct->execute();
+	public function selectGroupBy(){
+		$this->selectGroupBy->execute();
 
-		if($this->selectDistinct->errorCode()!=0){
-			print_r($this->selectDistinct->errorInfo());
+		if($this->selectGroupBy->errorCode()!=0){
+			print_r($this->selectGroupBy->errorInfo());
 		}
 
-		return $this->selectDistinct->fetchAll();
+		return $this->selectGroupBy->fetchAll();
 	}
 
 	public function selectByName($nameType){

@@ -1,5 +1,4 @@
 <?php
-
 // Permet d'envoyer un mail d'activation de profil
 function envoieMailVerif($email, $db){
 	$user = new User($db);

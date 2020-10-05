@@ -1,5 +1,5 @@
 <?php
-// Permet d'affichage de l'article
+// Permet l'affichage de l'article
 function afficheArticleController($twig, $db){
 	if(!isset($_GET["id"])){
 		header("Location:./");
@@ -94,6 +94,7 @@ function editorController($twig, $db){
 		exit;
 	}
 
+	// Vérifie si un article précisé dans l'url
 	$unArticle = null;
 	if(isset($_GET["id"])){
 		$unArticle = $article->selectById($_GET["id"]);

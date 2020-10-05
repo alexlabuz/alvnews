@@ -22,7 +22,8 @@
 	{% for t in themes %}
 	<div class="card text-white col-sm-5 m-3 p-4" style="background-color:{{t.couleur}}" style="max-width: 18rem;">
 	<div class="card-body">
-		<h2 class="card-title mb-4">{{t.libelle}}</h2>
+		<h2 class="card-title">{{t.libelle}}</h2>
+		<p class="mb-4">Nombre d'article : {{t.nbArticle}}</p>
 		<a href="?page=theme&cat={{t.id}}" class="btn btn-light">Voir les articles</a>
 	</div>
 	</div>
