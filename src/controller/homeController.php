@@ -20,7 +20,7 @@ function homeController($twig, $db){
 
 	// Lorsque l'utilisateur est rediriger sur la page d'accueil après s'être deconnecter
 	if(isset($_GET["singout"])){
-		$form["message"] = "Vous avez bien était déconnecté.";
+		$form["message"] = "Vous avez bien été déconnecté.";
 	}
 
 	echo $twig->render("home.html.twig", array("form" => $form, "article" => $articleList));
