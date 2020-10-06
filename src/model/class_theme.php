@@ -17,7 +17,7 @@ class Theme{
 
 		$this->select = $this->db->prepare("SELECT * FROM theme ORDER BY LOWER(libelle)");
 
-		$this->selectGroupBy = $this->db->prepare("SELECT t.id, t.libelle, t.couleur, COUNT(a.titre) AS nbArticle FROM article a, theme t WHERE a.idTheme = t.id GROUP BY t.id ORDER BY t.libelle");
+		$this->selectGroupBy = $this->db->prepare("SELECT t.id, t.libelle, t.couleur, COUNT(a.titre) AS nbArticle FROM article a, theme t WHERE a.idTheme = t.id AND a.visible = 1 GROUP BY t.id ORDER BY t.libelle");
 
 		$this->selectByName = $this->db->prepare("SELECT * FROM theme WHERE libelle = :libelle");
 

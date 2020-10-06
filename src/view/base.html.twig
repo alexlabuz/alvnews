@@ -29,7 +29,7 @@
 	{% if session.id is defined %}
 		<div class="dropdown">
 				<li class="nav-item">
-					<a class="nav-link dropdown-toggle" href="?page=deconnexion" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{session.nom}}</a>
+					<a class="nav-link dropdown-toggle" href="#" role="button" id="dropdownMenuLink" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">{{session.nom}}</a>
 					<div class="dropdown-menu" aria-labelledby="dropdownMenuLink">
 						<h6 class="dropdown-header">Bienvenue {{session.nom}}</h6>
 						<a class="dropdown-item" href="?page=profil">Profil</a>
@@ -79,7 +79,7 @@
 {% if form.nofooter is not defined %}
 <div class="container-fluid bg-dark overflow-hidden p-2 mt-3 text-light footer">
 	<div class="container">
-	<p class="m-1">alLavi news 2020 | Projet SI6 pour le Lycée Guy Mollet d'ARRAS | <a class="text-light" href="https://github.com/alexlabuz/alvnews" target="_blank">Code source</a></p>
+	<p class="m-1">alLavi news 2020 | <a class="text-light" href="https://github.com/alexlabuz/alvnews" target="_blank">Code source</a></p>
 	</div>
 </div>
 {% endif %}
