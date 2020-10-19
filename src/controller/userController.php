@@ -175,27 +175,38 @@ function updateUserController($twig, $db){
 	$donnees = $utilisateur->selectById($_SESSION["id"]);
 
 	if(isset($_POST['btUpdate'])){
-		$email = $_POST["email"];	
-		$nom = $_POST["nom"];
-		$image = $donnees["image"]; // Si aucune image est sélectionné on remet l'ancienne
-		$code = 0; // Code de réussite
-
-		$upload = new Upload(["jpg", "png", "JPG", "PNG"], "images/profil", 2000000);
-		$fichier = $upload->enregistrer("image");
-
-		if($fichier["nom"] != null){
-			/* Supprimer l'ancienne photo de profil */
-			if(file_exists("images/profil/".$donnees["image"])){
-				unlink("images/profil/".$donnees["image"]); 
-			}
-			$image = $fichier["nom"];
+		// Si une image est envoyée on l'ajoute au profil
+		$fichier = null;
+		if(!empty($_FILES["image"]["name"])){
+			$upload = new Upload($donnees["id"], "images/profil/", null, null);
+			$fichier = $upload->enregistrer("image");
 		}
 
+		$email = $_POST["email"];	
+		$nom = $_POST["nom"];
+		$image = null;
+
+		// Vérifie si une image à était envoyé
+		if(isset($fichier)){
+			$image = $fichier["nom"];
+		}else{
+			$image = $donnees["image"];
+		}
+
+		/**
+		 * Branche fileBeta
+		 */
+
+		$code = 0; // Code de réussite
+
 		if(($utilisateur->connect($email)) && ($email != $donnees["email"])){
+			// Si le mot de passe existe déjà et si l'email n'est pas le même
 			$code = 2;
-		}else if($nom == null || $email == null || $fichier["message"] != null){
+		}else if($nom == null || $email == null || $fichier["error"] == true){
+			// Si des champs ne sont pas remplie ou si il y a une erreur sur l'image
 			$code = 3;
 		}else{
+			// Met à jour l'utilisateur
 			$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
 			if(!$exec){
 				$code = 3;
@@ -204,10 +215,14 @@ function updateUserController($twig, $db){
 				$_SESSION["nom"] = $nom;
 				$_SESSION["email"] = $email;
 			}
+
 		}
 
-		header("Location:?page=updateUser&code=".$code);
-		exit;
+		if(isset($code)){
+			return header("Location:?page=updateUser&code=".$code);
+		}else{
+			return header("Location:?page=updateUser");
+		}
 	}
 
 	if(isset($_POST["btSupprimeImage"])){

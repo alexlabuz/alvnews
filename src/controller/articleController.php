@@ -31,56 +31,87 @@ function afficheArticleController($twig, $db){
 // Permet d'ajouter ou modifier un article
 function editorController($twig, $db){
 	$form = array();
+
 	$user = new User($db);
 	$unUtilisateur = $user->selectById($_SESSION["id"]);
+
 	$article = new Article($db);
+	
+	// Vérifie si un article précisé dans l'url
+	$unArticle = null;
+	if(isset($_GET["id"])){
+		$art = $article->selectById($_GET["id"]);
+		if($art != null && ($art["idUtilisateur"] == $unUtilisateur["id"] || $unUtilisateur["role"] == 3)){
+			$unArticle = $art;
+		}else{
+			$form["errorMessage"] == "Erreur : l'article n'existe pas ou vous n'avez pas les droits nécessaires";
+		}
+	}
 
 	// Appui sur le bouton d'envoie d'article
 	if(isset($_POST["btEnvoyer"])){
-		$inputTitre = $_POST["titre"];
-		$inputDescription = $_POST["description"];
-		$image = null;
-		$inputArticle = $_POST["article"];
-		$inputTheme = $_POST["theme"];
-		$inputVisible = 0;
-		if(isset($_POST["visible"])){
-			$inputVisible = true;
-		}
-		$idUser = $unUtilisateur["id"];
 		$error = false;
 
-		$upload = new Upload(["jpg","jpeg", "JPG", "png", "PNG"], "images/article", 2000000);
-		$fichier = $upload->enregistrer("image");
+		// Si une image est envoyée on l'ajoute au profil
+		$fichier = null;
+		if(!empty($_FILES["image"]["name"])){
+			$upload = new Upload($unArticle["id"], "images/article/", null, null);
+			$fichier = $upload->enregistrer("image");
+		}
+
+		$titre = $_POST["titre"];
+		$description = $_POST["description"];
+		$contenu = $_POST["contenu"];
+		$visible = 0;
+		$idTheme = $_POST["theme"];
+		$idUser = $unUtilisateur["id"];
+		$image = null;
+
+		// Vérifie si une image à était envoyé
+		if(isset($fichier)){
+			$image = $fichier["nom"];
+		}else{
+			$image = $unArticle["image"];
+		}
+
+		if(isset($_POST["visible"])){
+			$visible = true;
+		}
 		
-		if($inputTitre != null && $inputTheme != null){
+		// Vérifie si les champ ont était remplie
+		if($titre != null && $idTheme != null){
+
+			// Si une image est envoyée on l'ajoute au profil
+			$fichier = null;
+			if(!empty($_FILES["image"]["name"])){
+				$upload = new Upload($unArticle["id"], "images/article/", null, null);
+				$fichier = $upload->enregistrer("image");
+			}
 
 			// Vérifie si il s'agit d'un nouveau article ou si c'est une mise à jour
 			if(!isset($_POST["idArticleUpdate"])){
-				// Envoie de l'image
-				if($fichier["nom"] != null){
-					$image = $fichier["nom"];
-				}
 				// Création d'un nouvel article
-				$exec = $article->insert($inputTitre, $inputDescription, $image, $inputArticle, $inputVisible, $inputTheme, $idUser);
+				$exec = $article->insert($titre, $description, $image, $contenu, $visible, $idTheme, $idUser);
 			}else{
-				// Envoie de l'image
-				$donnees = $article->selectById($_POST["idArticleUpdate"]);
-				if($fichier["nom"] != null){
-					/* Supprimer l'ancienne photo de profil */
-					if(file_exists("images/article/".$donnees["image"])){
-						unlink("images/article/".$donnees["image"]); 
-					}
-					$image = $fichier["nom"];
-				}else{
-					$image = $donnees["image"];
-				}
 				// Mise à jour de l'article existant
-				$exec = $article->update($inputTitre, $inputDescription, $image, $inputArticle, $inputVisible, $inputTheme, $_POST["idArticleUpdate"]);
+				$exec = $article->update($titre, $description, $image, $contenu, $visible, $idTheme, $_POST["idArticleUpdate"]);
 			}
-			if(!$exec){$error = true;}
+			
+			if($exec){
+				
+				// Si une image est envoyée on l'ajoute au profil
+				$fichier = null;
+				if(!empty($_FILES["image"]["name"])){
+					$upload = new Upload($unArticle["id"], "images/article/", null, null);
+					$fichier = $upload->enregistrer("image");
+				}
 
-			if($fichier["message"] != null){$error = true;} // Si il y a une erreur dans l'envoie de fichier
-		}else{$error = true;}
+			}else{
+				$error = true;
+			}
+		}else{
+			$error = true;
+		}
 		
 		if($error){
 			if(!isset($_POST["idArticleUpdate"])){
@@ -92,17 +123,6 @@ function editorController($twig, $db){
 
 		header("Location:?page=home"); // Succée de l'envoie
 		exit;
-	}
-
-	// Vérifie si un article précisé dans l'url
-	$unArticle = null;
-	if(isset($_GET["id"])){
-		$unArticle = $article->selectById($_GET["id"]);
-		if($unArticle == null){
-			$form["errorMessage"] = "L'article n'existe pas";
-		}elseif($unArticle["idUtilisateur"] != $unUtilisateur["id"] && $unUtilisateur["role"] != 3){
-			$form["errorMessage"] = "Mais cet article ne vous appartient pas dis-donc !";
-		}
 	}
 
 	if(isset($_GET["code"]) && $_GET["code"] == 1){

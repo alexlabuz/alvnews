@@ -1,40 +1,61 @@
 <?php
 class Upload{
+	private $nom;
 	private $extension;
 	private $chemin;
 	private $taille;
 
-	public function __construct($extensions, $chemin, $taille){
-		$this->extension = $extensions;
+	public function __construct($nom, $chemin, $taille, $extensions){
+		$this->nom = $nom;
 		$this->chemin = $chemin;
-		$this->taille = $taille;
+		$this->taille = 8000000;
+		$this->extension = ["jpg", "JPG", "png", "PNG", "jpeg", "JPEG"];
+		if($taille != null){
+			$this->taille = $taille;
+		}
+		if($extensions != null){
+			$this->extension = $extensions;
+		}
 	}
 
 	public function enregistrer($data){
 		$fichier = array();
-		$fichier["nom"] = null;
-		$fichier["message"] = null;
+		$fichier["code"] = null;
+		$fichier["error"] = true;
 
+		// Vérifie si le fichier éxiste
 		if(isset($_FILES[$data])){
+
+			// Vérifie si le fichier a un nom/extension
 			if(!empty($_FILES[$data]["name"])){
-				if(!in_array(substr(strrchr($_FILES[$data]["name"], "."), 1), $this->extension)){
-					$fichier["message"] = "Veuillez choisir un autre type de fichier";
-				}else{
-					if(file_exists($_FILES[$data]["tmp_name"]) && filesize($_FILES[$data]["tmp_name"]) > $this->taille){
-						$fichier["message"] = "Votre fichier doit faire moins de ".($this->taille / 1000000)." Mo";
-					}else{
-						$fichier["nom"] = basename($_FILES[$data]["name"]);
-						// Enlève les accents
-						$fichier["nom"] = strtr($fichier["nom"], "ÀÁÂÃÄÅÇÈÉÊËÌÍÎÏÒÓÔÕÖÙÚÛÜÝàáâãäåçèéêëìíîïðòóôõöùúûüýÿ", 
-						"AAAAAACEEEEIIIIOOOOOUUUUYaaaaaaceeeeiiiioooooouuuuyy");
-						// Remplace les caractères autres que des lettres ou chiffres et point par _
-						$fichier["nom"] = preg_replace('/([^.a-z0-9]+)/i', "_", $fichier["nom"]);
-						// Copie du fichier
-						move_uploaded_file($_FILES[$data]["tmp_name"], $this->chemin . "/" . $fichier["nom"]);
+
+				// Récupère l'extension du fichier
+				$explode = explode(".", $_FILES[$data]["name"]);
+				$ext = $explode[count($explode)-1];
+				$this->nom = $this->nom.".".$ext;
+
+				// Vérifie si l'extension du fichier est autorisé
+				if(in_array($ext, $this->extension)){
+
+					// Vérifie la taille du fichier
+					if(filesize($_FILES[$data]["tmp_name"]) <= $this->taille){
+						// Envoie du fichier
+						$success = move_uploaded_file($_FILES[$data]["tmp_name"], $this->chemin . "/". $this->nom);
+						
+						// Vérifie si l'envoie à réussi
+						if($success){
+							$fichier["nom"] = $this->nom;
+							$fichier["error"] = false;
+						}
 					}
+
 				}
+
 			}
-			return $fichier;
+
 		}
+
+		return $fichier;
 	}
+
 }

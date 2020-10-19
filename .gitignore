@@ -1,3 +1,4 @@
 config/parametres.php
+uploads/
 public/images/profil/*
 public/images/article/*

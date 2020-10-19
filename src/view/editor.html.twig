@@ -1,17 +1,16 @@
 {% extends "base.html.twig" %}
 
 {% block title %}
-{% if get.id is defined %}{{article.titre}}{% else %}Nouvel article{% endif %}{{parent()}}
+{% if article.id is defined %}{{article.titre}}{% else %}Nouvel article{% endif %}{{parent()}}
 {% endblock %}
 
 {% block content %}
 
 {% if form.errorMessage is defined %}
-	<div class="alert alert-danger mx-auto " style="float:center" role="alert">{{form.errorMessage}}</div>
+	<div class="alert alert-danger mx-auto m-1" style="float:center" role="alert">{{form.errorMessage}}</div>
 {% else %}
 	
-
-{% if get.id is defined %}
+{% if article.id is defined %}
 	<h1 class="m-3 text-black-50">{{article.titre}}</h1>
 {% else %}
 	<h1 class="m-3 text-black-50">Nouvel article</h1>
@@ -44,7 +43,7 @@
 
 			<!-- INPUT IMAGE -->
 			<div class="col-sm-4">
-				<label>Image <small class="text-muted">Taille max : 2 Mo | format autorisé : JPG, PNG.</small></label>
+				<label>Image <small class="text-muted">Taille max : 8 Mo | format autorisé : JPG, PNG.</small></label>
 				<input type="file" class="form-control-file m-1" id="image" name="image" />
 			</div>
 		</div>
@@ -61,7 +60,7 @@
 	<!-- INPUT ARTICLE -->
 	<div class="form-group">
 		<label for="article"><b>Article</b></label>
-		<textarea class="form-control" id="article" name="article" rows="10">{{article.contenu}}</textarea>
+		<textarea class="form-control" id="article" name="contenu" rows="10">{{article.contenu}}</textarea>
 	</div>
 
 	
@@ -72,13 +71,13 @@
 	</div>
 
 	<!-- INPUT HIDDEN ID UPDATE -->
-	{% if get.id is defined %}
+	{% if article.id is defined %}
 		<input hidden name="idArticleUpdate" value="{{get.id}}" />
 	{% endif %}
 
 	<!-- SUBMIT -->
 	<div class="float-right inligne">
-		{% if get.id is defined %}
+		{% if article.id is defined %}
 			<small class="mr-2">Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</small>
 			<button class="btn btn-primary" type="submit" name="btEnvoyer">Mettre à jour</button>
 		{% else %}
