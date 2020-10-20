@@ -171,49 +171,46 @@ function profilController($twig, $db){
 function updateUserController($twig, $db){
 	$form = array();
 
+	$upload = new File("images/profil/");
+
 	$utilisateur = new User($db);
 	$donnees = $utilisateur->selectById($_SESSION["id"]);
 
 	if(isset($_POST['btUpdate'])){
-		// Si une image est envoyée on l'ajoute au profil
-		$fichier = null;
-		if(!empty($_FILES["image"]["name"])){
-			$upload = new Upload($donnees["id"], "images/profil/", null, null);
-			$fichier = $upload->enregistrer("image");
-		}
-
 		$email = $_POST["email"];	
 		$nom = $_POST["nom"];
-		$image = null;
-
-		// Vérifie si une image à était envoyé
-		if(isset($fichier)){
-			$image = $fichier["nom"];
-		}else{
-			$image = $donnees["image"];
-		}
-
-		/**
-		 * Branche fileBeta
-		 */
+		$image = $donnees["image"];
 
 		$code = 0; // Code de réussite
 
 		if(($utilisateur->connect($email)) && ($email != $donnees["email"])){
 			// Si le mot de passe existe déjà et si l'email n'est pas le même
 			$code = 2;
-		}else if($nom == null || $email == null || $fichier["error"] == true){
-			// Si des champs ne sont pas remplie ou si il y a une erreur sur l'image
+		}else if($nom == null || $email == null){
+			// Si des champs ne sont pas remplie
 			$code = 3;
 		}else{
-			// Met à jour l'utilisateur
-			$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
-			if(!$exec){
-				$code = 3;
-			}else{
-				// Réussite de la demande
-				$_SESSION["nom"] = $nom;
-				$_SESSION["email"] = $email;
+
+			// Vérifie si un fichier à était envoyé
+			if(!empty($_FILES["image"]["name"])){
+				$file = $upload->save("image", $donnees["id"], null, null);
+				if($file["errorMessage"] == null){
+					$image = $file["name"];
+				}else{
+					$code = 5;
+				}
+			}
+
+			if($code == 0){
+				// Met à jour l'utilisateur
+				$exec = $utilisateur->update($email, $nom, $image, $donnees["role"], $_SESSION['id']);
+				if(!$exec){
+					$code = 3;
+				}else{
+					// Réussite de la demande
+					$_SESSION["nom"] = $nom;
+					$_SESSION["email"] = $email;
+				}
 			}
 
 		}
@@ -227,11 +224,9 @@ function updateUserController($twig, $db){
 
 	if(isset($_POST["btSupprimeImage"])){
 		$code = 1;
-		$exec = $utilisateur->update($donnees["email"], $donnees["nom"],null ,$donnees["role"], $_SESSION["id"]);
+		$exec = $utilisateur->update($donnees["email"], $donnees["nom"], null,$donnees["role"], $_SESSION["id"]);
 		if($exec){
-			/* Supprimer l'ancienne photo de profil */
-			if(file_exists("images/profil/".$donnees["image"])){
-				unlink("images/profil/".$donnees["image"]); 
+			if($upload->remove($donnees["image"])){
 				$code = 0;
 			}
 		}
@@ -242,9 +237,10 @@ function updateUserController($twig, $db){
 
 	// Code erreur renvoyé dans le GET
 	$message[0] = "Les modifications ont bien étais pris en compte";
-	$message[2] = "Le mail saisi déjà existe déjà";
+	$message[2] = "Le mail saisi existe déjà";
 	$message[3] = "Une erreur s'est produite, veuillez réésayer";
 	$message[4] = "Le mot de passe est incorrect, veuillez réessayer";
+	$message[5] = "Une erreur s'est produite au niveau de l'image";
 
 	if(isset($_GET["code"]) && isset($message[$_GET["code"]])){
 		$form["message"] = $message[$_GET["code"]];

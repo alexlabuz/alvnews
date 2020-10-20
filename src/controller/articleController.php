@@ -31,7 +31,9 @@ function afficheArticleController($twig, $db){
 // Permet d'ajouter ou modifier un article
 function editorController($twig, $db){
 	$form = array();
+	$form["errorMessage"] = null;
 
+	$upload = new File("images/article");
 	$user = new User($db);
 	$unUtilisateur = $user->selectById($_SESSION["id"]);
 
@@ -41,88 +43,71 @@ function editorController($twig, $db){
 	$unArticle = null;
 	if(isset($_GET["id"])){
 		$art = $article->selectById($_GET["id"]);
+
 		if($art != null && ($art["idUtilisateur"] == $unUtilisateur["id"] || $unUtilisateur["role"] == 3)){
 			$unArticle = $art;
 		}else{
-			$form["errorMessage"] == "Erreur : l'article n'existe pas ou vous n'avez pas les droits nécessaires";
+			$form["errorMessage"] = "Erreur : l'article n'existe pas ou vous n'avez pas les droits nécessaires";
 		}
 	}
 
 	// Appui sur le bouton d'envoie d'article
 	if(isset($_POST["btEnvoyer"])){
-		$error = false;
-
-		// Si une image est envoyée on l'ajoute au profil
-		$fichier = null;
-		if(!empty($_FILES["image"]["name"])){
-			$upload = new Upload($unArticle["id"], "images/article/", null, null);
-			$fichier = $upload->enregistrer("image");
-		}
+		$error = ($form["errorMessage"] != null);
 
 		$titre = $_POST["titre"];
 		$description = $_POST["description"];
+		$image = null;
 		$contenu = $_POST["contenu"];
 		$visible = 0;
 		$idTheme = $_POST["theme"];
 		$idUser = $unUtilisateur["id"];
-		$image = null;
 
-		// Vérifie si une image à était envoyé
-		if(isset($fichier)){
-			$image = $fichier["nom"];
-		}else{
+		if(isset($_POST["visible"])){
+			$visible = 1;
+		}
+
+		if($unArticle != null){
 			$image = $unArticle["image"];
 		}
 
-		if(isset($_POST["visible"])){
-			$visible = true;
-		}
-		
 		// Vérifie si les champ ont était remplie
-		if($titre != null && $idTheme != null){
+		if($titre != null && $idTheme != null && !$error){
 
-			// Si une image est envoyée on l'ajoute au profil
-			$fichier = null;
+			// Vérifie si un fichier à était envoyé
 			if(!empty($_FILES["image"]["name"])){
-				$upload = new Upload($unArticle["id"], "images/article/", null, null);
-				$fichier = $upload->enregistrer("image");
-			}
-
-			// Vérifie si il s'agit d'un nouveau article ou si c'est une mise à jour
-			if(!isset($_POST["idArticleUpdate"])){
-				// Création d'un nouvel article
-				$exec = $article->insert($titre, $description, $image, $contenu, $visible, $idTheme, $idUser);
-			}else{
-				// Mise à jour de l'article existant
-				$exec = $article->update($titre, $description, $image, $contenu, $visible, $idTheme, $_POST["idArticleUpdate"]);
-			}
-			
-			if($exec){
-				
-				// Si une image est envoyée on l'ajoute au profil
-				$fichier = null;
-				if(!empty($_FILES["image"]["name"])){
-					$upload = new Upload($unArticle["id"], "images/article/", null, null);
-					$fichier = $upload->enregistrer("image");
+				if($unArticle == null){
+					// Si il s'agit d'un nouvel article on récupère l'état de l'auto increment pour connaître l'id
+					$idAutoIncrement = $article->showStatus()["Auto_increment"];
+					$file = $upload->save("image", $idAutoIncrement, null, null);
+				}else{
+					$file = $upload->save("image", $unArticle['id'], null, null);
 				}
-
-			}else{
-				$error = true;
+				$image = $file["name"];
+				$error = ($file["errorMessage"] != null);
 			}
+
+			// Envoie l'article
+			if(!$error){
+				// Vérifie si il s'agit d'un nouveau article ou si c'est une mise à jour
+				if($unArticle == null){
+					// Création d'un nouvel article
+					$exec = $article->insert($titre, $description, $image, $contenu, $visible, $idTheme, $idUser);
+				}else{
+					// Mise à jour de l'article existant
+					$exec = $article->update($titre, $description, $image, $contenu, $visible, $idTheme, $unArticle["id"]);
+				}
+				if(!$exec){$error = true;}
+			}
+
 		}else{
 			$error = true;
 		}
-		
 		if($error){
-			if(!isset($_POST["idArticleUpdate"])){
-				header("Location:?page=editor&code=1");exit;
-			}else{
-				header("Location:?page=editor&id=".$_POST["idArticleUpdate"]."&code=1");exit;
-			}
+			return header("Location:?page=editor&code=1");
 		}
 
-		header("Location:?page=home"); // Succée de l'envoie
-		exit;
+		return header("Location:?page=home"); // Succée de l'envoie
 	}
 
 	if(isset($_GET["code"]) && $_GET["code"] == 1){

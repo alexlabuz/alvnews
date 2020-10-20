@@ -12,6 +12,7 @@ class Article{
 	private $search;
 	private $searchCount;
 	private $selectCount;
+	private $showStatus;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -37,7 +38,7 @@ class Article{
 			LIMIT :min, :max");
 
 		$this->selectByUser = $this->db->prepare(
-			"SELECT titre, description, dateCreation, dateModif, a.id AS id
+			"SELECT titre, description, dateCreation, dateModif, visible, a.id AS id
 			FROM article a, utilisateur u
 			WHERE a.idUtilisateur = u.id
 			AND u.id = :id
@@ -76,6 +77,8 @@ class Article{
 			AND visible = 1");
 
 		$this->selectCount = $this->db->prepare("SELECT COUNT(id) AS nombre FROM article WHERE visible >= :visible");
+
+		$this->showStatus = $this->db->prepare("SHOW TABLE STATUS LIKE 'article'");
 	}
 
 	public function insert($titre, $description, $image, $contenu, $visible, $idTheme, $idUtilisateur){
@@ -116,7 +119,7 @@ class Article{
 			print_r($this->insert->errorInfo());
 			$r = false;
 		}
-
+		
 		return $r;
 	}
 
@@ -209,6 +212,16 @@ class Article{
 		}
 
 		return $this->selectCount->fetch();
+	}
+
+	public function showStatus(){
+		$this->showStatus->execute();
+
+		if($this->showStatus->errorCode() != 0){
+			print_r($this->showStatus->errorInfo());
+		}
+
+		return $this->showStatus->fetch();
 	}
 
 }

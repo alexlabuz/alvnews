@@ -6,10 +6,12 @@
 
 {% block content %}
 
-{% if form.errorMessage is defined %}
-	<div class="alert alert-danger mx-auto m-1" style="float:center" role="alert">{{form.errorMessage}}</div>
+{% if form.errorMessage is not null %}
+	<!-- ERROR MESSAGE DISPLAY -->
+	<div class="alert alert-danger m-2" style="float:center" role="alert">{{form.errorMessage}}</div>
 {% else %}
-	
+
+<!-- ARTICLE TITLE -->
 {% if article.id is defined %}
 	<h1 class="m-3 text-black-50">{{article.titre}}</h1>
 {% else %}
@@ -17,7 +19,12 @@
 {% endif %}
 
 <div class="container-lg">
-<form method="POST" action="?page=editor" enctype="multipart/form-data">
+
+{% if article.id is defined %}
+	{% set action = "&id=#{article.id}" %}
+{% endif %}
+
+<form method="POST" action="?page=editor{{action | raw}}" enctype="multipart/form-data">
 	<div class="bg-dark p-3 text-light mb-2 rounded">
 
 		<div class="form-row mb-2">
@@ -43,7 +50,7 @@
 
 			<!-- INPUT IMAGE -->
 			<div class="col-sm-4">
-				<label>Image <small class="text-muted">Taille max : 8 Mo | format autorisé : JPG, PNG.</small></label>
+				<label>Image <small class="text-muted">Taille max : 8 Mo | format autorisé : JPG, PNG, webm</small></label>
 				<input type="file" class="form-control-file m-1" id="image" name="image" />
 			</div>
 		</div>
@@ -69,11 +76,6 @@
 		<input type="checkbox" class="form-check-input" name="visible" id="visible"{% if article.visible == 1 or article == null %} checked{% endif %} />
 		<label class="form-check-label" for="visible">Publication visible</label>
 	</div>
-
-	<!-- INPUT HIDDEN ID UPDATE -->
-	{% if article.id is defined %}
-		<input hidden name="idArticleUpdate" value="{{get.id}}" />
-	{% endif %}
 
 	<!-- SUBMIT -->
 	<div class="float-right inligne">
