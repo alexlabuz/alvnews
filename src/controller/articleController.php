@@ -75,17 +75,17 @@ function editorController($twig, $db){
 		if($titre != null && $idTheme != null && !$error){
 
 			// Vérifie si un fichier à était envoyé
-			if(!empty($_FILES["image"]["name"])){
-				if($unArticle == null){
-					// Si il s'agit d'un nouvel article on récupère l'état de l'auto increment pour connaître l'id
-					$idAutoIncrement = $article->showStatus()["Auto_increment"];
-					$file = $upload->save("image", $idAutoIncrement, null, null);
-				}else{
-					$file = $upload->save("image", $unArticle['id'], null, null);
-				}
-				$image = $file["name"];
-				$error = ($file["errorMessage"] != null);
+			if($unArticle == null){
+				// Si il s'agit d'un nouvel article on récupère l'état de l'auto increment pour connaître l'id
+				$idAutoIncrement = $article->showStatus()["Auto_increment"];
+				$file = $upload->save("image", $idAutoIncrement, null, null);
+			}else{
+				$file = $upload->save("image", $unArticle['id'], null, null);
 			}
+			if($file["name"] != null){
+				$image = $file["name"];
+			}
+			$error = ($file["errorMessage"] != null);
 
 			// Envoie l'article
 			if(!$error){

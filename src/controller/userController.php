@@ -190,15 +190,11 @@ function updateUserController($twig, $db){
 			// Si des champs ne sont pas remplie
 			$code = 3;
 		}else{
-
-			// Vérifie si un fichier à était envoyé
-			if(!empty($_FILES["image"]["name"])){
-				$file = $upload->save("image", $donnees["id"], null, null);
-				if($file["errorMessage"] == null){
-					$image = $file["name"];
-				}else{
-					$code = 5;
-				}
+			$file = $upload->save("image", $donnees["id"], null, null);
+			if($file["name"] != null){
+				$image = $file["name"];
+			}elseif($file["errorMessage"] != null){
+				$code = 5;
 			}
 
 			if($code == 0){
@@ -212,7 +208,6 @@ function updateUserController($twig, $db){
 					$_SESSION["email"] = $email;
 				}
 			}
-
 		}
 
 		if(isset($code)){
