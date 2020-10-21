@@ -2,80 +2,87 @@
 {% block title %}Mettre à jour le profil{{parent()}} {% endblock %}
 
 {% block content %}
-	<h1 class="text-center m-4">Modifier profil</h1>
+<h1 class="m-4">Paramètre profil</h1>
 
-	{% if form.message is defined %}
-		{% if get.code == 0 %}
-			<div class="alert alert-success mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
-		{% else %}
-			<div class="alert alert-danger mx-auto block-custom" style="float:center" role="alert">{{form.message}}</div>
-		{% endif %}
+{% if form.message is defined %}
+	{% if get.code == 0 %}
+		<div class="alert alert-success container" style="float:center" role="alert">{{form.message}}</div>
+	{% else %}
+		<div class="alert alert-danger container" style="float:center" role="alert">{{form.message}}</div>
 	{% endif %}
+{% endif %}
 
-	<form method="POST" action="index.php?page=updateUser" enctype="multipart/form-data" class="bg-primary text-light p-4 mx-auto rounded block-custom">
-		<div class="form-group">
-			<label for="email">Adresse email</label>
-			<input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required/>
-		</div>
-		<div class="form-group">
-			<label for="nom">Nom</label>
-			<input type="text" class="form-control" id="nom" name="nom" maxlength="50" value="{{user.nom}}" required/>
-		</div>
-		<div class="form-group">
-			<label for="image">Photo de profil</label>
-			<input type="file" class="form-control" id="image" name="image"/>
-			<small>Max : 8 Mo | formats autorisés : JPG, PNG.</small>
-		</div>
+<form method="POST" action="index.php?page=updateUser" enctype="multipart/form-data" class="">
+<div class="container bg-secondary text-light p-4 rounded">
+	<h1 class="mb-3">{{user.nom}}</h1>
+	<div class="row">
 
-		<button type="submit" name="btUpdate" class="btn btn-light">Mettre à jour</button>
-	</form>
-	
-	<form method="POST" action="index.php?page=updateUser" class="bg-primary text-light p-2 mx-auto rounded mt-4 block-custom">
+		<div class="col-lg-3 align-self-center text-lg-center">
 		{% if user.image != null %}
-		<div class="row">
-		<div class="col-3">
-			<img src="images/profil/{{user.image}}" class="img-thumbnail img-mini">
-		</div>
-		<div class="col-5 align-self-center">
-			<p>Ma photo de profil</p>
-			<button type="submit" name="btSupprimeImage" class="btn btn-light btn-sm">Supprimer</button>
-		</div>
-		</div>
+				<img src="images/profil/{{user.image}}" alt="photo de profil" class="img-thumbnail img-big">
+				<button type="submit" name="btSupprimeImage" class="btn btn-light btn-sm m-2">
+					Supprimer l'image
+					<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill ml-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+					<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+					</svg>
+				</button>
 		{% else %}
-			<p class="m-2">Pas de photo de profil</p>
+				<img src="images/default/profil.png" alt="photo de profil" class="img-thumbnail img-big">
 		{% endif %}
+		</div>
+
+		<div class="col-lg-9 align-self-center">
+			<div class="form-group">
+				<label for="email">Adresse email</label>
+				<input type="email" class="form-control" id="email" name="email" value="{{user.email}}" required/>
+			</div>
+			<div class="form-group">
+				<label for="nom">Nom</label>
+				<input type="text" class="form-control" id="nom" name="nom" maxlength="50" value="{{user.nom}}" required/>
+			</div>
+			<div class="form-group">
+				<label for="image">Photo de profil</label>
+				<input type="file" class="form-control-file" id="image" name="image"/>
+				<small>Max : 8 Mo | formats autorisés : JPG, PNG.</small>
+			</div>
+		</div>
+
+	</div>
+	<div class="text-right">
+		<button type="submit" name="btUpdate" class="btn btn-light">Mettre à jour</button>
+	</div>
+</div>
+</form>
+
+<div class="container mt-3">
+	<button class="btn btn-danger btn-sm" id="supprimerCompte" data-toggle="modal" data-target="#exampleModal">Cloturer mon compte</button>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal-dialog" role="document">
+	<div class="modal-content">
+	<div class="modal-header">
+		<h5 class="modal-title" id="exampleModalLabel">Cloturer le compte</h5>
+		<button type="button" class="close" data-dismiss="modal" aria-label="Close">
+		<span aria-hidden="true">&times;</span>
+		</button>
+	</div>
+	<form method="POST" action="?page=deleteUser">
+		<div class="modal-body">
+			<p>Veuillez saisir votre mot de passe afin de confirmer votre identité</p>
+			<div class="form-group">
+				<label for="password">Mot de passe</label>
+				<input type="password" class="form-control" id="password" name="password" required/>
+			</div>
+			<p class="text-danger"><b>Il ne sera plus possible de revenir en arrière, tous les articles et commentaires que vous avez postés seront supprimés également</b></p>
+		</div>
+		<div class="modal-footer">
+			<button type="submit" class="btn btn-danger" name="btSupprimer">Supprimer mon compte</button>
+		</div>
 	</form>
-
-	<div class="bg-danger text-light p-4 mt-4 mx-auto rounded block-custom">
-		<p>Cloturer mon compte</p>
-		<button class="btn btn-light" id="supprimerCompte" data-toggle="modal" data-target="#exampleModal">Supprimer mon compte</button>
 	</div>
-
-	<!-- Modal -->
-	<div class="modal fade" id="exampleModal" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
-	<div class="modal-dialog" role="document">
-		<div class="modal-content">
-		<div class="modal-header">
-			<h5 class="modal-title" id="exampleModalLabel">Cloturer le compte</h5>
-			<button type="button" class="close" data-dismiss="modal" aria-label="Close">
-			<span aria-hidden="true">&times;</span>
-			</button>
-		</div>
-		<form method="POST" action="?page=deleteUser">
-			<div class="modal-body">
-				<p>Veuillez saisir votre mot de passe afin de confirmer votre identité</p>
-				<div class="form-group">
-					<label for="password">Mot de passe</label>
-					<input type="password" class="form-control" id="password" name="password" required/>
-				</div>
-				<p class="text-danger"><b>Il ne sera plus possible de revenir en arrière, tous les articles et commentaires que vous avez postés seront supprimés également</b></p>
-			</div>
-			<div class="modal-footer">
-				<button type="submit" class="btn btn-danger" name="btSupprimer">Supprimer mon compte</button>
-			</div>
-		</form>
-		</div>
-	</div>
-	</div>
+</div>
+</div>
 
 {% endblock %}

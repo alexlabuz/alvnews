@@ -111,6 +111,18 @@ nav.homeNavBar{
 		height: 110px;
 	}
 }
+
+.img-big{
+	width: 220px;
+	height: 220px;
+}
+@media(max-width:776px){
+	.img-big{
+		width: 110px;
+		height: 110px;
+	}
+}
+
 .img-mini{
 	width: 80px;
 	height: 80px;

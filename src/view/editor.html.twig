@@ -24,7 +24,7 @@
 	{% set action = "&id=#{article.id}" %}
 {% endif %}
 
-<form method="POST" action="?page=editor{{action | raw}}" enctype="multipart/form-data">
+<form method="POST" action="?page=editor{{action | raw}}" enctype="multipart/form-data" class="jsAnimateLoadForm">
 	<div class="bg-dark p-3 text-light mb-2 rounded">
 
 		<div class="form-row mb-2">
@@ -92,4 +92,6 @@
 
 {% endif %}
 
+<!-- SCRIPT -->
+<script src="js/loadingButton.js"></script>
 {% endblock %}
