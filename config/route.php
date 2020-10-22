@@ -34,8 +34,9 @@ function getPage($db){
 	$listPage["removeComment"] = "removeCommentController;1";
 	$listPage["enregistre"] = "addRemoveEnregistreController;1";
 	$listPage['suggestion'] = "suggestionController;0";
+	$listPage['addSujet'] = "addSujetController;1";
 	$listPage['404'] = "error404Controller;0";
-	$listPage['maintenance'] = "maintenanceController;0";
+	$listPage['maintenance'] = "maintenanceController;1";
 	
 	if($db != null){
 		if(!isset($_GET["page"])){

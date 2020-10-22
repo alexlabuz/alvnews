@@ -50,6 +50,7 @@
 			{% if user.role >= 2 %}
 			<a href="?page=editor" class="nav-item nav-link text-light">Rédiger un article</a>
 			{% endif %}
+			<a href="?page=addSujet" class="nav-item nav-link text-light">Rédiger un sujet</a>
 			{% if user.role == 3 %}
 			<div class="btn-group" role="group">
 				<a id="btnGroupDrop1" class="nav-item nav-link text-light dropdown-toggle" data-toggle="dropdown">Administration</a>
@@ -77,6 +78,9 @@
 		<a class="nav-link" data-toggle="tab" href="#myArticle" role="tab">Mes articles</a>
 	</li>
 	{% endif %}
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#mySujet" role="tab">Mes sujets</a>
+	</li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -138,6 +142,24 @@
 			<h4 class="text-center m-5">Pas d'article rédigé</h4>
 		{% endif %}
 		</form>
+	</div>
+	<!-- MES SUJET -->
+	<div class="tab-pane fade show" id="mySujet" role="tabpanel" aria-labelledby="profile-tab">
+		<h3 class="mt-4"><b>Mes sujets ({{form.nbSujet}})</b></h3>
+		{% if form.listSujet != null %}
+			{% for e in form.listSujet %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{e.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Posé le {{e.date_creation | date("d F Y à G:i")}}</h6>
+					<a href="#" class="card-link">Voir le sujet</a>
+					<a href="#" class="card-link text-danger">Supprimer le sujet</a>
+				</div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<h4 class="text-center m-5">Pas de sujet</h4>
+		{% endif %}
 	</div>
 </div>
 

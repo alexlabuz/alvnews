@@ -164,6 +164,10 @@ function profilController($twig, $db){
 	$form["listEnregistre"] = $enregistre->selectByUser($donnees["id"]);
 	$form["nbEnregistre"] = count($form["listEnregistre"]);
 
+	$sujet = new ForumSujet($db);
+	$form["listSujet"] = $sujet->selectByUser($donnees["id"]);
+	$form["nbSujet"] = count($form["listSujet"]);
+
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
 

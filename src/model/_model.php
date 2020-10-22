@@ -5,3 +5,4 @@ require_once("class_article.php");
 require_once("class_comment.php");
 require_once("class_enregistre.php");
 require_once("class_file.php");
+require_once("class_forum_sujet.php");
