@@ -1,11 +1,11 @@
 -- phpMyAdmin SQL Dump
--- version 4.8.4
+-- version 4.9.2
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  mer. 17 juin 2020 à 20:04
--- Version du serveur :  5.7.24
--- Version de PHP :  7.3.1
+-- Généré le :  jeu. 22 oct. 2020 à 14:58
+-- Version du serveur :  10.4.10-MariaDB
+-- Version de PHP :  7.3.12
 
 SET SQL_MODE = "NO_AUTO_VALUE_ON_ZERO";
 SET AUTOCOMMIT = 0;
@@ -36,7 +36,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   `titre` varchar(80) COLLATE utf8mb4_bin NOT NULL,
   `description` varchar(255) COLLATE utf8mb4_bin DEFAULT NULL,
   `image` varchar(150) COLLATE utf8mb4_bin DEFAULT NULL,
-  `contenu` text COLLATE utf8mb4_bin,
+  `contenu` text COLLATE utf8mb4_bin DEFAULT NULL,
   `dateCreation` datetime NOT NULL,
   `dateModif` datetime NOT NULL,
   `visible` int(11) NOT NULL,
@@ -45,7 +45,7 @@ CREATE TABLE IF NOT EXISTS `article` (
   PRIMARY KEY (`id`),
   KEY `idUtilisateur` (`idUtilisateur`),
   KEY `idTheme` (`idTheme`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
 
 -- --------------------------------------------------------
 
@@ -85,6 +85,58 @@ CREATE TABLE IF NOT EXISTS `enregistre` (
 -- --------------------------------------------------------
 
 --
+-- Structure de la table `forum_like`
+--
+
+DROP TABLE IF EXISTS `forum_like`;
+CREATE TABLE IF NOT EXISTS `forum_like` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `idUser` int(11) NOT NULL,
+  `idSujet` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idSujet` (`idSujet`),
+  KEY `idUser` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `forum_reponse`
+--
+
+DROP TABLE IF EXISTS `forum_reponse`;
+CREATE TABLE IF NOT EXISTS `forum_reponse` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `contenu` text COLLATE utf8mb4_bin NOT NULL,
+  `date_creation` datetime NOT NULL,
+  `idUser` int(11) NOT NULL,
+  `idSujet` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `forum_reponse_ibfk_1` (`idSujet`),
+  KEY `idUser` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
+-- Structure de la table `forum_sujet`
+--
+
+DROP TABLE IF EXISTS `forum_sujet`;
+CREATE TABLE IF NOT EXISTS `forum_sujet` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `titre` varchar(255) COLLATE utf8mb4_bin NOT NULL,
+  `contenu` text COLLATE utf8mb4_bin NOT NULL,
+  `date_creation` datetime NOT NULL,
+  `ouvert` tinyint(1) NOT NULL,
+  `idUser` int(11) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `idUser` (`idUser`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+-- --------------------------------------------------------
+
+--
 -- Structure de la table `theme`
 --
 
@@ -108,10 +160,10 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `email` varchar(150) COLLATE utf8mb4_bin NOT NULL,
   `nom` varchar(50) COLLATE utf8mb4_bin NOT NULL,
   `mdp` varchar(255) COLLATE utf8mb4_bin NOT NULL,
-  `role` int(11) NOT NULL DEFAULT '1',
+  `role` int(11) NOT NULL DEFAULT 1,
   `image` varchar(150) COLLATE utf8mb4_bin DEFAULT NULL,
   `dateInscription` date NOT NULL,
-  `valide` tinyint(1) NOT NULL DEFAULT '0',
+  `valide` tinyint(1) NOT NULL DEFAULT 0,
   `idGenere` varchar(32) COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
@@ -140,6 +192,26 @@ ALTER TABLE `commentaire`
 ALTER TABLE `enregistre`
   ADD CONSTRAINT `enregistre_ibfk_1` FOREIGN KEY (`idArticle`) REFERENCES `article` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
   ADD CONSTRAINT `enregistre_ibfk_2` FOREIGN KEY (`idUtilisateur`) REFERENCES `utilisateur` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
+
+--
+-- Contraintes pour la table `forum_like`
+--
+ALTER TABLE `forum_like`
+  ADD CONSTRAINT `forum_like_ibfk_1` FOREIGN KEY (`idSujet`) REFERENCES `forum_sujet` (`id`),
+  ADD CONSTRAINT `forum_like_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`id`);
+
+--
+-- Contraintes pour la table `forum_reponse`
+--
+ALTER TABLE `forum_reponse`
+  ADD CONSTRAINT `forum_reponse_ibfk_1` FOREIGN KEY (`idSujet`) REFERENCES `forum_sujet` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `forum_reponse_ibfk_2` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`id`);
+
+--
+-- Contraintes pour la table `forum_sujet`
+--
+ALTER TABLE `forum_sujet`
+  ADD CONSTRAINT `forum_sujet_ibfk_1` FOREIGN KEY (`idUser`) REFERENCES `utilisateur` (`id`);
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;
