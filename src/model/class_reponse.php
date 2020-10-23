@@ -12,10 +12,11 @@ class ForumReponse{
 		$this->add = $this->db->prepare("INSERT INTO forum_reponse (contenu, date_creation, idUser, idSujet) VALUES (:contenu, NOW(), :idUser, :idSujet)");
 
 		$this->selectBySujet = $this->db->prepare(
-			"SELECT r.id AS id, contenu, r.date_creation AS date, u.id AS userId, u.nom AS userName, u.image AS userImage
+			"SELECT r.id AS id, contenu, r.date_creation AS date, idUser, u.nom AS userName, u.image AS userImage
 			FROM forum_reponse r, utilisateur u
 			WHERE r.idUser = u.id
-			AND r.idSujet = :idSujet"
+			AND r.idSujet = :idSujet
+			ORDER BY r.date_creation"
 		);
 	}
 
@@ -31,7 +32,7 @@ class ForumReponse{
 		return $r;
 	}
 
-	public function select($idSujet){
+	public function selectBySujet($idSujet){
 		$this->selectBySujet->execute(array(":idSujet" => $idSujet));
 
 		if($this->selectBySujet->errorCode() != 0){

@@ -15,7 +15,7 @@ class ForumSujet {
 		$this->add = $this->db->prepare("INSERT INTO forum_sujet(titre, contenu, date_creation, ouvert, idUser) VALUES (:titre, :contenu, NOW(), 1, :idUser)");
 
 		$this->select = $db->prepare(
-			"SELECT s.id AS id, titre, s.date_creation AS date, u.nom AS userName
+			"SELECT s.id AS id, titre, s.date_creation AS date, u.nom AS userName, idUser
 			FROM forum_sujet s, utilisateur u
 			WHERE s.idUser = u.id
 			AND s.ouvert >= :ouvert

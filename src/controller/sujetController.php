@@ -21,11 +21,18 @@ function viewSujetController($twig, $db){
 
 	if($unSujet == null){
 		$form["errorMessage"] = "Toutes nos excuses mais l'article que vous souhaitez voir n'éxiste pas ou à était supprimé";
-		$unArticle["titre"] = "Erreur"; // Pour l'affichage dans la <title>
+		$unSujet["titre"] = "Erreur"; // Pour l'affichage dans la <title>
+	}
+
+	// Si l'utilisateur n'a pas d'image de profil on lui met celle par défaut
+	if($unSujet["userImage"] == null){
+		$unSujet["userImage"] = "images/default/profil.png";
+	}else{
+		$unSujet["userImage"] = "images/profil/".$unSujet["userImage"];
 	}
 
 	$reponse = new ForumReponse($db);
-	$reponses = $reponse->select($_GET["id"]);
+	$reponses = $reponse->selectBySujet($_GET["id"]);
 	$form["nb_reponse"] = count($reponses);
 	
 
