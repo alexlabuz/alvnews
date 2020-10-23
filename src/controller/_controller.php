@@ -6,4 +6,5 @@ require_once("articleController.php");
 require_once("commentaireController.php");
 require_once("enregistreController.php");
 require_once("emailController.php");
-require_once("f_sujetController.php");
+require_once("sujetController.php");
+require_once("reponseController.php");

@@ -145,7 +145,16 @@
 	</div>
 	<!-- MES SUJET -->
 	<div class="tab-pane fade show" id="mySujet" role="tabpanel" aria-labelledby="profile-tab">
-		<h3 class="mt-4"><b>Mes sujets ({{form.nbSujet}})</b></h3>
+		<form action="?page=removeSujet" method="POST">
+		<h3 class="mt-4">
+			<b>Mes sujets ({{form.nbSujet}})</b>
+			<button type="submit" class="btn btn-danger btn-sm ml-2" name="btEfface">
+				Supprimer la sélection
+				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+				</svg>
+			</button>
+		</h3>
 		{% if form.listSujet != null %}
 			{% for e in form.listSujet %}
 			<div class="card mt-3">
@@ -153,13 +162,15 @@
 					<h5 class="card-title">{{e.titre}}</h5>
 					<h6 class="card-subtitle mb-2 text-muted">Posé le {{e.date_creation | date("d F Y à G:i")}}</h6>
 					<a href="#" class="card-link">Voir le sujet</a>
-					<a href="#" class="card-link text-danger">Supprimer le sujet</a>
+					<label class="card-link text-danger" for="{{e.id}}">Supprimer le sujet</label>
+					<input class="card-link m-2" type="checkbox" id="{{e.id}}" name="cocher[]" value="{{e.id}}" />
 				</div>
 			</div>
 			{% endfor %}
 		{% else %}
 			<h4 class="text-center m-5">Pas de sujet</h4>
 		{% endif %}
+		</form>
 	</div>
 </div>
 

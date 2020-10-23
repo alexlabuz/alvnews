@@ -2,8 +2,7 @@
 // Permet l'affichage de l'article
 function afficheArticleController($twig, $db){
 	if(!isset($_GET["id"])){
-		header("Location:./");
-		exit;
+		return header("Location:./");
 	}
 	$form = array();
 	$form["url"] = url();

@@ -1,0 +1,21 @@
+{% extends "base.html.twig" %}
+{% block title %}Sujets{{parent()}}{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+	<h1><b>Sujets</b></h1>
+	<p>Découvrez les fils de discussions ouvertes par les utilisateurs de alLavi news</p>
+
+	<div>
+	{% for s in sujets %}
+		<div class="m-3 p-2 bg-light">
+			<h4>{{s.titre}}</h4>
+			<p>le {{s.date}} par {{s.userName}}</p>
+			<p>Nombre de réponse : {{s.nb_reponse}}</p>
+			<a href="?page=viewSujet&id={{s.id}}">Accerder au sujet</a>
+		</div>
+	{% endfor %}
+	</div>
+
+</div>
+{% endblock %}

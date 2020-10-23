@@ -1,0 +1,48 @@
+{% extends "base.html.twig" %}
+{% block title %}{{sujet.titre}}{{parent()}}{% endblock %}
+
+{% block content %}
+<div class="container-fluid text-center bg-light border-dark border-bottom p-4">
+	<h2>{{sujet.titre}}</h2>
+	<p class="m-0">Un sujet lancé le {{sujet.date}} par {{sujet.userName}} <img src="images/profil/{{sujet.userImage}} " alt="" class="img-profile-redacteur mb-1 rounded-circle"></p>
+</div>
+
+<div class="container">
+	<div class="m-2">{{sujet.contenu | nl2br}}</div>
+	<hr class="bg-dark">
+	<h3><b>Réponses ({{form.nb_reponse}})</b></h3>
+
+	<form action="?page=addReponse" method="POST" class="bg-light p-3">
+		<div class="form-group">
+			<input type="text" class="form-control form-control-sm" id="reponse" name="reponse">
+		</div>
+		<input hidden name="idSujet" value="{{sujet.id}}" />
+		<button type="submit" class="btn btn btn-outline-primary btn-sm" name="btRepondre">Répondre</button>
+	</form>
+
+	<div>
+	{% for r in reponses %}
+		<div class="row">
+			<div class="col-3 border-muted border-right">
+				{% if r.userImage is null %}
+					{% set img = "images/default/profil.png" %}
+				{% else %}
+					{% set img = "images/profil/#{r.userImage}" %}
+				{% endif %}
+				<div class="row">
+					<img class="img-thumbnail" src="{{img}}" alt="image profil" style="width:80px;height:80px;">
+					<div class="col align-self-center">
+						<p class="m-0"><b>{{r.userName}}</b></p>
+						<p class="mb-0">Le {{r.date}}</p>
+					</div>
+				</div>
+			</div>
+			<div class="col-9 align-self-center">
+				{{r.contenu}}
+			</div>
+		</div>
+	{% endfor %}
+	</div>
+
+</div>
+{% endblock %}
