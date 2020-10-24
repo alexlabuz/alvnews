@@ -8,6 +8,7 @@ class ForumSujet {
 	private $selectByUser;
 	private $selectById;
 	private $delete;
+	private $updateOuvert;
 
 	public function __construct($db){
 		$this->db = $db;
@@ -32,6 +33,8 @@ class ForumSujet {
 			WHERE s.idUser = u.id AND s.id = :id");
 
 		$this->delete = $this->db->prepare("DELETE FROM forum_sujet WHERE id = :id");
+		
+		$this->updateOuvert = $this->db->prepare("UPDATE forum_sujet SET ouvert = :ouvert WHERE id = :id");
 	}
 
 	public function add($titre, $contenu, $idUser){
@@ -91,5 +94,16 @@ class ForumSujet {
 
 		return $r;
 	}
+	
+	public function updateOuvert($ouvert, $id){
+		$r = true;
+		$this->updateOuvert->execute(array(":ouvert" => $ouvert,":id"=>$id));
 
+		if($this->updateOuvert->errorCode() != 0){
+			print_r($this->updateOuvert->errorInfo());
+			$r = false;
+		}
+
+		return $r;
+	}
 }

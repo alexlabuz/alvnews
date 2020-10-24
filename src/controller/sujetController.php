@@ -34,7 +34,6 @@ function viewSujetController($twig, $db){
 	$reponse = new ForumReponse($db);
 	$reponses = $reponse->selectBySujet($_GET["id"]);
 	$form["nb_reponse"] = count($reponses);
-	
 
 	echo $twig->render("viewSujet.html.twig", array("form" => $form, "sujet" => $unSujet, "reponses" => $reponses));
 }
@@ -99,4 +98,8 @@ function removeSujetController($twig, $db){
 
 	// Redirige vers la page précedente
 	return header("Location: $_SERVER[HTTP_REFERER]&code=".$code);	
+}
+
+function fermeSujet($twig, $db){
+	
 }
