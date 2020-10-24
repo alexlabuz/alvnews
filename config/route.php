@@ -38,10 +38,9 @@ function getPage($db){
 	$listPage['viewSujet'] = "viewSujetController;0";
 	$listPage['addSujet'] = "addSujetController;1";
 	$listPage['removeSujet'] = "removeSujetController;1";
-	$listPage['addReponse'] = "addReponseController;1";
-	$listPage['removeReponse'] = "removeReponseController;1";
+	$listPage['reponse'] = "reponseController;1";
 	$listPage['404'] = "error404Controller;0";
-	$listPage['maintenance'] = "maintenanceController;1";
+	$listPage['maintenance'] = "maintenanceController;0";
 	
 	if($db != null){
 		if(!isset($_GET["page"])){

@@ -1,46 +1,50 @@
 <?php
+// Controlleur qui Permet d'ajouter ou de supprimer des réponses
+function reponseController($twig, $db){
+	$reponse = new ForumReponse($db);
+	$sujet = new ForumSujet($db);
+	$user = new User($db);
 
-function addReponseController($twig, $db){
+	// Ajout de réponse
 	if(isset($_POST["btRepondre"])){
 		$content = $_POST["reponse"];
 		$idUser = $_SESSION["id"];
 		$idSujet = $_POST["idSujet"];
 
-		$reponse = new ForumReponse($db);
+		$unSujet = $sujet->selectById($idSujet);
 
-		if(strlen($content) > 0){
+		if(strlen($content) > 0 && $unSujet["ouvert"] == 1){
 			$exec = $reponse->add($content, $idUser, $idSujet);
-			if($exec){
-				return header("location:?page=viewSujet&id=".$idSujet);
-			}else{
+			if(!$exec){
 				echo "<a style='color:red'>Une erreur s'est produite lors de l'envoie de la réponse</a>";
+				exit;
 			}
 		}
-	}else{
-		return header("location:./");
+
+		return header("location:?page=viewSujet&id=".$idSujet);
 	}
-}
 
-function removeReponseController($twig, $db){
-	if(isset($_POST["btSupprimer"])){
+	// Supression de réponse
+	else if(isset($_POST["btSupprimer"])){
 		$idReponse = $_POST["btSupprimer"];
+		$idSujet = $_POST["idSujet"];
 
-		$reponse = new ForumReponse($db);
 		$uneReponse = $reponse->selectById($idReponse);
-
-		$user = new User($db);
+		$unSujet = $sujet->selectById($idSujet);
 		$unUser = $user->selectById($_SESSION["id"]);
 
-		if($uneReponse["idUser"] == $_SESSION["id"] || $unUser["role"] == 3){
+		if(($uneReponse["idUser"] == $_SESSION["id"] || $unUser["role"] == 3) && $unSujet["ouvert"] == 1){
 			$exec = $reponse->delete($idReponse);
-			if($exec){
-				header('Location:'.$_SERVER['HTTP_REFERER']);
-			}else{
+			if(!$exec){
 				echo "<a style='color:red'>Une erreur s'est produite lors de la supression de la réponse</a>";
+				exit;
 			}
 		}
+		
+		return header('Location:'.$_SERVER['HTTP_REFERER']);
+	}
 
-	}else{
+	else{
 		return header("location:./");
 	}
 }

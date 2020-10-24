@@ -6,9 +6,10 @@ function homeSujetController($twig, $db){
 	$sujet = new ForumSujet($db);
 	$sujets = $sujet->select(1, 0, 12);
 
-	echo $twig->render("sujets.html.twig", array("form" => $form, "sujets" => $sujets));
+	echo $twig->render("sujetView/sujets.html.twig", array("form" => $form, "sujets" => $sujets));
 }
 
+// Permet d'afficher un sujet
 function viewSujetController($twig, $db){
 	// Si aucun id est passé en paramètre en renvoie l'utilisateur vers la page d'accueil
 	if(!isset($_GET["id"])){
@@ -16,26 +17,40 @@ function viewSujetController($twig, $db){
 	}
 
 	$form = array();
+	$reponses = array();
 	$sujet = new ForumSujet($db);
 	$unSujet = $sujet->selectById($_GET["id"]);
 
-	if($unSujet == null){
-		$form["errorMessage"] = "Toutes nos excuses mais l'article que vous souhaitez voir n'éxiste pas ou à était supprimé";
+
+	if($unSujet != null){
+
+		// Si le bouton "fermer le sujet" à était cliqué
+		if(isset($_GET["close"]) && $_GET["close"] == true){
+
+			if($unSujet["idUser"] == $_SESSION["id"]){
+				$sujet->updateOuvert(0, $unSujet["id"]);
+			}
+
+			return header("location:?page=viewSujet&id=".$_GET["id"]);
+		}
+
+		// Si l'utilisateur n'a pas d'image de profil on lui met celle par défaut
+		if($unSujet["userImage"] == null){
+			$unSujet["userImage"] = "images/default/profil.png";
+		}else{
+			$unSujet["userImage"] = "images/profil/".$unSujet["userImage"];
+		}
+
+		$reponse = new ForumReponse($db);
+		$reponses = $reponse->selectBySujet($_GET["id"]);
+		$form["nb_reponse"] = count($reponses);
+
+	}else{
+		$form["errorMessage"] = "Toutes nos excuses mais le sujet que vous souhaitez voir n'éxiste pas ou à était supprimé";
 		$unSujet["titre"] = "Erreur"; // Pour l'affichage dans la <title>
 	}
 
-	// Si l'utilisateur n'a pas d'image de profil on lui met celle par défaut
-	if($unSujet["userImage"] == null){
-		$unSujet["userImage"] = "images/default/profil.png";
-	}else{
-		$unSujet["userImage"] = "images/profil/".$unSujet["userImage"];
-	}
-
-	$reponse = new ForumReponse($db);
-	$reponses = $reponse->selectBySujet($_GET["id"]);
-	$form["nb_reponse"] = count($reponses);
-
-	echo $twig->render("viewSujet.html.twig", array("form" => $form, "sujet" => $unSujet, "reponses" => $reponses));
+	echo $twig->render("sujetView/viewSujet.html.twig", array("form" => $form, "sujet" => $unSujet, "reponses" => $reponses));
 }
 
 // Permet d'ajouter un nouveau sujet
@@ -67,7 +82,7 @@ function addSujetController($twig, $db){
 
 	$form["nofooter"] = 0;
 
-	echo $twig->render("addSujet.html.twig", array("form" => $form));
+	echo $twig->render("sujetView/addSujet.html.twig", array("form" => $form));
 }
 
 // Supprimer les sujets cocher sur le profil
@@ -98,8 +113,4 @@ function removeSujetController($twig, $db){
 
 	// Redirige vers la page précedente
 	return header("Location: $_SERVER[HTTP_REFERER]&code=".$code);	
-}
-
-function fermeSujet($twig, $db){
-	
 }

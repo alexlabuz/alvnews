@@ -25,7 +25,7 @@ class ForumSujet {
 			LIMIT :min, :max"
 		);
 
-		$this->selectByUser = $this->db->prepare("SELECT id, titre, date_creation, ouvert, idUser FROM forum_sujet fs WHERE idUser = :idUser");
+		$this->selectByUser = $this->db->prepare("SELECT id, titre, date_creation, ouvert, idUser FROM forum_sujet fs WHERE idUser = :idUser ORDER BY date_creation DESC");
 
 		$this->selectById = $this->db->prepare(
 			"SELECT s.id AS id, titre, contenu, s.date_creation AS date, ouvert, idUser, u.nom AS userName, u.image AS userImage

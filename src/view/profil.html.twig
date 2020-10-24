@@ -160,8 +160,15 @@
 			<div class="card mt-3">
 				<div class="card-body">
 					<h5 class="card-title">{{e.titre}}</h5>
-					<h6 class="card-subtitle mb-2 text-muted">Posé le {{e.date_creation | date("d F Y à G:i")}}</h6>
-					<a href="#" class="card-link">Voir le sujet</a>
+					<h6 class="card-subtitle mb-2 text-muted">
+						Posé le {{e.date_creation | date("d F Y à G:i")}}
+						{% if e.ouvert == 1 %}
+							<span class="badge badge-success">Sujet ouvert</span>
+						{% else %}
+							<span class="badge badge-danger">Sujet fermé</span>
+						{% endif %}
+					</h6>
+					<a href="?page=viewSujet&id={{e.id}}" class="card-link">Voir le sujet</a>
 					<label class="card-link text-danger" for="{{e.id}}">Supprimer le sujet</label>
 					<input class="card-link m-2" type="checkbox" id="{{e.id}}" name="cocher[]" value="{{e.id}}" />
 				</div>
