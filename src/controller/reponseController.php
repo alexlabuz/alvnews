@@ -1,6 +1,8 @@
 <?php
-// Controlleur qui Permet d'ajouter ou de supprimer des réponses
+
+// Controlleur qui Permet d'ajouter, de mettre à jour ou de supprimer des réponses
 function reponseController($twig, $db){
+
 	$reponse = new ForumReponse($db);
 	$sujet = new ForumSujet($db);
 	$user = new User($db);
@@ -24,13 +26,33 @@ function reponseController($twig, $db){
 		return header("location:?page=viewSujet&id=".$idSujet);
 	}
 
-	// Supression de réponse
-	else if(isset($_POST["btSupprimer"])){
-		$idReponse = $_POST["btSupprimer"];
-		$idSujet = $_POST["idSujet"];
+	// Mise à jour de réponse
+	else if(isset($_POST["btUpdate"])){
+		$content = $_POST["reponse"];
+		$idReponse = $_POST["btUpdate"];
 
 		$uneReponse = $reponse->selectById($idReponse);
-		$unSujet = $sujet->selectById($idSujet);
+		$unSujet = $sujet->selectById($uneReponse["idSujet"]);
+		$unUser = $user->selectById($_SESSION["id"]);
+
+		if(($uneReponse["idUser"] == $_SESSION["id"] || $unUser["role"] == 3) && $unSujet["ouvert"] == 1){
+			$exec = $reponse->update($content, $idReponse);
+			if(!$exec){
+				echo "<a style='color:red'>Une erreur s'est produite lors de la mise à jour de la réponse</a>";
+				exit;
+			}
+
+		}
+
+		return header('Location:'.$_SERVER['HTTP_REFERER']);
+	}
+
+	// Supression de réponse
+	else if(isset($_GET["id"])){
+		$idReponse = $_GET["id"];
+
+		$uneReponse = $reponse->selectById($idReponse);
+		$unSujet = $sujet->selectById($uneReponse["idSujet"]);
 		$unUser = $user->selectById($_SESSION["id"]);
 
 		if(($uneReponse["idUser"] == $_SESSION["id"] || $unUser["role"] == 3) && $unSujet["ouvert"] == 1){
@@ -47,4 +69,5 @@ function reponseController($twig, $db){
 	else{
 		return header("location:./");
 	}
+
 }

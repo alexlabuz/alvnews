@@ -5,6 +5,7 @@ class ForumReponse{
 	private $db;
 	private $add;
 	private $delete;
+	private $update;
 	private $selectBySujet;
 	private $selectById;
 
@@ -15,6 +16,8 @@ class ForumReponse{
 
 		$this->delete = $this->db->prepare("DELETE FROM forum_reponse WHERE id = :id");
 
+		$this->update = $this->db->prepare("UPDATE forum_reponse SET contenu = :contenu WHERE id = :id");
+
 		$this->selectBySujet = $this->db->prepare(
 			"SELECT r.id AS id, contenu, r.date_creation AS date, idUser, u.nom AS userName, u.image AS userImage
 			FROM forum_reponse r, utilisateur u
@@ -23,7 +26,7 @@ class ForumReponse{
 			ORDER BY r.date_creation"
 		);
 
-		$this->selectById = $this->db->prepare("SELECT idUser FROM forum_reponse WHERE id = :id");
+		$this->selectById = $this->db->prepare("SELECT idUser, idSujet FROM forum_reponse WHERE id = :id");
 	}
 
 	public function add($content, $idUser, $idSujet){
@@ -44,6 +47,18 @@ class ForumReponse{
 
 		if($this->delete->errorCode() != 0){
 			print_r($this->delete->errorInfo());
+			$r = false;
+		}
+
+		return $r;
+	}
+	
+	public function update($contenu, $id){
+		$r = true;
+		$this->update->execute(array(":contenu" => $contenu,":id" => $id));
+
+		if($this->update->errorCode() != 0){
+			print_r($this->update->errorInfo());
 			$r = false;
 		}
 

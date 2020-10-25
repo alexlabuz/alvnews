@@ -1,40 +1,66 @@
-var btUpdateReponse = document.getElementsByClassName("btUpdateReponseJS");
-var divReponse = document.getElementsByClassName("divReponseJS");
-var editorOpen = false;
+// Récupère les <div> parents de l'affichage de réponse
+var divUpdateReponse = document.getElementsByClassName("clickUpdate");
 
-for(i = 0; i < btUpdateReponse.length; i++){
-	btUpdateReponse[i].addEventListener("click", function(i){
-		var div = document.getAttribute("reponse-id", this.getAttribute("reponse-id"));
-		openInput(div);
+// Ajoute un écoutteur à tous ces <div>
+for(i = 0; i < divUpdateReponse.length; i++){
+	divUpdateReponse[i].addEventListener("dblclick", function handler(e){
+		e.preventDefault();
+		openInput(this);
+		// On supprime l'écouteur
+		this.removeEventListener("dblclick", handler);
 	});
 }
 
+// Créer un formulaire avec un <textarea> pour modifier la réponse
 function openInput(element){
-	var text = element.childNodes[1].textContent;
+	// Récupère le texte de la balise enfant <p>
+	var text = element.childNodes[0].textContent;
+	// Recupère l'id de la réponse depuis l'attribut "id-reponse"
+	var id = element.getAttribute("id-reponse");
+	// Supprimer la balise <p>
+	element.innerHTML = "";
 
+	// Créer le forumlaire
 	var form = document.createElement("form");
-	form.action = "";
+	form.action = "?page=reponse";
 	form.method = "POST";
 
-	var inputReponse=document.createElement("textarea");
-	inputReponse.type="text";
+	var inputReponse = document.createElement("textarea");
 	inputReponse.name="reponse";
 	inputReponse.rows="3";
 	inputReponse.textContent = text;
-	inputReponse.className = "form-control form-control-sm"
+	inputReponse.className = "form-control form-control-sm mb-2";
 	form.appendChild(inputReponse);
 
 	var btSubmit = document.createElement("button");
-	btSubmit.type = "submit"
-	btSubmit.name = "btEnvoyer"
-	btSubmit.textContent = "Envoyer"
-	btSubmit.className = "btn btn-outline-primary btn-sm";
+	btSubmit.type = "submit";
+	btSubmit.name = "btUpdate";
+	btSubmit.value = id;
+	btSubmit.textContent = "Modifier";
+	btSubmit.className = "btn btn-outline-primary btn-sm mr-1";
 	form.appendChild(btSubmit);
+	
+	var btClose = document.createElement("button");
+	btClose.textContent = "Fermer";
+	btClose.className = "btn btn-outline-secondary btn-sm";
+	form.appendChild(btClose);
 
-	element.innerHTML = "";
 	element.appendChild(form);
-}
 
-function closeInput(element, text) {
-	element.innerHTML = text;
+	// Lors de l'appui sur le bouton "Fermé" (btClose)
+	btClose.addEventListener("click", function(e){
+		e.preventDefault();
+		element.innerHTML = "";
+		// On recréer le <p>
+		var p = document.createElement("p");
+		p.textContent = text;
+		element.appendChild(p);
+
+		// On recréer l'écouteur
+		element.addEventListener("dblclick", function handler(){
+			openInput(this);
+			this.removeEventListener("dblclick", handler);
+		});
+	});
+
 }
