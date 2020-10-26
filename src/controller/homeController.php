@@ -9,7 +9,7 @@ function homeController($twig, $db){
 		$page = $_GET["min"];
 	}
 	
-	$max = 8; // Maximum d'article à afficher par page
+	$max = 10; // Maximum d'article à afficher par page
 	$min = $page * $max;
 	
 	$nbEntree = $article->selectCount(1)["nombre"]; // Récupère tout les articles visibles
