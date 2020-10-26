@@ -5,7 +5,6 @@
 {% endblock %}
 
 {% block content %}
-
 {% if form.errorMessage is not null %}
 	<!-- ERROR MESSAGE DISPLAY -->
 	<div class="alert alert-danger m-2" style="float:center" role="alert">{{form.errorMessage}}</div>
@@ -13,9 +12,9 @@
 
 <!-- ARTICLE TITLE -->
 {% if article.id is defined %}
-	<h1 class="m-3 text-black-50">{{article.titre}}</h1>
+	<h1 class="m-3 text-black-50"><b>{{article.titre}}</b></h1>
 {% else %}
-	<h1 class="m-3 text-black-50">Nouvel article</h1>
+	<h1 class="m-3 text-black-50"><b>Nouvel article</b></h1>
 {% endif %}
 
 <div class="container-lg">
@@ -91,7 +90,8 @@
 </div>
 
 {% endif %}
+{% endblock %}
 
-<!-- SCRIPT -->
+{% block script %}
 <script src="js/loadingButton.js"></script>
 {% endblock %}
