@@ -7,34 +7,55 @@ class ForumSujet {
 	private $select;
 	private $selectByUser;
 	private $selectById;
+	private $selectCount;
+	private $selectByReponseUser;
 	private $delete;
 	private $updateOuvert;
 
 	public function __construct($db){
 		$this->db = $db;
 
-		$this->add = $this->db->prepare("INSERT INTO forum_sujet(titre, contenu, date_creation, ouvert, idUser) VALUES (:titre, :contenu, NOW(), 1, :idUser)");
+		$this->add = $this->db->prepare("INSERT INTO sujet(titre, contenu, date_creation, ouvert, idUser) VALUES (:titre, :contenu, NOW(), 1, :idUser)");
 
 		$this->select = $db->prepare(
-			"SELECT s.id AS id, titre, s.date_creation AS date, u.nom AS userName, idUser
-			FROM forum_sujet s, utilisateur u
+			"SELECT s.id AS id, titre, s.date_creation AS date, u.nom AS userName, idUser, 
+				(SELECT COUNT(id)
+				FROM reponse_sujet
+				WHERE idSujet = s.id) AS nbReponse
+			FROM sujet s, utilisateur u
 			WHERE s.idUser = u.id
-			AND s.ouvert >= :ouvert
+			AND s.ouvert = :ouvert
 			GROUP BY s.id
 			ORDER BY s.date_creation DESC
 			LIMIT :min, :max"
 		);
 
-		$this->selectByUser = $this->db->prepare("SELECT id, titre, date_creation, ouvert, idUser FROM forum_sujet fs WHERE idUser = :idUser ORDER BY date_creation DESC");
+		$this->selectByUser = $this->db->prepare("SELECT id, titre, date_creation, ouvert, idUser FROM sujet fs WHERE idUser = :idUser ORDER BY date_creation DESC");
 
 		$this->selectById = $this->db->prepare(
 			"SELECT s.id AS id, titre, contenu, s.date_creation AS date, ouvert, idUser, u.nom AS userName, u.image AS userImage
-			FROM forum_sujet s, utilisateur u
+			FROM sujet s, utilisateur u
 			WHERE s.idUser = u.id AND s.id = :id");
 
-		$this->delete = $this->db->prepare("DELETE FROM forum_sujet WHERE id = :id");
+		$this->selectCount = $this->db->prepare("SELECT COUNT(id) AS nombre FROM sujet WHERE ouvert = :ouvert");
+	
+		$this->selectByReponseUser = $this->db->prepare(
+			"SELECT s.id AS id, titre, s.date_creation AS date, u.nom AS nameUser, (
+				SELECT MAX(date_creation)
+				FROM reponse_sujet
+				WHERE idSujet = s.id) AS dateLastReponse
+			FROM sujet s, reponse_sujet r, utilisateur u
+			WHERE r.idSujet = s.id
+			AND r.idUser = u.id
+			AND u.id = 27
+			AND s.ouvert = 1
+			GROUP BY s.id
+			ORDER BY s.date_creation DESC"
+		);
+
+		$this->delete = $this->db->prepare("DELETE FROM sujet WHERE id = :id");
 		
-		$this->updateOuvert = $this->db->prepare("UPDATE forum_sujet SET ouvert = :ouvert WHERE id = :id");
+		$this->updateOuvert = $this->db->prepare("UPDATE sujet SET ouvert = :ouvert WHERE id = :id");
 	}
 
 	public function add($titre, $contenu, $idUser){
@@ -81,6 +102,26 @@ class ForumSujet {
 		}
 
 		return $this->selectById->fetch();
+	}
+	
+	public function selectByReponseUser($idUser){
+		$this->selectByReponseUser->execute(array(":idUser" => $idUser));
+
+		if($this->selectByReponseUser->errorCode() != 0){
+			print_r($this->selectByReponseUser->errorInfo());
+		}
+
+		return $this->selectByReponseUser->fetchAll();
+	}
+
+	public function selectCount($ouvert){
+		$this->selectCount->execute(array(":ouvert" => $ouvert));
+
+		if($this->selectCount->errorCode() != 0){
+			print_r($this->selectCount->errorInfo());
+		}
+
+		return $this->selectCount->fetch();
 	}
 	
 	public function delete($id){

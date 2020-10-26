@@ -29,6 +29,7 @@ function openInput(element){
 	inputReponse.name="reponse";
 	inputReponse.rows="3";
 	inputReponse.textContent = text;
+	inputReponse.required = "required";
 	inputReponse.className = "form-control form-control-sm mb-2";
 	form.appendChild(inputReponse);
 

@@ -2,9 +2,7 @@
 {% block title %}{{sujet.titre}}{{parent()}}{% endblock %}
 
 {% block content %}
-
-{% if form.errorMessage is defined %}
-	
+{% if form.errorMessage is defined %}	
 <div class="alert alert-danger container" role="alert">
 	{{form.errorMessage}}
 </div>
@@ -12,7 +10,7 @@
 	
 <div class="container-fluid text-center bg-light border-dark border-bottom p-4">
 	<h2>{{sujet.titre}}</h2>
-	<p class="m-0">Un sujet lancé le {{sujet.date}} par {{sujet.userName}} <img src="{{sujet.userImage}}" alt="" class="img-profile-redacteur mb-1 rounded-circle"></p>
+	<p class="m-0">Un sujet lancé le {{sujet.date | date("d F Y à G:i")}} par {{sujet.userName}} <img src="{{sujet.userImage}}" alt="" class="img-profile-redacteur mb-1 rounded-circle"></p>
 	{% if sujet.ouvert == 1 %}
 		<span class="badge badge-success">Sujet ouvert</span>
 	{% else %}
@@ -22,7 +20,7 @@
 
 {% if sujet.idUser == session.id %}
 <!--BAR-->
-<nav class="navbar navbar-expand-lg navbar-light bg-light">
+<nav class="navbar navbar-expand-sm navbar-light bg-light">
 	<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarArticle">
 		<span class="navbar-toggler-icon"></span>
 	</button>
@@ -40,12 +38,12 @@
   <div class="modal-dialog">
     <div class="modal-content">
       <div class="modal-header">
-        <h5 class="modal-title text-danger" id="exampleModalLabel">Fermer le sujet</h5>
+        <h5 class="modal-title" id="exampleModalLabel">Fermer le sujet</h5>
         <button type="button" class="close" data-dismiss="modal" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-      <div class="modal-body">Êtes-vous sûr de vouloir faire ça ? Pas retour en arrière possible, il vous faudra ouvrir un nouveau sujet.</div>
+      <div class="modal-body">Êtes-vous sûr de vouloir faire cela ? Pas retour en arrière possible, il vous faudra ouvrir un nouveau sujet.</div>
       <div class="modal-footer">
         <button type="button" class="btn btn-secondary" data-dismiss="modal">Annuler</button>
 		<a type="Button" href="?page=viewSujet&id={{sujet.id}}&close=true" class="btn btn-danger">Fermer le sujet</a>
@@ -67,11 +65,11 @@
 			<p class="m-0">Vous ne pouvez pas répondre à ce sujet</p>
 		{% else %}
 			<div class="form-group">
-				<textarea type="text" class="form-control form-control-sm" id="reponse" placeholder="Saisissez votre réponse ici ..." name="reponse" rows="3"></textarea>
+				<textarea type="text" class="form-control form-control-sm" id="reponse" placeholder="Saisissez votre réponse ici ..." name="reponse" rows="3" required></textarea>
 			</div>
 			<input hidden name="idSujet" value="{{sujet.id}}" />
 			<button type="submit" class="btn btn-outline-primary btn-sm" name="btRepondre">Répondre</button>
-			<p class="mb-0 mt-2">Double-cliquez sur votre réponse pour la modifier</p>
+			<p class="mb-0 mt-2">Double-cliquez sur l'une de vos réponses pour la modifier</p>
 		{% endif %}
 	</form>
 	{% else %}
@@ -107,13 +105,15 @@
 
 	{% if sujet.ouvert == 0 %}
 		<div class="row align-items-center bg-light p-2 mb-2 border-bottom border-secondary text-danger">
-			<b>{{sujet.userName}} à fermé ce sujet</p>
+			<b>{{sujet.userName}} a fermé ce sujet</p>
 		</div>
 	{% endif %}
 	</div>
 
 </div>
-<script src="js/reponseUpdate.js"></script>
 {% endif %}
+{% endblock %}
 
+{% block script %}
+<script src="js/reponseUpdate.js"></script>
 {% endblock %}

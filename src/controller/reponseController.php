@@ -35,7 +35,7 @@ function reponseController($twig, $db){
 		$unSujet = $sujet->selectById($uneReponse["idSujet"]);
 		$unUser = $user->selectById($_SESSION["id"]);
 
-		if(($uneReponse["idUser"] == $_SESSION["id"] || $unUser["role"] == 3) && $unSujet["ouvert"] == 1){
+		if(($uneReponse["idUser"] == $_SESSION["id"] || $unUser["role"] == 3) && strlen($content) > 0 && $unSujet["ouvert"] == 1){
 			$exec = $reponse->update($content, $idReponse);
 			if(!$exec){
 				echo "<a style='color:red'>Une erreur s'est produite lors de la mise à jour de la réponse</a>";

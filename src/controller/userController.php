@@ -168,6 +168,8 @@ function profilController($twig, $db){
 	$form["listSujet"] = $sujet->selectByUser($donnees["id"]);
 	$form["nbSujet"] = count($form["listSujet"]);
 
+	$form["listSujetRepondu"] = $sujet->selectByReponseUser($donnees["id"]);
+
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
 

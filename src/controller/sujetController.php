@@ -1,12 +1,34 @@
 <?php
 
-// Page d'acceuil des sujets qui afficher la liste des sujets ouverts
+// Page d'acceuil des sujets qui afficher la liste des sujets ouverts et fermé
 function homeSujetController($twig, $db){
 	$form = array();
 	$sujet = new ForumSujet($db);
-	$sujets = $sujet->select(1, 0, 12);
+	$sujetsOuvert = $sujet->select(1, 0, 4);
+	$sujetFerme = $sujet->select(0, 0 ,4);
 
-	echo $twig->render("sujetView/sujets.html.twig", array("form" => $form, "sujets" => $sujets));
+	if(isset($_GET["ouvert"])){
+		$ouvert = $_GET["ouvert"];
+
+		$page = 0;
+		// Teste si min est passé dans get et si il contiens une valeurs numérique
+		if(isset($_GET["min"]) && is_numeric($_GET["min"])){
+			$page = $_GET["min"];
+		}
+		$max = 10;
+		$min = $page * $max;
+
+		$nbEntree = $sujet->selectCount($ouvert)["nombre"];
+		$form["nbPage"] = ceil($nbEntree / $max);
+		$form["numeroPage"] = $page;
+
+		// Teste si ouvert contiens 1 ou 0 ou si le numero de page choisis et valables
+		if(($ouvert == 1 || $ouvert == 0) && ($page >= 0 && $page < $form["nbPage"])){
+			$form["listeSujet"] = $sujet->select($ouvert, $min, $max);
+		}
+	}
+
+	echo $twig->render("sujetView/sujets.html.twig", array("form" => $form, "sujetsOuvert" => $sujetsOuvert, "sujetsFerme" => $sujetFerme));
 }
 
 // Permet d'afficher un sujet
@@ -67,8 +89,12 @@ function addSujetController($twig, $db){
 		$content = $_POST["content"];
 		$idUser = $donneesUser["id"];
 
-		$exec = $sujet->add($title, $content, $idUser);
-		if(!$exec){
+		if($title != null && $content != null){	
+			$exec = $sujet->add($title, $content, $idUser);
+			if(!$exec){
+				return header("location:?page=addSujet&code=1");
+			}
+		}else{
 			return header("location:?page=addSujet&code=1");
 		}
 

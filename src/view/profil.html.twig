@@ -81,6 +81,9 @@
 	<li class="nav-item">
 		<a class="nav-link" data-toggle="tab" href="#mySujet" role="tab">Mes sujets</a>
 	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#mySujetRepondu" role="tab">Sujets répondus</a>
+	</li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -143,7 +146,7 @@
 		{% endif %}
 		</form>
 	</div>
-	<!-- MES SUJET -->
+	<!-- MES SUJETS -->
 	<div class="tab-pane fade show" id="mySujet" role="tabpanel" aria-labelledby="profile-tab">
 		<form action="?page=removeSujet" method="POST">
 		<h3 class="mt-4">
@@ -178,6 +181,28 @@
 			<h4 class="text-center m-5">Pas de sujet</h4>
 		{% endif %}
 		</form>
+	</div>
+	<!-- MES SUJETS REPONDUS -->
+	<div class="tab-pane fade show" id="mySujetRepondu" role="tabpanel" aria-labelledby="profile-tab">
+		<h3 class="mt-4">
+			<b>Sujets répondus</b>
+		</h3>
+		<p>Affiche les sujets encore ouverts avec lesquelles vous avez interagi.</p>
+		{% if form.listSujetRepondu != null %}
+			{% for e in form.listSujetRepondu %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{e.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Posé le {{e.date | date("d F Y à G:i")}} par {{e.nameUser}}</h6>
+					<p>Derniere réponse : {{dateLastReponse | date("d F Y à G:i")}}</p>
+					<a href="?page=viewSujet&id={{e.id}}" class="card-link">Voir le sujet</a>
+				</div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<h4 class="text-center m-5">Pas de sujet répondu</h4>
+		{% endif %}
+	</div>
 	</div>
 </div>
 
