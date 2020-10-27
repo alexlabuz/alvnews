@@ -85,7 +85,7 @@
 <form class="bg-light p-3 mb-3" method="POST" action="?page=addComment">
 {% if session.id is defined %}
 	<label for="commentaire">Saisissez votre commentaire :</label>
-	<input class="form-control input-commentaire" id="commentaire" type="text" name="commentaire"/>
+	<input class="form-control w-50" id="commentaire" type="text" name="commentaire" required/>
 	<input hidden name="idArticle" value="{{article.id}}" />
 	<div class="mt-2">
 		<button class="btn btn-outline-primary btn-sm" type="submit" name="btEnvoyer">Envoyer</button>

@@ -52,13 +52,13 @@ class Article{
 			AND a.id = :id");
 			
 		$this->selectByTheme = $this->db->prepare(
-		"SELECT a.id AS id, titre, a.image AS image, description, dateCreation , visible, u.nom AS redacteur
-		FROM article a, theme t , utilisateur u
-		WHERE a.idTheme = t.id
-		AND a.idUtilisateur = u.id
-		AND a.visible >= :visible
-		AND t.id = :idTheme
-		ORDER BY dateCreation DESC");
+			"SELECT a.id AS id, titre, a.image AS image, description, dateCreation , visible, u.nom AS redacteur
+			FROM article a, theme t , utilisateur u
+			WHERE a.idTheme = t.id
+			AND a.idUtilisateur = u.id
+			AND a.visible >= :visible
+			AND t.id = :idTheme
+			ORDER BY dateCreation DESC");
 
 		$this->search = $this->db->prepare(
 			"SELECT id, titre, description, dateCreation

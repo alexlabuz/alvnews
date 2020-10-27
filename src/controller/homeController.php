@@ -5,7 +5,7 @@ function homeController($twig, $db){
 	$article = new Article($db);
 
 	$page = 0;
-	if(isset($_GET["min"])){
+	if(isset($_GET["min"]) && is_numeric($_GET["min"])){
 		$page = $_GET["min"];
 	}
 	
@@ -13,10 +13,14 @@ function homeController($twig, $db){
 	$min = $page * $max;
 	
 	$nbEntree = $article->selectCount(1)["nombre"]; // Récupère tout les articles visibles
-	$articleList = $article->select($min, $max, 1);
-
 	$form["nbDePage"] = ceil($nbEntree/$max);
 	$form["numeroPage"] = $page;
+
+	if($page < 0 || $page >= $form["nbDePage"]){
+		return header("Location:./");
+	}
+
+	$articleList = $article->select($min, $max, 1);
 
 	// Lorsque l'utilisateur est rediriger sur la page d'accueil après s'être deconnecter
 	if(isset($_GET["singout"])){
@@ -38,11 +42,11 @@ function searchController($twig, $db){
 	if(!empty($_GET["search"])){
 		$search = $_GET["search"];
 		$form["title"] = $search;
+
 		$article = new Article($db);
 
-
 		$page = 0;
-		if(isset($_GET["min"])){
+		if(isset($_GET["min"]) && is_numeric($_GET["min"])){
 			$page = $_GET["min"];
 		}
 
@@ -50,11 +54,16 @@ function searchController($twig, $db){
 		$min = $page * $max;
 
 		$nbEntree = $article->searchCount($search)["nombre"];
-		$form["resultat"] = $article->search($search, $min, $max);
-
-		$form["search"] = $_GET["search"];
 		$form["nbDePage"] = ceil($nbEntree / $max);
 		$form["numeroPage"] = $page;
+
+		if($page < 0 || $page >= $form["nbDePage"]){
+			$min = 0;
+		}
+
+		$form["resultat"] = $article->search($search, $min, $max);
+		
+		$form["search"] = $search;
 	}
 
 	$form["nofooter"] = true;
