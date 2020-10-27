@@ -164,9 +164,9 @@ function profilController($twig, $db){
 	$enregistre = new Enregistre($db);
 	$form["listEnregistre"] = $enregistre->selectByUser($donnees["id"]);
 	$form["nbEnregistre"] = count($form["listEnregistre"]);
-	$form["listEnregistre"] = array_slice($form["listEnregistre"], 0, 40);
+	$form["listEnregistre"] = array_slice($form["listEnregistre"], 0, 40); // Affiche 40 enregistrement max
 
-	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees)); // Affiche 40 enregistrement max
+	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
 
 // Met à jour le profil de l'utilisateur
