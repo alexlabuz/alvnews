@@ -47,7 +47,7 @@ class ForumSujet {
 			FROM sujet s, reponse_sujet r, utilisateur u
 			WHERE r.idSujet = s.id
 			AND r.idUser = u.id
-			AND u.id = 27
+			AND u.id = :idUser
 			AND s.ouvert = 1
 			GROUP BY s.id
 			ORDER BY s.date_creation DESC"

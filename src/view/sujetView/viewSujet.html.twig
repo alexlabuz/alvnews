@@ -59,6 +59,7 @@
 	<h3 class="mb-3"><b>Réponses ({{form.nb_reponse}})</b></h3>
 
 	{% if session.id is defined %}
+	<!-- FORMUMAIRE COMMENTAIRE -->
 	<form action="?page=reponse" method="POST" class="bg-light p-3 mb-3">
 		{% if sujet.ouvert == 0 %}
 			<h4 class="text-danger"><b>Sujet fermé</b></h4>
@@ -69,32 +70,34 @@
 			</div>
 			<input hidden name="idSujet" value="{{sujet.id}}" />
 			<button type="submit" class="btn btn-outline-primary btn-sm" name="btRepondre">Répondre</button>
-			<p class="mb-0 mt-2">Double-cliquez sur l'une de vos réponses pour la modifier</p>
+			<p class="mb-0 mt-2 d-none d-sm-block">Double-cliquez sur l'une de vos réponses pour la modifier</p>
 		{% endif %}
 	</form>
 	{% else %}
 		<p>Pour répondre veuillez vous connecter</p>	
 	{% endif %}
 
+	<!-- AFFICHAGE LISTE COMMENTAIRES -->
 	<div class="container">
 	<input type="hidden" name="idSujet" value="{{sujet.id}}" />
 	{% for r in reponses %}
 		{% if r.userImage is null %}{% set img = "images/default/profil.png" %}{% else %}{% set img = "images/profil/#{r.userImage}" %}{% endif %}
 		<div class="row align-items-center bg-light p-2 mb-2 border-bottom border-secondary">
 			<!-- USER info -->
-			<div class="col-3">
+			<div class="col-sm-3">
 				<p class="m-0">
 					<img class="img-thumbnail" src="{{img}}" alt="image profil" style="width:60px;height:60px;">
 					<a class="{% if r.idUser == sujet.idUser %}bg-primary text-white rounded d-inline{% endif %}"><b>{{r.userName}}</b></a><br>
 					<a>Le {{r.date | date("d F Y à G:i")}}</a>
+					<hr class="d-sm-none">
 				</p>
 			</div>
 			<!-- CONTENT -->
-			<div class="col-8{% if  r.idUser == session.id and sujet.ouvert == 1 %} clickUpdate{% endif %}" id-reponse="{{r.id}}"
+			<div class="col-sm-8{% if  r.idUser == session.id and sujet.ouvert == 1 %} clickUpdate{% endif %}" id-reponse="{{r.id}}"
 				><p>{{r.contenu | nl2br}}</p
 			></div>
 			<!-- UPDATE AND REMOVE BUTTON -->
-			<div class="col-1">
+			<div class="col-sm-1">
 			{% if r.idUser == session.id and sujet.ouvert == 1 %}
 				<!-- remove button -->
 				<a href="?page=reponse&id={{r.id}}" class="btn btn-outline-danger btn-sm">Effacer</a>

@@ -185,7 +185,7 @@
 	<!-- MES SUJETS REPONDUS -->
 	<div class="tab-pane fade show" id="mySujetRepondu" role="tabpanel" aria-labelledby="profile-tab">
 		<h3 class="mt-4">
-			<b>Sujets répondus</b>
+			<b>Sujets répondus ({{form.nbSujetRepondu}})</b>
 		</h3>
 		<p>Affiche les sujets encore ouverts avec lesquelles vous avez interagi.</p>
 		{% if form.listSujetRepondu != null %}
@@ -194,7 +194,7 @@
 				<div class="card-body">
 					<h5 class="card-title">{{e.titre}}</h5>
 					<h6 class="card-subtitle mb-2 text-muted">Posé le {{e.date | date("d F Y à G:i")}} par {{e.nameUser}}</h6>
-					<p>Derniere réponse : {{dateLastReponse | date("d F Y à G:i")}}</p>
+					<p>Derniere réponse : {{e.dateLastReponse | date("d F Y à G:i")}}</p>
 					<a href="?page=viewSujet&id={{e.id}}" class="card-link">Voir le sujet</a>
 				</div>
 			</div>
