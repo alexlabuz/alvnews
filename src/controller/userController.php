@@ -159,10 +159,12 @@ function profilController($twig, $db){
 	$article = new Article($db);
 	$form["listArticle"] = $article->selectByUser($donnees["id"]);
 	$form["nbArticle"] = count($form["listArticle"]);
+	$form["listArticle"] = array_slice($form["listArticle"], 0, 40); // Affiche 40 articles max
 
 	$enregistre = new Enregistre($db);
 	$form["listEnregistre"] = $enregistre->selectByUser($donnees["id"]);
 	$form["nbEnregistre"] = count($form["listEnregistre"]);
+	$form["listEnregistre"] = array_slice($form["listEnregistre"], 0, 40); // Affiche 40 enregistrement max
 
 	$sujet = new ForumSujet($db);
 	$form["listSujet"] = $sujet->selectByUser($donnees["id"]);

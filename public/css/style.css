@@ -53,7 +53,6 @@ nav.homeNavBar{
 	}
 }
 
-.list-article .card{max-width:540px;}
 @media(min-width:776px){
 	.list-article .card, .list-article img{
 		height: 220px;
@@ -80,9 +79,6 @@ nav.homeNavBar{
 	height: 30px;
 }
 
-.input-commentaire{
-	max-width: 520px;
-}
 .commentaireList img{
 	width: 50px;
 	height: 50px;
