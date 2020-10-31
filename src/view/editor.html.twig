@@ -7,12 +7,12 @@
 {% block head %}
 <style>
 html, body, .baseDiv{height:100%}
+.baseDiv{padding-top:56px;}
 .homeNavBar{
 	position:fixed;
 	top:0;
 	width:100%;
 }
-.baseDiv{padding-top:56px;}
 </style>
 {% endblock %}
 
@@ -30,7 +30,7 @@ html, body, .baseDiv{height:100%}
 <form method="POST" action="?page=editor{{action | raw}}" enctype="multipart/form-data" class="jsAnimateLoadForm h-100">
 <div class="row m-0 h-100">
 
-	<div class="col-md-9" style="overflow:auto;">
+	<div class="col-md-9 h-100 overflow-auto">
 
 		<!-- ARTICLE TITLE -->
 		{% if article.id is defined %}
@@ -40,25 +40,25 @@ html, body, .baseDiv{height:100%}
 		{% endif %}
 
 		<!-- INPUT ARTICLE -->
-		<div class="form-group m-3">
+		<div class="form-group m-sm-3">
 			<label for="article"><b>Article</b></label>
 			<textarea class="form-control" id="article" name="contenu" rows="20">{{article.contenu}}</textarea>
 		</div>
 
 	</div>
 
-	<div class="col-md-3 p-3 bg-light border-dark border-left">
+	<div class="col-md-3 p-3 bg-light border-dark border-left overflow-auto h-100">
 
 		<!-- INPUT TITRE -->
 		<div class="form-group">
 			<label for="titre"><b>Titre *</b></label>
-			<input type="text" class="form-control" id="titre" name="titre" maxlength="80" placeholder="Titre de l'article" value="{{article.titre}}" required>
+			<input type="text" class="form-control" id="titre" name="titre" maxlength="70" placeholder="Titre de l'article" value="{{article.titre}}" required>
 		</div>
 
 		<!-- INPUT DESCRIPTION -->
 		<div class="form-group">
 			<label for="description"><b>Description</b></label>
-			<input type="text" class="form-control form-control-sm" id="description" name="description" maxlength="255" placeholder="Description de l'article" value="{{article.description}}"/>
+			<input type="text" class="form-control form-control-sm" id="description" name="description" maxlength="245" placeholder="Description de l'article" value="{{article.description}}"/>
 		</div>
 
 		<!-- INPUT THEME -->
@@ -116,7 +116,6 @@ html, body, .baseDiv{height:100%}
 {% endblock %}
 
 {% block script %}
-<script src="js/bs-custom-file-input.js"></script>
 <script src="js/loadingButton.js"></script>
 <script src="js/editor.js"></script>
 {% endblock %}
