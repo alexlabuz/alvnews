@@ -1,5 +1,5 @@
 {% extends "base.html.twig" %}
-{% block title %}Mettre à jour le profil{{parent()}} {% endblock %}
+{% block title %}Paramètre profil{{parent()}} {% endblock %}
 
 {% block content %}
 <h1 class="m-4">Paramètre profil</h1>
@@ -40,11 +40,14 @@
 				<label for="nom">Nom</label>
 				<input type="text" class="form-control" id="nom" name="nom" maxlength="50" value="{{user.nom}}" required/>
 			</div>
-			<div class="form-group">
-				<label for="image">Photo de profil</label>
-				<input type="file" class="form-control-file" id="image" name="image"/>
-				<small>Max : 8 Mo | formats autorisés : JPG, PNG.</small>
+			
+			<label for="image">Photo de profil</label>
+			<div class="custom-file">
+				<input type="file" class="custom-file-input" id="image" name="image" style="display:none;">
+				<label class="custom-file-label" for="image">Choisir un fichier</label>
 			</div>
+			<p class="m-0"><small class="text-muted">Max : 8 Mo | format autorisé : JPG, PNG.</small></p>
+
 		</div>
 
 	</div>
@@ -84,5 +87,14 @@
 	</div>
 </div>
 </div>
+
+{% block script %}
+<script>
+// Permet l'affichage du formulaire (file) pour l'image
+window.addEventListener("load",function(){
+	bsCustomFileInput.init();
+});
+</script>
+{% endblock %}
 
 {% endblock %}

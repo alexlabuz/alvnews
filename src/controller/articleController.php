@@ -71,8 +71,8 @@ function editorController($twig, $db){
 			$image = $unArticle["image"];
 		}
 
-		// Vérifie si les champ ont était remplie
-		if($titre != null && $idTheme != null && !$error){
+		// Vérifie si les champ ont était remplie et si il n'y a pas de code javascript sur la page
+		if($titre != null && $idTheme != null && !$error && !strrpos(strtolower($contenu), "<script")){
 
 			// Vérifie si un fichier à était envoyé
 			if($unArticle == null){
