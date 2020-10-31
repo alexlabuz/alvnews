@@ -4,94 +4,118 @@
 {% if article.id is defined %}{{article.titre}}{% else %}Nouvel article{% endif %}{{parent()}}
 {% endblock %}
 
+{% block head %}
+<style>
+html, body, .baseDiv{height:100%}
+.baseDiv{padding-top:56px;}
+.homeNavBar{
+	position:fixed;
+	top:0;
+	width:100%;
+}
+</style>
+{% endblock %}
+
 {% block content %}
 {% if form.errorMessage is not null %}
 	<!-- ERROR MESSAGE DISPLAY -->
 	<div class="alert alert-danger m-2" style="float:center" role="alert">{{form.errorMessage}}</div>
 {% else %}
 
-<!-- ARTICLE TITLE -->
-{% if article.id is defined %}
-	<h1 class="m-3 text-black-50"><b>{{article.titre}}</b></h1>
-{% else %}
-	<h1 class="m-3 text-black-50"><b>Nouvel article</b></h1>
-{% endif %}
-
-<div class="container-lg">
 
 {% if article.id is defined %}
 	{% set action = "&id=#{article.id}" %}
 {% endif %}
 
-<form method="POST" action="?page=editor{{action | raw}}" enctype="multipart/form-data" class="jsAnimateLoadForm">
-	<div class="bg-dark p-3 text-light mb-2 rounded">
+<form method="POST" action="?page=editor{{action | raw}}" enctype="multipart/form-data" class="jsAnimateLoadForm h-100">
+<div class="row m-0 h-100">
 
-		<div class="form-row mb-2">
-			<!-- INPUT TITRE -->
-			<div class="col-sm-6">
-				<label>Titre *</label>
-				<input type="text" class="form-control" id="titre" name="titre" maxlength="80" placeholder="Titre de l'article" value="{{article.titre}}" required>
-			</div>
+	<div class="col-md-9 h-100 overflow-auto">
 
-			<!-- INPUT THEME -->
-			<div class="col-sm-2">
-				<label for="theme">Thème *</label>
-				<select class="form-control" id="theme" name="theme" required>
-					{% for t in form.theme %}
-						{% if article.idTheme == t.id %}
-							<option value="{{t.id}}" selected>{{t.libelle}}</option>
-						{% else %}
-							<option value="{{t.id}}">{{t.libelle}}</option>
-						{% endif %}
-					{% endfor %}
-				</select>
-			</div>
-
-			<!-- INPUT IMAGE -->
-			<div class="col-sm-4">
-				<label>Image <small class="text-muted">Max : 8 Mo | format autorisé : JPG, PNG</small></label>
-				<input type="file" class="form-control-file m-1" id="image" name="image" />
-			</div>
-		</div>
-		<div class="form-row">
-			<!-- INPUT DESCRIPTION -->
-			<div class="col-12">
-				<label>Description</label>
-				<input type="text" class="form-control" id="description" name="description" maxlength="255" placeholder="Description de l'article" value="{{article.description}}"/>
-			</div>
-		</div>
-
-	</div>
-
-	<!-- INPUT ARTICLE -->
-	<div class="form-group">
-		<label for="article"><b>Article</b></label>
-		<textarea class="form-control" id="article" name="contenu" rows="10">{{article.contenu}}</textarea>
-	</div>
-
-	
-	<!-- INPUT VISIBLE -->
-	<div class="form-group form-check float-left">
-		<input type="checkbox" class="form-check-input" name="visible" id="visible"{% if article.visible == 1 or article == null %} checked{% endif %} />
-		<label class="form-check-label" for="visible">Publication visible</label>
-	</div>
-
-	<!-- SUBMIT -->
-	<div class="float-right inligne">
+		<!-- ARTICLE TITLE -->
 		{% if article.id is defined %}
-			<small class="mr-2">Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</small>
-			<button class="btn btn-primary" type="submit" name="btEnvoyer">Mettre à jour</button>
+			<h1 id="article_title" class="m-3 text-black-50 h3 font-weight-bold">{{article.titre}}</h1>
 		{% else %}
-			<small class="mr-2">Pas encore publié</small>
-			<button class="btn btn-primary" type="submit" name="btEnvoyer">Publier</button>
+			<h1 id="article_title" class="m-3 text-black-50 h3 font-weight-bold">Nouvel article</h1>
 		{% endif %}
+
+		<!-- INPUT ARTICLE -->
+		<div class="form-group m-sm-3">
+			<label for="article"><b>Article</b></label>
+			<textarea class="form-control" id="article" name="contenu" rows="20">{{article.contenu}}</textarea>
+		</div>
+
 	</div>
-</form>
+
+	<div class="col-md-3 p-3 bg-light border-dark border-left overflow-auto h-100">
+
+		<!-- INPUT TITRE -->
+		<div class="form-group">
+			<label for="titre"><b>Titre *</b></label>
+			<input type="text" class="form-control" id="titre" name="titre" maxlength="70" placeholder="Titre de l'article" value="{{article.titre}}" required>
+		</div>
+
+		<!-- INPUT DESCRIPTION -->
+		<div class="form-group">
+			<label for="description"><b>Description</b></label>
+			<input type="text" class="form-control form-control-sm" id="description" name="description" maxlength="245" placeholder="Description de l'article" value="{{article.description}}"/>
+		</div>
+
+		<!-- INPUT THEME -->
+		<div class="form-group">
+			<label for="theme"><b>Thème *</b></label>
+			<select class="form-control" id="theme" name="theme" required>
+				{% for t in form.theme %}
+					{% if article.idTheme == t.id %}
+						<option value="{{t.id}}" selected>{{t.libelle}}</option>
+					{% else %}
+						<option value="{{t.id}}">{{t.libelle}}</option>
+					{% endif %}
+				{% endfor %}
+			</select>
+		</div>
+
+		<!-- INPUT IMAGE -->
+		<label for="image"><b>Image</b></label>
+		<div class="custom-file">
+			<input type="file" class="custom-file-input" id="image" name="image" style="display:none;">
+			<label class="custom-file-label" for="image">Choisir un fichier</label>
+		</div>
+		<p class="m-0"><small class="text-muted">Max : 8 Mo | format autorisé : JPG, PNG</small></p>
+		
+		<hr>
+
+		<p>Nombre de caractères : <span id="nbStr">0</span></p>
+		<p>Nombre de mots : <span id="nbWords">0</span></p>
+
+		<hr>
+
+		<!-- INPUT VISIBLE -->
+		<div class="form-check">
+			<input type="checkbox" class="form-check-input" name="visible" id="visible"{% if article.visible == 1 or article == null %} checked{% endif %} />
+			<label class="form-check-label" for="visible">Publication visible</label>
+		</div>
+
+		<!-- SUBMIT -->
+		<div class="mt-3 bg-secondary rounded p-2 text-white">
+			{% if article.id is defined %}
+				<p class="mb-2">Mit à jour le {{article.dateModif | date("d F Y à G:i")}}</p>
+				<button class="btn btn-light w-100" type="submit" name="btEnvoyer">Mettre à jour</button>
+			{% else %}
+				<p class="mb-2">Pas encore publié</p>
+				<button class="btn btn-light w-100" type="submit" name="btEnvoyer">Publier</button>
+			{% endif %}
+		</div>
+
+	</div>
+
 </div>
+</form>
 
 {% endif %}
 {% endblock %}
 
 {% block script %}
 <script src="js/loadingButton.js"></script>
+<script src="js/editor.js"></script>
 {% endblock %}

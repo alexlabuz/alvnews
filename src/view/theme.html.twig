@@ -44,7 +44,7 @@
 	<div class="row row-cols-1 row-cols-lg-2 list-article mb-3">
 	{% for a in articles %}
 		<a href="?page=article&id={{a.id}}">
-		<div class="card m-2">
+		<div class="card m-2 overflow-hidden">
 			<div class="row no-gutters">
 				<div class="col-md-4">
 					{% if a.image != null %}
