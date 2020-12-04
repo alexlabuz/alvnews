@@ -166,6 +166,13 @@ function profilController($twig, $db){
 	$form["nbEnregistre"] = count($form["listEnregistre"]);
 	$form["listEnregistre"] = array_slice($form["listEnregistre"], 0, 40); // Affiche 40 enregistrement max
 
+	$sujet = new ForumSujet($db);
+	$form["listSujet"] = $sujet->selectByUser($donnees["id"]);
+	$form["nbSujet"] = count($form["listSujet"]);
+
+	$form["listSujetRepondu"] = $sujet->selectByReponseUser($donnees["id"]);
+	$form["nbSujetRepondu"] = count($form["listSujetRepondu"]);
+
 	echo $twig->render("profil.html.twig", array("form" => $form, "user" => $donnees));
 }
 

@@ -1,0 +1,111 @@
+{% extends "base.html.twig" %}
+{% block title %}Sujets{{parent()}}{% endblock %}
+
+{% block content %}
+<div class="container mt-3">
+
+{% if form.listeSujet is not defined %}
+	<!-- PAGE D'ACCUEIL SUJETS -->
+
+	<h1><b>Sujets</b></h1>
+	<p>Découvrez les fils de discussions ouvertes par les utilisateurs de alLavi news</p>
+	{% if session.id is defined %}
+		<a href="?page=addSujet" class="btn btn-primary">Créer un sujet</a>
+	{% endif %}
+	
+	<hr>
+	<h2>Derniers sujets ouverts</h2>
+	<p>Cliquez sur un sujet pour y accéder</p>
+	<div class="row row-cols-1 row-cols-lg-2 list-article mb-3">
+		{% for s in sujetsOuvert %}
+		<a href="?page=viewSujet&id={{s.id}}">
+		<div class="card m-3">
+			<div class="card-header">
+				Le {{s.date | date("d F Y à G:i")}} par {{s.userName}}
+			</div>
+			<div class="card-body">
+				<blockquote class="blockquote mb-0">
+				<p>{{s.titre}}</p>
+				<footer class="blockquote-footer">Nombre de réponse : {{s.nbReponse}}</footer>
+				</blockquote>
+			</div>
+		</div>
+		</a>
+		{% endfor %}
+	</div>
+	<a class="btn btn-light w-100 border" href="?page=sujets&ouvert=1">Voir plus</a>
+
+	<hr>
+	<h2>Derniers sujets résolus</h2>
+	<p>Cliquez sur un sujet pour y accéder</p>
+	<div class="row row-cols-1 row-cols-lg-2 list-article mb-3">
+		{% for s in sujetsFerme %}
+		<a href="?page=viewSujet&id={{s.id}}">
+		<div class="card m-3">
+			<div class="card-header">
+				Le {{s.date | date("d F Y à G:i")}} par {{s.userName}}
+			</div>
+			<div class="card-body">
+				<blockquote class="blockquote mb-0">
+				<p>{{s.titre}}</p>
+				<footer class="blockquote-footer">Nombre de réponse : {{s.nbReponse}}</footer>
+				</blockquote>
+			</div>
+		</div>
+		</a>
+		{% endfor %}
+	</div>
+	<a class="btn btn-light w-100 border" href="?page=sujets&ouvert=0">Voir plus</a>
+
+{% else %}
+	<!-- PAGE LISTE SUJETS OUVERT OU FERME -->
+
+	{% if get.ouvert == 1 %}
+	<h2>Sujets ouverts</h2>
+	<p>Accédez aux sujets pour lequel vous pouvez répondre.</p>
+	{% else %}
+	<h2>Sujets fermés</h2>
+	<p>Accédez aux sujets qui ont été résolu.</p>
+	{% endif %}
+	<a href="?page=sujets">Retour à la page d'acceuil des sujets</a>
+
+	<div class="row row-cols-1 row-cols-lg-2 list-article mb-3">
+		{% for s in form.listeSujet %}
+		<a href="?page=viewSujet&id={{s.id}}">
+		<div class="card m-3">
+			<div class="card-header">
+				Le {{s.date | date("d F Y à G:i")}} par {{s.userName}}
+			</div>
+			<div class="card-body">
+				<blockquote class="blockquote mb-0">
+				<p>{{s.titre}}</p>
+				<footer class="blockquote-footer">Nombre de réponse : {{s.nbReponse}}</footer>
+				</blockquote>
+			</div>
+		</div>
+		</a>
+		{% endfor %}
+	</div>
+	
+	<!-- PAGINATION -->
+	<nav>
+	<ul class="pagination justify-content-center">
+		<li class="page-item{% if form.numeroPage == 0 %} disabled{% endif %}">
+		<a class="page-link" href="?page=sujets&ouvert={{get.ouvert}}&min={{form.numeroPage - 1}}" aria-label="Previous">
+			<span aria-hidden="true">&laquo;</span>
+		</a>
+		</li>
+		{% for i in 1..form.nbPage %}
+		<li class="page-item{% if i == form.numeroPage +1 %} active{% endif %}"><a class="page-link" href="?page=sujets&ouvert={{get.ouvert}}&min={{i-1}}">{{i}}</a></li>
+		{% endfor %}
+		<li class="page-item{% if form.numeroPage == form.nbDePage - 1 %} disabled{% endif %}">
+		<a class="page-link" href="?page=sujets&ouvert={{get.ouvert}}&min={{form.numeroPage + 1}}" aria-label="Next">
+			<span aria-hidden="true">&raquo;</span>
+		</a>
+		</li>
+	</ul>
+	</nav>
+{% endif %}
+
+</div>
+{% endblock %}

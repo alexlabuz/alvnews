@@ -50,6 +50,7 @@
 			{% if user.role >= 2 %}
 			<a href="?page=editor" class="nav-item nav-link text-light">Rédiger un article</a>
 			{% endif %}
+			<a href="?page=addSujet" class="nav-item nav-link text-light">Rédiger un sujet</a>
 			{% if user.role == 3 %}
 			<div class="btn-group" role="group">
 				<a id="btnGroupDrop1" class="nav-item nav-link text-light dropdown-toggle" data-toggle="dropdown">Administration</a>
@@ -77,6 +78,12 @@
 		<a class="nav-link" data-toggle="tab" href="#myArticle" role="tab">Mes articles</a>
 	</li>
 	{% endif %}
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#mySujet" role="tab">Mes sujets</a>
+	</li>
+	<li class="nav-item">
+		<a class="nav-link" data-toggle="tab" href="#mySujetRepondu" role="tab">Sujets répondus</a>
+	</li>
 </ul>
 
 <div class="tab-content" id="myTabContent">
@@ -138,6 +145,64 @@
 			<h4 class="text-center m-5">Pas d'article rédigé</h4>
 		{% endif %}
 		</form>
+	</div>
+	<!-- MES SUJETS -->
+	<div class="tab-pane fade show" id="mySujet" role="tabpanel" aria-labelledby="profile-tab">
+		<form action="?page=removeSujet" method="POST">
+		<h3 class="mt-4">
+			<b>Mes sujets ({{form.nbSujet}})</b>
+			<button type="submit" class="btn btn-danger btn-sm ml-2" name="btEfface">
+				Supprimer la sélection
+				<svg width="1em" height="1em" viewBox="0 0 16 16" class="bi bi-trash-fill mb-1" fill="currentColor" xmlns="http://www.w3.org/2000/svg">
+				<path fill-rule="evenodd" d="M2.5 1a1 1 0 0 0-1 1v1a1 1 0 0 0 1 1H3v9a2 2 0 0 0 2 2h6a2 2 0 0 0 2-2V4h.5a1 1 0 0 0 1-1V2a1 1 0 0 0-1-1H10a1 1 0 0 0-1-1H7a1 1 0 0 0-1 1H2.5zm3 4a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7a.5.5 0 0 1 .5-.5zM8 5a.5.5 0 0 1 .5.5v7a.5.5 0 0 1-1 0v-7A.5.5 0 0 1 8 5zm3 .5a.5.5 0 0 0-1 0v7a.5.5 0 0 0 1 0v-7z"/>
+				</svg>
+			</button>
+		</h3>
+		{% if form.listSujet != null %}
+			{% for e in form.listSujet %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{e.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">
+						Posé le {{e.date_creation | date("d F Y à G:i")}}
+						{% if e.ouvert == 1 %}
+							<span class="badge badge-success">Sujet ouvert</span>
+						{% else %}
+							<span class="badge badge-danger">Sujet fermé</span>
+						{% endif %}
+					</h6>
+					<a href="?page=viewSujet&id={{e.id}}" class="card-link">Voir le sujet</a>
+					<label class="card-link text-danger" for="{{e.id}}">Supprimer le sujet</label>
+					<input class="card-link m-2" type="checkbox" id="{{e.id}}" name="cocher[]" value="{{e.id}}" />
+				</div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<h4 class="text-center m-5">Pas de sujet</h4>
+		{% endif %}
+		</form>
+	</div>
+	<!-- MES SUJETS REPONDUS -->
+	<div class="tab-pane fade show" id="mySujetRepondu" role="tabpanel" aria-labelledby="profile-tab">
+		<h3 class="mt-4">
+			<b>Sujets répondus ({{form.nbSujetRepondu}})</b>
+		</h3>
+		<p>Affiche les sujets encore ouverts avec lesquelles vous avez interagi.</p>
+		{% if form.listSujetRepondu != null %}
+			{% for e in form.listSujetRepondu %}
+			<div class="card mt-3">
+				<div class="card-body">
+					<h5 class="card-title">{{e.titre}}</h5>
+					<h6 class="card-subtitle mb-2 text-muted">Posé le {{e.date | date("d F Y à G:i")}} par {{e.nameUser}}</h6>
+					<p>Derniere réponse : {{e.dateLastReponse | date("d F Y à G:i")}}</p>
+					<a href="?page=viewSujet&id={{e.id}}" class="card-link">Voir le sujet</a>
+				</div>
+			</div>
+			{% endfor %}
+		{% else %}
+			<h4 class="text-center m-5">Pas de sujet répondu</h4>
+		{% endif %}
+	</div>
 	</div>
 </div>
 
