@@ -15,12 +15,12 @@
 <div class="container mt-3">
 {% if get.cat == null %}
 
-	<h1><b>Thème</b></h1>
+	<h1>Thème</h1>
 	<p>Parcourez nos articles par catégorie</p>
 
 	<div class="row justify-content-md-center">
 	{% for t in themes %}
-	<div class="card text-white col-sm-5 m-3 p-4" style="background-color:{{t.couleur}}" style="max-width: 18rem;">
+	<div class="card text-white col-sm-5 m-3 p-4 rounded-lg" style="background-color:{{t.couleur}}" style="max-width: 18rem;">
 	<div class="card-body">
 		<h2 class="card-title">{{t.libelle}}</h2>
 		<p class="mb-4">Nombre d'article : {{t.nbArticle}}</p>

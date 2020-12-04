@@ -13,16 +13,19 @@
 	</div>
 {% endif %}
 <!-- AFFICHAGE INFO PROFIL -->
-<div class="container bg-dark text-light">
-	<div class="row border-bottom border-light p-2 text-center text-sm-left">
+<div class="container bg-dark text-light rounded mt-sm-2">
+	<div class="row border-bottom border-light p-3 text-center text-sm-left">
 		<!-- PHOTO PROFILE -->
 		<div class="col-lg-2 align-self-center">
-		<a href="?page=updateUser">
+
 		{% if user.image != null %}
-			<img src="images/profil/{{user.image}}" alt="photo de profil" class="img-thumbnail img-profile">
+			{% set link_picture ="images/profil/" ~ user.image %}
 		{% else %}
-			<img src="images/default/profil.png" alt="photo de profil" class="img-thumbnail img-profile">
+			{% set link_picture ="images/default/profil.png" %}
 		{% endif %}
+
+		<a href="?page=updateUser">
+			<img src="{{link_picture}}" alt="photo de profil" class="img-thumbnail img-profile" data-toggle="tooltip" data-placement="bottom" data-html="true" title="<div class='m-2'>Paramètre profil</div>">
 		</a>
 		</div>
 		<!-- NOM UTILISATEUR -->
