@@ -1,7 +1,7 @@
 <h1>alLavi news</h1>
 
 <h2>Présentation</h2>
-<p>alLavi news est comme son nom l’indique, un site web d’actualité qui présente des articles (de divers sujets) rédigés par des modérateurs du site, il est possible à n’importe quel utilisateur connecté de commenter les articles ou de les mettre dans une liste afin de leur permettre de les regarder plus tard.</p>
+<p>alLavi news est comme son nom l’indique, un site web d’actualités qui présente des articles (de divers sujets) rédigés par des modérateurs du site, il est possible à n’importe quel utilisateur connecté de commenter les articles ou de les mettre dans une liste afin de leur permettre de les regarder plus tard.</p>
 
 <h2>Les types d’utilisateurs</h2>
 <p>La liste ci-dessous liste ce que les utilisateurs peuvent faire sur le site selon leur type de profil :</p>
@@ -32,12 +32,16 @@
 <ul>
 	<li>Importer le fichier "alvnews.sql" dans votre mysql</li>
 	<li>Allez dans "config/" et créer un fichier "parametres.php" et configurer la base de données du site avec ce code :<br>
-	<code>&lsaquo;?php<br>
-	$config["server"] = "localhost";<br>
-	$config["login"] = "your_db_login";<br>
-	$config["password"] = "your_db_password";<br>
-	$config["db"] = "alvnews";<br>
-	?></code></li>
+		<code>
+		<?php  
+		$config["server"] = "localhost";  
+		$config["login"] = "your_db_login";  
+		$config["password"] = "your_db_password";  
+		$config["db"] = "alvnews";  
+		?>
+		</code>
+	</li>
 	<li>Donnez les droits d'écriture au répertoire "article" et "profil" dans "public/images/"</li>
+	<li>L'identifiant de l'utilisateur par défaut est "admin@admin" et le mot de passe "admin"</li>
 </ul>
 <p>Vous pouvez utiliser/modifier alLavi news dès à prèsent</p>

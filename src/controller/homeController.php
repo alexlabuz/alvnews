@@ -16,7 +16,7 @@ function homeController($twig, $db){
 	$form["nbDePage"] = ceil($nbEntree/$max);
 	$form["numeroPage"] = $page;
 
-	if($page < 0 || $page >= $form["nbDePage"]){
+	if($page < 0 || $page >= $form["nbDePage"]+1){
 		return header("Location:./");
 	}
 

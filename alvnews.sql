@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Hôte : 127.0.0.1:3306
--- Généré le :  lun. 26 oct. 2020 à 19:52
+-- Généré le :  mer. 24 fév. 2021 à 17:01
 -- Version du serveur :  10.4.10-MariaDB
 -- Version de PHP :  7.3.12
 
@@ -45,7 +45,14 @@ CREATE TABLE IF NOT EXISTS `article` (
   PRIMARY KEY (`id`),
   KEY `idUtilisateur` (`idUtilisateur`),
   KEY `idTheme` (`idTheme`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+--
+-- Déchargement des données de la table `article`
+--
+
+INSERT INTO `article` (`id`, `titre`, `description`, `image`, `contenu`, `dateCreation`, `dateModif`, `visible`, `idTheme`, `idUtilisateur`) VALUES
+(1, 'Welcome', 'Bienvenue sur alLavi news', NULL, 'FÃ©licitation, vous avez configurÃ© alLavi news, vous pouvez dÃ¨s Ã  prÃ©sent l\'utiliser.', '2021-02-24 18:00:10', '2021-02-24 18:00:10', 1, 1, 1);
 
 -- --------------------------------------------------------
 
@@ -130,7 +137,14 @@ CREATE TABLE IF NOT EXISTS `theme` (
   `libelle` varchar(80) COLLATE utf8mb4_bin NOT NULL,
   `couleur` varchar(80) COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+--
+-- Déchargement des données de la table `theme`
+--
+
+INSERT INTO `theme` (`id`, `libelle`, `couleur`) VALUES
+(1, 'Contenu libre', 'grey');
 
 -- --------------------------------------------------------
 
@@ -150,7 +164,14 @@ CREATE TABLE IF NOT EXISTS `utilisateur` (
   `valide` tinyint(1) NOT NULL DEFAULT 0,
   `idGenere` varchar(32) COLLATE utf8mb4_bin NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_bin;
+
+--
+-- Déchargement des données de la table `utilisateur`
+--
+
+INSERT INTO `utilisateur` (`id`, `email`, `nom`, `mdp`, `role`, `image`, `dateInscription`, `valide`, `idGenere`) VALUES
+(1, 'admin@admin', 'Admin', '$2y$10$R0YCGDxWxVj5r4k3/aVAL.yVGYExd3uuYb5s40QGF1J08rApYWURm', 3, NULL, '2021-02-24', 1, '');
 
 --
 -- Contraintes pour les tables déchargées
