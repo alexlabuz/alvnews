@@ -33,7 +33,7 @@
 	<li>Importer le fichier "alvnews.sql" dans votre mysql</li>
 	<li>Allez dans "config/" et créer un fichier "parametres.php" et configurer la base de données du site avec ce code :<br>
 		<code>
-		<?php  
+		&lsaquo;?php  
 		$config["server"] = "localhost";  
 		$config["login"] = "your_db_login";  
 		$config["password"] = "your_db_password";  
